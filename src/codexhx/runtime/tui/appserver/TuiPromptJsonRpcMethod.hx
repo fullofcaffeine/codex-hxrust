@@ -5,6 +5,7 @@ package codexhx.runtime.tui.appserver;
 **/
 enum abstract TuiPromptJsonRpcMethod(String) to String {
 	final TurnStart = "turn/start";
+	final TurnInterrupt = "turn/interrupt";
 
 	public function text():String {
 		return this;

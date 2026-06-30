@@ -33,7 +33,10 @@ class FakeTuiAppServerFacade {
 	var activeTurnValue:Null<TurnId>;
 	var lastStartedTurnValue:Null<TurnId>;
 	var lastCompletedTurnValue:Null<TurnId>;
+	var lastInterruptedTurnValue:Null<TurnId>;
 	var completedTurnCountValue:Int;
+	var interruptedTurnCountValue:Int;
+	var lastInterruptCodeValue:String;
 	var latestAttachGeneration:Int;
 	var latestPromptGeneration:Int;
 	var lastPromptLifecycleValue:TuiPromptPendingRequestLifecycle;
@@ -50,7 +53,10 @@ class FakeTuiAppServerFacade {
 		this.activeTurnValue = null;
 		this.lastStartedTurnValue = null;
 		this.lastCompletedTurnValue = null;
+		this.lastInterruptedTurnValue = null;
 		this.completedTurnCountValue = 0;
+		this.interruptedTurnCountValue = 0;
+		this.lastInterruptCodeValue = "";
 		this.latestAttachGeneration = 0;
 		this.latestPromptGeneration = 0;
 		this.lastPromptLifecycleValue = TuiPromptPendingRequestLifecycle.none();
@@ -88,8 +94,20 @@ class FakeTuiAppServerFacade {
 		return turnText(lastCompletedTurnValue);
 	}
 
+	public function lastInterruptedTurnIdText():String {
+		return turnText(lastInterruptedTurnValue);
+	}
+
 	public function completedTurnCount():Int {
 		return completedTurnCountValue;
+	}
+
+	public function interruptedTurnCount():Int {
+		return interruptedTurnCountValue;
+	}
+
+	public function lastInterruptCode():String {
+		return lastInterruptCodeValue;
 	}
 
 	public function agentNavigation():AgentNavigationState {
@@ -154,6 +172,36 @@ class FakeTuiAppServerFacade {
 		for (event in transportOutcome.events())
 			enqueue(event);
 		return TuiPromptSubmitResult.accepted(envelope, effects);
+	}
+
+	public function interruptActiveTurn(requestId:RequestId):TuiPromptTurnInterruptResult {
+		if (activeSessionValue == null) {
+			lastInterruptCodeValue = "missing_session";
+			return TuiPromptTurnInterruptResult.rejected(lastInterruptCodeValue);
+		}
+		if (activeThreadValue == null) {
+			lastInterruptCodeValue = "missing_thread";
+			return TuiPromptTurnInterruptResult.rejected(lastInterruptCodeValue);
+		}
+		if (activeTurnValue == null) {
+			lastInterruptCodeValue = "no_active_turn";
+			return TuiPromptTurnInterruptResult.rejected(lastInterruptCodeValue);
+		}
+		final envelope = new TuiPromptTurnInterruptEnvelope(requestId, activeSessionValue, activeThreadValue, activeTurnValue);
+		final effects:Array<TuiAppServerShellEffect> = [
+			TuiAppServerShellEffect.RequestRegistered(requestId, TuiAppServerRequestMethod.TurnInterrupt),
+			TuiAppServerShellEffect.TurnInterruptSent(envelope)
+		];
+		final outcome = promptTransport.interruptTurn(envelope);
+		if (outcome == null || !outcome.isAccepted()) {
+			lastInterruptCodeValue = outcome == null ? "missing_interrupt_outcome" : outcome.code();
+			return TuiPromptTurnInterruptResult.transportRejected(envelope, effects, lastInterruptCodeValue);
+		}
+		recordTurnInterrupted();
+		lastInterruptCodeValue = outcome.code();
+		for (event in outcome.events())
+			enqueue(event);
+		return TuiPromptTurnInterruptResult.accepted(envelope, effects);
 	}
 
 	public function shutdownPromptTransport(code:String):TuiPromptTransportShutdownReport {
@@ -310,11 +358,22 @@ class FakeTuiAppServerFacade {
 		completedTurnCountValue = completedTurnCountValue + 1;
 	}
 
+	function recordTurnInterrupted():Void {
+		if (activeTurnValue == null)
+			return;
+		lastInterruptedTurnValue = activeTurnValue;
+		activeTurnValue = null;
+		interruptedTurnCountValue = interruptedTurnCountValue + 1;
+	}
+
 	function clearTurnState():Void {
 		activeTurnValue = null;
 		lastStartedTurnValue = null;
 		lastCompletedTurnValue = null;
+		lastInterruptedTurnValue = null;
 		completedTurnCountValue = 0;
+		interruptedTurnCountValue = 0;
+		lastInterruptCodeValue = "";
 	}
 
 	function activeThreadMatches(threadId:ThreadId):Bool {

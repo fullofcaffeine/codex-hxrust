@@ -85,6 +85,10 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 			lineOutcome.events(), transcript);
 	}
 
+	public function sendTurnInterrupt(_request:TuiPromptTurnInterruptRequest, _envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		return TuiPromptTurnInterruptOutcome.rejected("line_connected_interrupt_unsupported");
+	}
+
 	public function lastConnectReport():TuiAppServerJsonRpcLineConnectReport {
 		return lastConnectReportValue;
 	}

@@ -90,6 +90,10 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 			lineOutcome.events(), transcript);
 	}
 
+	public function sendTurnInterrupt(_request:TuiPromptTurnInterruptRequest, _envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		return TuiPromptTurnInterruptOutcome.rejected("persistent_line_interrupt_unsupported");
+	}
+
 	public function close(code:String):TuiAppServerJsonRpcLineCloseReport {
 		closedValue = true;
 		if (lastCloseReportValue != null)

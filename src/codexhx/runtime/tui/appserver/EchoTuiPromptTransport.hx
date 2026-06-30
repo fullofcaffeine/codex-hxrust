@@ -21,6 +21,14 @@ class EchoTuiPromptTransport implements TuiPromptTransport {
 		]);
 	}
 
+	public function interruptTurn(envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		if (envelope == null)
+			return TuiPromptTurnInterruptOutcome.rejected("missing_envelope");
+		return TuiPromptTurnInterruptOutcome.accepted(new TuiPromptTurnInterruptResponse(envelope.requestId), [
+			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("interrupted"))
+		]);
+	}
+
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {
 		return TuiPromptTransportShutdownReport.noLineClose(code);
 	}

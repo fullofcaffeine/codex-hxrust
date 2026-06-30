@@ -240,6 +240,18 @@ IDs plus a completed-turn count. The projected `turn/completed` ready status
 clears the active turn while preserving the last completed ID, giving the live
 shell a typed prerequisite for a later `turn/interrupt` request path.
 
+`TUI-LIVE-63` adds that typed `turn/interrupt` request path for the minimal
+live shell. `TuiPromptTurnInterruptEnvelope`, params, request, response,
+transport outcome, and facade result keep the request shape explicit instead of
+reusing nullable `turn/start` fields. `FakeTuiAppServerFacade.interruptActiveTurn`
+targets the current active turn, rejects idle interrupts with `no_active_turn`,
+records last-interrupted turn state, clears the active turn, and deliberately
+does not increment completed-turn count. The default fake JSON-RPC transport
+returns an empty-result `turn/interrupt` response and projects a ready
+`interrupted` status. Connector-backed line transports currently reject
+interrupt with typed unsupported codes until the process/socket cancellation
+boundary exists.
+
 ```json
 {
   "jsonrpc": "2.0",

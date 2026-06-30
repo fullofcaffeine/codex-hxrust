@@ -1,6 +1,7 @@
 import codexhx.protocol.RequestId;
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.protocol.TurnId;
 import codexhx.protocol.app.AppProtocol;
 import codexhx.protocol.json.CodexJson;
 import codexhx.protocol.json.JsonParseOutcome;
@@ -84,6 +85,10 @@ import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptEnvelope;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptRequest;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptResponse;
 import codexhx.runtime.tui.appserver.TuiPromptTurnLifecycleReport;
 import codexhx.runtime.tui.appserver.TuiPromptTurnLifecycleStatus;
 import codexhx.runtime.tui.appserver.TuiPromptTurnStartResponse;
@@ -103,6 +108,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function main():Void {
 		testPromptSubmitEnvelopeEchoAndRedraw();
 		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
+		testJsonRpcTurnInterruptEnvelope();
 		testFakeAppServerJsonRpcTransportOwnsTranscript();
 		testFakeLineTransportEmitsInboundJsonLines();
 		testFakeLineTransportTracksLifecycleAndRejectsAfterClose();
@@ -147,6 +153,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testEmptySubmitIsTypedRefusal();
 		testUnattachedSubmitIsTypedRefusal();
 		testTransportRejectedSubmitIsTypedRefusal();
+		testFacadeInterruptsActiveTurn();
 		testLiveBackendSubmitEchoDrawsShell();
 		Sys.println("tui-prompt-submit-envelope ok");
 	}
@@ -374,6 +381,43 @@ class TuiPromptSubmitEnvelopeHarness {
 			"projected assistant delta");
 		assertThreadStatusEvent(expectAppServerEvent(outcome.eventAt(2), "projected completion event"), threadId, TuiAppServerThreadStatus.Ready("ready"),
 			"projected completion status");
+	}
+
+	static function testJsonRpcTurnInterruptEnvelope():Void {
+		final transport = new JsonRpcTuiPromptTransport();
+		final threadId = thread("00000000-0000-0000-0000-000000005559");
+		final envelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(121), session("00000000-0000-0000-0000-000000009996"), threadId,
+			turn("turn-120"));
+		final outcome = transport.interruptTurn(envelope);
+		assertTrue(outcome.isAccepted(), "json-rpc interrupt accepted");
+		assertStringEquals("accepted", outcome.code(), "json-rpc interrupt code");
+		assertIntEquals(1, outcome.eventCount(), "json-rpc interrupt event count");
+		assertThreadStatusEvent(expectAppServerEvent(outcome.eventAt(0), "json-rpc interrupt event"), threadId, TuiAppServerThreadStatus.Ready("interrupted"),
+			"json-rpc interrupt status");
+
+		final request = transport.lastInterruptRequest();
+		if (request == null)
+			throw "json-rpc interrupt request recorded";
+		assertStringEquals("121", request.requestId.toString(), "json-rpc interrupt request id");
+		assertStringEquals(TuiPromptJsonRpcMethod.TurnInterrupt.text(), request.methodText(), "json-rpc interrupt method");
+		assertStringEquals("{\"threadId\":\"00000000-0000-0000-0000-000000005559\",\"turnId\":\"turn-120\"}", request.paramsJson(),
+			"json-rpc interrupt params");
+		assertStringEquals("{\"id\":121,\"jsonrpc\":\"2.0\",\"method\":\"turn/interrupt\",\"params\":{\"threadId\":\"00000000-0000-0000-0000-000000005559\",\"turnId\":\"turn-120\"}}",
+			request.messageJson(), "json-rpc interrupt message");
+		final requestProtocol = AppProtocol.parseFixtureItem(expectJson(CodexJson.parse(request.fixtureJson("prompt-json-rpc-turn-interrupt"))));
+		assertTrue(requestProtocol.ok, "json-rpc interrupt request parses through app protocol: " + requestProtocol.errorCode);
+		assertStringEquals("request:turn/interrupt", requestProtocol.message.summary, "json-rpc interrupt request summary");
+
+		final response = transport.lastInterruptResponse();
+		if (response == null)
+			throw "json-rpc interrupt response recorded";
+		assertStringEquals("121", response.requestId.toString(), "json-rpc interrupt response id");
+		assertStringEquals(TuiPromptJsonRpcMethod.TurnInterrupt.text(), response.methodText(), "json-rpc interrupt response method");
+		assertStringEquals("{}", response.resultJson(), "json-rpc interrupt result");
+		assertStringEquals("{\"id\":121,\"jsonrpc\":\"2.0\",\"result\":{}}", response.messageJson(), "json-rpc interrupt response message");
+		final responseProtocol = AppProtocol.parseFixtureItem(expectJson(CodexJson.parse(response.fixtureJson("prompt-json-rpc-turn-interrupt-response"))));
+		assertTrue(responseProtocol.ok, "json-rpc interrupt response parses through app protocol: " + responseProtocol.errorCode);
+		assertStringEquals("response:turn/interrupt", responseProtocol.message.summary, "json-rpc interrupt response summary");
 	}
 
 	static function testFakeAppServerJsonRpcTransportOwnsTranscript():Void {
@@ -1467,6 +1511,35 @@ class TuiPromptSubmitEnvelopeHarness {
 		backend.restore(TerminalRestoreReason.NormalExit);
 	}
 
+	static function testFacadeInterruptsActiveTurn():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005562");
+		final facade = attachedFacadeWithTransport(shell, activeThread, new LongRunningPromptTransport());
+		final submit = facade.submitPrompt(RequestId.fromInteger(120), "long running");
+		assertTrue(submit.acceptedPrompt(), "long-running submit accepted");
+		assertStringEquals("turn-120", facade.activeTurnIdText(), "facade active turn before interrupt");
+		assertIntEquals(0, facade.completedTurnCount(), "facade completed count before interrupt");
+
+		final interrupt = facade.interruptActiveTurn(RequestId.fromInteger(121));
+		assertTrue(interrupt.acceptedInterrupt(), "facade interrupt accepted");
+		assertStringEquals("accepted", interrupt.code(), "facade interrupt code");
+		assertStringEquals("", facade.activeTurnIdText(), "facade active turn cleared by interrupt");
+		assertStringEquals("turn-120", facade.lastInterruptedTurnIdText(), "facade last interrupted turn");
+		assertIntEquals(1, facade.interruptedTurnCount(), "facade interrupted count");
+		assertIntEquals(0, facade.completedTurnCount(), "facade interrupt does not count completion");
+		assertStringEquals("accepted", facade.lastInterruptCode(), "facade last interrupt code");
+		assertIntEquals(2, facade.queuedCount(), "facade queued working plus interrupted-ready events");
+		final effects = facade.drainQueued();
+		assertTrue(effects.length > 0, "facade interrupt drain effects");
+		assertStatusKindEquals(ChatWidgetStatusKind.Idle, shell.statusKind(), "facade interrupted status kind");
+		assertStringEquals("interrupted", shell.statusText(), "facade interrupted status text");
+		assertIntEquals(0, facade.completedTurnCount(), "facade still does not count interrupted turn as completed");
+
+		final idleInterrupt = facade.interruptActiveTurn(RequestId.fromInteger(122));
+		assertFalse(idleInterrupt.acceptedInterrupt(), "idle interrupt rejected");
+		assertStringEquals("no_active_turn", idleInterrupt.code(), "idle interrupt code");
+	}
+
 	static function testLiveBackendSubmitEchoDrawsShell():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000007777");
@@ -1503,6 +1576,13 @@ class TuiPromptSubmitEnvelopeHarness {
 
 	static function thread(value:String):ThreadId {
 		return ThreadId.unsafeAssumeValid(value);
+	}
+
+	static function turn(value:String):TurnId {
+		final parsed = TurnId.fromString(value);
+		if (parsed == null)
+			throw "invalid turn id " + value;
+		return parsed;
 	}
 
 	static function assertAcceptedSubmit(submit:TuiPromptSubmitInteraction, requestId:String, prompt:String, label:String):Void {
@@ -2265,6 +2345,35 @@ class RejectingPromptTransport implements TuiPromptTransport {
 		return TuiPromptTransportOutcome.rejected(code);
 	}
 
+	public function interruptTurn(_envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		return TuiPromptTurnInterruptOutcome.rejected(code);
+	}
+
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return TuiPromptTransportShutdownReport.noLineClose(code);
+	}
+}
+
+class LongRunningPromptTransport implements TuiPromptTransport {
+	public function new() {}
+
+	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
+		if (envelope == null)
+			return TuiPromptTransportOutcome.rejected("missing_envelope");
+		final response = TuiPromptTurnStartResponse.fromEnvelope(envelope);
+		return TuiPromptTransportOutcome.acceptedWithResponse(response, [
+			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Working("submitted"))
+		]);
+	}
+
+	public function interruptTurn(envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		if (envelope == null)
+			return TuiPromptTurnInterruptOutcome.rejected("missing_envelope");
+		return TuiPromptTurnInterruptOutcome.accepted(new TuiPromptTurnInterruptResponse(envelope.requestId), [
+			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("interrupted"))
+		]);
+	}
+
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {
 		return TuiPromptTransportShutdownReport.noLineClose(code);
 	}
@@ -2281,6 +2390,10 @@ class DisconnectedAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransp
 		return TuiAppServerJsonRpcTransportOutcome.disconnected(code, TuiAppServerJsonRpcTransportTranscript.outbound(_request));
 	}
 
+	public function sendTurnInterrupt(_request:TuiPromptTurnInterruptRequest, _envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		return TuiPromptTurnInterruptOutcome.rejected(code);
+	}
+
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {
 		return TuiPromptTransportShutdownReport.noLineClose(code);
 	}
@@ -2292,6 +2405,10 @@ class MissingResponseAppServerJsonRpcTransport implements TuiAppServerJsonRpcTra
 	public function sendPrompt(_request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
 		return new TuiAppServerJsonRpcTransportOutcome(TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", null, [], [],
 			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")], TuiAppServerJsonRpcTransportTranscript.outbound(_request));
+	}
+
+	public function sendTurnInterrupt(_request:TuiPromptTurnInterruptRequest, _envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		return TuiPromptTurnInterruptOutcome.rejected("missing_response_transport_interrupt_unsupported");
 	}
 
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {

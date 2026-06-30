@@ -55,6 +55,8 @@ class TuiPromptPendingRequestLifecycle {
 				"attach_session";
 			case PromptSubmit:
 				"prompt_submit";
+			case TurnInterrupt:
+				"turn_interrupt";
 		}
 	}
 }

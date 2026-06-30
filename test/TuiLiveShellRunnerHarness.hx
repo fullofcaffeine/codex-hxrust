@@ -3,6 +3,7 @@ import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineNativeOpener;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineTransportAttacher;
+import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectReport;
@@ -17,6 +18,15 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
+import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
+import codexhx.runtime.tui.appserver.TuiPromptTransport;
+import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptEnvelope;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptResponse;
+import codexhx.runtime.tui.appserver.TuiPromptTurnStartResponse;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.live.TuiLiveShellRunOutcome;
 import codexhx.runtime.tui.live.TuiLiveShellRunPolicy;
@@ -34,6 +44,7 @@ class TuiLiveShellRunnerHarness {
 	static function main():Void {
 		testInitialDrawAndIdleRestore();
 		testTextSubmitEchoThroughPump();
+		testCtrlCInterruptsActiveTurn();
 		testTextSubmitThroughLineConnectedTransport();
 		testTextSubmitThroughInjectedLineConnector();
 		testAgentNavigationInputRoutesActiveThread();
@@ -77,6 +88,33 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.appServerEvents() >= 3, "fake app-server echo events");
 		assertStringEquals("user> hi", outcome.finalFrameLineAt(3), "user row rendered");
 		assertStringEquals("assistant> echo: hi", outcome.finalFrameLineAt(4), "assistant echo rendered");
+	}
+
+	static function testCtrlCInterruptsActiveTurn():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("n")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.Key(TerminalKey.CtrlC),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final facade = new FakeTuiAppServerFacade(shell, new RunnerLongRunningPromptTransport());
+		final outcome = TuiLiveShellRunner.run(request(shell, backend, [], TuiLiveShellRunPolicy.bounded(16, 2)).withFacade(facade));
+
+		assertIntEquals(1, outcome.submittedPrompts(), "interrupt submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "interrupt accepted prompts");
+		assertStringEquals("turn-5", outcome.lastStartedTurnIdText(), "interrupt last started turn");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "interrupt last completed turn");
+		assertStringEquals("turn-5", outcome.lastInterruptedTurnIdText(), "interrupt last interrupted turn");
+		assertStringEquals("", outcome.activeTurnIdText(), "interrupt active turn cleared");
+		assertIntEquals(0, outcome.completedTurns(), "interrupt does not count completion");
+		assertIntEquals(1, outcome.interruptedTurns(), "interrupt count");
+		assertStringEquals("accepted", outcome.lastInterruptCode(), "interrupt code");
+		assertStringEquals("Codex | model: gpt-live | status: interrupted", outcome.finalFrameLineAt(0), "interrupt status rendered");
+		assertTrue(!outcome.exitRequested(), "active turn ctrl-c should not exit");
 	}
 
 	static function testTextSubmitThroughLineConnectedTransport():Void {
@@ -309,5 +347,30 @@ class RunnerRecordingLineConnector implements TuiAppServerJsonRpcLineConnector {
 
 	public function transportCallCount():Int {
 		return transportCalls;
+	}
+}
+
+class RunnerLongRunningPromptTransport implements TuiPromptTransport {
+	public function new() {}
+
+	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
+		if (envelope == null)
+			return TuiPromptTransportOutcome.rejected("missing_envelope");
+		final response = TuiPromptTurnStartResponse.fromEnvelope(envelope);
+		return TuiPromptTransportOutcome.acceptedWithResponse(response, [
+			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Working("submitted"))
+		]);
+	}
+
+	public function interruptTurn(envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		if (envelope == null)
+			return TuiPromptTurnInterruptOutcome.rejected("missing_envelope");
+		return TuiPromptTurnInterruptOutcome.accepted(new TuiPromptTurnInterruptResponse(envelope.requestId), [
+			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("interrupted"))
+		]);
+	}
+
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return TuiPromptTransportShutdownReport.noLineClose(code);
 	}
 }

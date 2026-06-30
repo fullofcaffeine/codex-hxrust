@@ -27,6 +27,16 @@ class FakeTuiAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
 			transcript);
 	}
 
+	public function sendTurnInterrupt(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		if (request == null)
+			return TuiPromptTurnInterruptOutcome.rejected("missing_request");
+		if (envelope == null)
+			return TuiPromptTurnInterruptOutcome.rejected("missing_envelope");
+		return TuiPromptTurnInterruptOutcome.accepted(TuiPromptTurnInterruptResponse.fromRequest(request), [
+			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("interrupted"))
+		]);
+	}
+
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {
 		return TuiPromptTransportShutdownReport.noLineClose(code);
 	}

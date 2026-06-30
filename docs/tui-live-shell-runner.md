@@ -49,5 +49,13 @@ projected completion/ready event drains. The runner outcome records those facts
 so the generated demo can report completed turn evidence before the later
 `turn/interrupt` request path exists.
 
+`TUI-LIVE-63` adds the first typed interrupt route. During key handling,
+`TuiLiveShellRunner` sends Ctrl-C to `FakeTuiAppServerFacade.interruptActiveTurn`
+when an active turn exists; idle Ctrl-C still follows the previous shell-exit
+path. `TuiLiveShellRunOutcome` now records last-interrupted turn ID,
+interrupted-turn count, and the last interrupt code alongside active/completed
+turn evidence. This is app-server request/effect plumbing, not real async
+process cancellation yet.
+
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

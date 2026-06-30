@@ -6,4 +6,5 @@ package codexhx.runtime.tui.appserver;
 enum TuiAppServerRequestMethod {
 	AttachSession;
 	PromptSubmit;
+	TurnInterrupt;
 }

@@ -220,6 +220,9 @@ class TuiLiveShellDemoHarness {
 		assertStringEquals("turn-14", outcome.lastCompletedTurnIdText(), "persistent demo last completed turn");
 		assertStringEquals("", outcome.activeTurnIdText(), "persistent demo active turn cleared");
 		assertIntEquals(2, outcome.completedTurns(), "persistent demo completed turns");
+		assertStringEquals("", outcome.lastInterruptedTurnIdText(), "persistent demo no interrupted turn");
+		assertIntEquals(0, outcome.interruptedTurns(), "persistent demo interrupted turns");
+		assertStringEquals("", outcome.lastInterruptCode(), "persistent demo interrupt code");
 	}
 
 	static function expectedInboundLines(prompt:String):Array<String> {

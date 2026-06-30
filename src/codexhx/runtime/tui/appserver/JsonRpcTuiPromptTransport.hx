@@ -15,6 +15,9 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastCorrelationValue:TuiPromptJsonRpcFrameCorrelation;
 	var lastStreamScopeValue:TuiPromptJsonRpcStreamScopeReport;
 	var lastTurnLifecycleValue:TuiPromptTurnLifecycleReport;
+	var lastInterruptRequestValue:Null<TuiPromptTurnInterruptRequest>;
+	var lastInterruptResponseValue:Null<TuiPromptTurnInterruptResponse>;
+	var lastInterruptOutcomeValue:TuiPromptTurnInterruptOutcome;
 
 	public function new(?appServerTransport:TuiAppServerJsonRpcTransport) {
 		this.appServerTransport = appServerTransport == null ? new FakeTuiAppServerJsonRpcTransport() : appServerTransport;
@@ -27,6 +30,9 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		this.lastCorrelationValue = TuiPromptJsonRpcFrameCorrelation.fromFrames([]);
 		this.lastStreamScopeValue = TuiPromptJsonRpcStreamScopeReport.fromNotifications(null, null, []);
 		this.lastTurnLifecycleValue = TuiPromptTurnLifecycleReport.fromNotifications(null, []);
+		this.lastInterruptRequestValue = null;
+		this.lastInterruptResponseValue = null;
+		this.lastInterruptOutcomeValue = TuiPromptTurnInterruptOutcome.rejected("not_sent");
 	}
 
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
@@ -72,6 +78,23 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		replaceLastFrames(transcriptFrames);
 		return TuiPromptTransportOutcome.acceptedWithResponse(response.result,
 			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, transportOutcome.events()));
+	}
+
+	public function interruptTurn(envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome {
+		if (envelope == null) {
+			lastInterruptRequestValue = null;
+			lastInterruptResponseValue = null;
+			lastInterruptOutcomeValue = TuiPromptTurnInterruptOutcome.rejected("missing_envelope");
+			return lastInterruptOutcomeValue;
+		}
+		final request = TuiPromptTurnInterruptRequest.fromEnvelope(envelope);
+		lastInterruptRequestValue = request;
+		lastInterruptResponseValue = null;
+		final outcome = appServerTransport.sendTurnInterrupt(request, envelope);
+		lastInterruptOutcomeValue = outcome == null ? TuiPromptTurnInterruptOutcome.rejected("missing_interrupt_outcome") : outcome;
+		if (lastInterruptOutcomeValue.isAccepted())
+			lastInterruptResponseValue = lastInterruptOutcomeValue.response();
+		return lastInterruptOutcomeValue;
 	}
 
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {
@@ -156,6 +179,18 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 
 	public function lastTurnLifecycle():TuiPromptTurnLifecycleReport {
 		return lastTurnLifecycleValue;
+	}
+
+	public function lastInterruptRequest():Null<TuiPromptTurnInterruptRequest> {
+		return lastInterruptRequestValue;
+	}
+
+	public function lastInterruptResponse():Null<TuiPromptTurnInterruptResponse> {
+		return lastInterruptResponseValue;
+	}
+
+	public function lastInterruptOutcome():TuiPromptTurnInterruptOutcome {
+		return lastInterruptOutcomeValue;
 	}
 
 	function replaceLastFrames(frames:Array<TuiPromptJsonRpcFrame>):Void {

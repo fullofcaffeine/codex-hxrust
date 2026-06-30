@@ -58,7 +58,8 @@ class TuiLiveShellRunner {
 
 	static function recordTurnState(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome):Void {
 		outcome.recordTurnState(request.facade.activeTurnIdText(), request.facade.lastStartedTurnIdText(), request.facade.lastCompletedTurnIdText(),
-			request.facade.completedTurnCount());
+			request.facade.lastInterruptedTurnIdText(), request.facade.completedTurnCount(), request.facade.interruptedTurnCount(),
+			request.facade.lastInterruptCode());
 	}
 
 	static function attachSession(request:TuiLiveShellRunRequest):Void {
@@ -109,7 +110,12 @@ class TuiLiveShellRunner {
 				case TerminalEvent.Key(key):
 					idleEvents = 0;
 					outcome.recordKeyEvent();
-					if (shouldQuitOnKey(request, key)) {
+					if (shouldInterruptOnKey(request, key)) {
+						request.facade.interruptActiveTurn(RequestId.fromInteger(nextRequestId));
+						nextRequestId = nextRequestId + 1;
+						recordPump(request, outcome, pump.drain(request.policy.appServerPolicy));
+						recordCurrentFrame(request, outcome);
+					} else if (shouldQuitOnKey(request, key)) {
 						handleExit(request, outcome, TerminalExitReason.Requested);
 					} else {
 						final interaction = pump.submitComposerInput(TerminalInputMapper.inputFromTerminalKey(key), RequestId.fromInteger(nextRequestId),
@@ -154,6 +160,15 @@ class TuiLiveShellRunner {
 		return switch key {
 			case TerminalKey.Character("q"):
 				request.shell.composer().buffer().length == 0;
+			case _:
+				false;
+		}
+	}
+
+	static function shouldInterruptOnKey(request:TuiLiveShellRunRequest, key:TerminalKey):Bool {
+		return switch key {
+			case TerminalKey.CtrlC:
+				request.facade.activeTurn() != null;
 			case _:
 				false;
 		}

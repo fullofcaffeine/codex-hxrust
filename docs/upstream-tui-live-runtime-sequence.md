@@ -4512,6 +4512,24 @@ Status: TUI-LIVE-62 records accepted `turn/start` responses as live-shell turn s
 
 This is not full interrupt/cancellation yet. It does not send `turn/interrupt`, own async cancellation tokens, join background reader/writer tasks, or model provider abort semantics. It gives the live shell the typed active-turn identity needed before Ctrl-C can target a running turn instead of only exiting the shell.
 
+### TUI-LIVE-63 Turn Interrupt Request Path
+
+Status: TUI-LIVE-63 adds the first typed active-turn interrupt request path to
+the live shell. The prompt transport boundary now has explicit
+`TuiPromptTurnInterruptEnvelope`, params, JSON-RPC request, empty-result
+response, and outcome types. `JsonRpcTuiPromptTransport` sends
+`turn/interrupt` through the fake app-server JSON-RPC transport, and the fake
+transport projects an interrupted ready status. `FakeTuiAppServerFacade`
+targets the current active turn, rejects idle interrupts, records
+last-interrupted turn evidence, clears active turn state, and does not count an
+interrupted turn as completed. `TuiLiveShellRunner` routes Ctrl-C to interrupt
+when a turn is active and keeps the previous idle Ctrl-C exit behavior.
+
+This is still deterministic, synchronous, and credential-free. Connector-backed
+line transports return typed unsupported interrupt outcomes until a later slice
+owns process/socket cancellation, async reader/writer task coordination, and
+real app-server abort semantics.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

@@ -30,7 +30,10 @@ class TuiLiveShellRunOutcome {
 	var activeTurnIdValue:String;
 	var lastStartedTurnIdValue:String;
 	var lastCompletedTurnIdValue:String;
+	var lastInterruptedTurnIdValue:String;
 	var completedTurnsValue:Int;
+	var interruptedTurnsValue:Int;
+	var lastInterruptCodeValue:String;
 	final finalFrameLines:Array<String>;
 
 	public function new() {
@@ -52,7 +55,10 @@ class TuiLiveShellRunOutcome {
 		this.activeTurnIdValue = "";
 		this.lastStartedTurnIdValue = "";
 		this.lastCompletedTurnIdValue = "";
+		this.lastInterruptedTurnIdValue = "";
 		this.completedTurnsValue = 0;
+		this.interruptedTurnsValue = 0;
+		this.lastInterruptCodeValue = "";
 		this.finalFrameLines = [];
 	}
 
@@ -136,11 +142,15 @@ class TuiLiveShellRunOutcome {
 		promptTransportShutdownValue = report;
 	}
 
-	public function recordTurnState(activeTurnId:String, lastStartedTurnId:String, lastCompletedTurnId:String, completedTurns:Int):Void {
+	public function recordTurnState(activeTurnId:String, lastStartedTurnId:String, lastCompletedTurnId:String, lastInterruptedTurnId:String,
+			completedTurns:Int, interruptedTurns:Int, lastInterruptCode:String):Void {
 		activeTurnIdValue = normalize(activeTurnId);
 		lastStartedTurnIdValue = normalize(lastStartedTurnId);
 		lastCompletedTurnIdValue = normalize(lastCompletedTurnId);
+		lastInterruptedTurnIdValue = normalize(lastInterruptedTurnId);
 		completedTurnsValue = completedTurns < 0 ? 0 : completedTurns;
+		interruptedTurnsValue = interruptedTurns < 0 ? 0 : interruptedTurns;
+		lastInterruptCodeValue = normalize(lastInterruptCode);
 	}
 
 	public function setupAccepted():Bool {
@@ -235,8 +245,20 @@ class TuiLiveShellRunOutcome {
 		return lastCompletedTurnIdValue;
 	}
 
+	public function lastInterruptedTurnIdText():String {
+		return lastInterruptedTurnIdValue;
+	}
+
 	public function completedTurns():Int {
 		return completedTurnsValue;
+	}
+
+	public function interruptedTurns():Int {
+		return interruptedTurnsValue;
+	}
+
+	public function lastInterruptCode():String {
+		return lastInterruptCodeValue;
 	}
 
 	public function finalFrameLineAt(index:Int):String {

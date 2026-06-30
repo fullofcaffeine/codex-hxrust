@@ -9,5 +9,6 @@ package codexhx.runtime.tui.appserver;
 **/
 interface TuiPromptTransport {
 	function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome;
+	function interruptTurn(envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome;
 	function shutdown(code:String):TuiPromptTransportShutdownReport;
 }
