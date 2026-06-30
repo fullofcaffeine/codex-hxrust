@@ -1,9 +1,13 @@
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectStatus;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectReport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
@@ -26,6 +30,7 @@ class TuiLiveShellRunnerHarness {
 		testInitialDrawAndIdleRestore();
 		testTextSubmitEchoThroughPump();
 		testTextSubmitThroughLineConnectedTransport();
+		testTextSubmitThroughInjectedLineConnector();
 		testAgentNavigationInputRoutesActiveThread();
 		testEscapeCtrlCAndQExit();
 		testLiveBackendNoTtyRunPath();
@@ -113,6 +118,32 @@ class TuiLiveShellRunnerHarness {
 				["app-server", "--json-rpc"], "/workspace", []))));
 		assertIntEquals(1, directOutcome.acceptedPrompts(), "direct line-connected accepted prompts");
 		assertStringEquals("assistant> echo: direct", directOutcome.finalFrameLineAt(4), "direct line-connected assistant echo");
+	}
+
+	static function testTextSubmitThroughInjectedLineConnector():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("n")),
+			TerminalEvent.Key(TerminalKey.Character("j")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("t")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final connector = new RunnerRecordingLineConnector();
+		final outcome = TuiLiveShellRunner.run(request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(24,
+				2)).withLineConnectedPromptTransportUsingConnector(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+				["app-server", "--json-rpc"], "/workspace", [])),
+				"", connector));
+
+		assertIntEquals(1, outcome.acceptedPrompts(), "injected line connector accepted prompts");
+		assertStringEquals("assistant> echo: inject", outcome.finalFrameLineAt(4), "injected line connector assistant echo");
+		assertIntEquals(1, connector.connectCallCount(), "injected line connector connect count");
+		assertIntEquals(1, connector.transportCallCount(), "injected line connector transport count");
 	}
 
 	static function testAgentNavigationInputRoutesActiveThread():Void {
@@ -217,5 +248,35 @@ class TuiLiveShellRunnerHarness {
 	static function assertTrue(value:Bool, label:String):Void {
 		if (!value)
 			throw label;
+	}
+}
+
+class RunnerRecordingLineConnector implements TuiAppServerJsonRpcLineConnector {
+	final delegate:DryRunTuiAppServerJsonRpcLineConnector;
+	var connectCalls:Int;
+	var transportCalls:Int;
+
+	public function new() {
+		this.delegate = new DryRunTuiAppServerJsonRpcLineConnector();
+		this.connectCalls = 0;
+		this.transportCalls = 0;
+	}
+
+	public function connect(endpoint:TuiAppServerJsonRpcLineEndpoint):TuiAppServerJsonRpcLineConnectReport {
+		connectCalls = connectCalls + 1;
+		return delegate.connect(endpoint);
+	}
+
+	public function transportFor(report:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport> {
+		transportCalls = transportCalls + 1;
+		return delegate.transportFor(report);
+	}
+
+	public function connectCallCount():Int {
+		return connectCalls;
+	}
+
+	public function transportCallCount():Int {
+		return transportCalls;
 	}
 }

@@ -6,19 +6,30 @@ package codexhx.runtime.tui.appserver;
 class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJsonRpcTransport {
 	final endpoint:TuiAppServerJsonRpcLineEndpoint;
 	final rejectionCode:String;
+	final connector:TuiAppServerJsonRpcLineConnector;
 
 	var lastConnectReportValue:TuiAppServerJsonRpcLineConnectReport;
 	var lastLineOutcomeValue:TuiAppServerJsonRpcLineOutcome;
 	var lastCloseReportValue:TuiAppServerJsonRpcLineCloseReport;
 	var lastAttemptReportValue:TuiAppServerJsonRpcLineTransportAttemptReport;
 
-	public function new(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String) {
+	public function new(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String, connector:TuiAppServerJsonRpcLineConnector) {
 		this.endpoint = endpoint;
 		this.rejectionCode = rejectionCode;
+		this.connector = connector;
 		this.lastConnectReportValue = null;
 		this.lastLineOutcomeValue = null;
 		this.lastCloseReportValue = null;
 		this.lastAttemptReportValue = null;
+	}
+
+	public static function dryRun(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String):DryRunTuiAppServerJsonRpcLineConnectedTransport {
+		return new DryRunTuiAppServerJsonRpcLineConnectedTransport(endpoint, rejectionCode, defaultConnector());
+	}
+
+	public static function withConnector(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String,
+			connector:TuiAppServerJsonRpcLineConnector):DryRunTuiAppServerJsonRpcLineConnectedTransport {
+		return new DryRunTuiAppServerJsonRpcLineConnectedTransport(endpoint, rejectionCode, connector);
 	}
 
 	public static function stdio(plan:TuiAppServerJsonRpcProcessLaunchPlan):DryRunTuiAppServerJsonRpcLineConnectedTransport {
@@ -26,7 +37,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 	}
 
 	public static function stdioWithRejection(plan:TuiAppServerJsonRpcProcessLaunchPlan, rejectionCode:String):DryRunTuiAppServerJsonRpcLineConnectedTransport {
-		return new DryRunTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(plan), rejectionCode);
+		return dryRun(TuiAppServerJsonRpcLineEndpoint.Stdio(plan), rejectionCode);
 	}
 
 	public static function socket(host:String, port:Int):DryRunTuiAppServerJsonRpcLineConnectedTransport {
@@ -34,7 +45,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 	}
 
 	public static function socketWithRejection(host:String, port:Int, rejectionCode:String):DryRunTuiAppServerJsonRpcLineConnectedTransport {
-		return new DryRunTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.TcpSocket(host, port), rejectionCode);
+		return dryRun(TuiAppServerJsonRpcLineEndpoint.TcpSocket(host, port), rejectionCode);
 	}
 
 	public function sendPrompt(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
@@ -47,14 +58,13 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		final outbound = TuiAppServerJsonRpcTransportTranscript.outbound(request);
 		if (envelope == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_envelope", outbound);
-		final connector:TuiAppServerJsonRpcLineConnector = new DryRunTuiAppServerJsonRpcLineConnector();
 		final connectReport = connector.connect(endpoint);
 		lastConnectReportValue = connectReport;
 		if (connectReport == null || !connectReport.isReady()) {
 			recordAttempt(connectReport, null, null, false);
 			return TuiAppServerJsonRpcTransportOutcome.rejected(connectReport == null ? "missing_connect_report" : connectReport.code, outbound);
 		}
-		final lineTransport = materializeLineTransport(connector, connectReport);
+		final lineTransport = materializeLineTransport(connectReport);
 		if (lineTransport == null) {
 			recordAttempt(connectReport, null, null, false);
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_line_transport", outbound);
@@ -96,13 +106,16 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		lastAttemptReportValue = TuiAppServerJsonRpcLineTransportAttemptReport.fromParts(connectReport, lineOutcome, closeReport, transportMaterialized);
 	}
 
-	function materializeLineTransport(connector:TuiAppServerJsonRpcLineConnector,
-			connectReport:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport> {
+	function materializeLineTransport(connectReport:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport> {
 		if (rejectionCode.length == 0)
 			return connector.transportFor(connectReport);
 		if (connectReport == null || !connectReport.isReady())
 			return null;
 		return new FakeTuiAppServerJsonRpcLineTransport(new DryRunRejectingTuiPromptJsonRpcExchange(rejectionCode));
+	}
+
+	static function defaultConnector():TuiAppServerJsonRpcLineConnector {
+		return new DryRunTuiAppServerJsonRpcLineConnector();
 	}
 
 	static function inboundFramesFromLineOutcome(outcome:TuiAppServerJsonRpcLineOutcome):Array<TuiPromptJsonRpcFrame> {

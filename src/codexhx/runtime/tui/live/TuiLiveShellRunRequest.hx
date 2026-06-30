@@ -5,6 +5,7 @@ import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
@@ -62,8 +63,14 @@ class TuiLiveShellRunRequest {
 	}
 
 	public function withLineConnectedPromptTransport(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String = ""):TuiLiveShellRunRequest {
-		return withJsonRpcPromptTransport(new JsonRpcTuiPromptTransport(new DryRunTuiAppServerJsonRpcLineConnectedTransport(endpoint,
+		return withJsonRpcPromptTransport(new JsonRpcTuiPromptTransport(DryRunTuiAppServerJsonRpcLineConnectedTransport.dryRun(endpoint,
 			normalize(rejectionCode, ""))));
+	}
+
+	public function withLineConnectedPromptTransportUsingConnector(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String,
+			connector:TuiAppServerJsonRpcLineConnector):TuiLiveShellRunRequest {
+		return withJsonRpcPromptTransport(new JsonRpcTuiPromptTransport(DryRunTuiAppServerJsonRpcLineConnectedTransport.withConnector(endpoint,
+			normalize(rejectionCode, ""), connector)));
 	}
 
 	public function withScheduler(scheduler:TerminalRedrawScheduler):TuiLiveShellRunRequest {
