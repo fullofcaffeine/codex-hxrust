@@ -13,12 +13,17 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportTranscript;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineCloseReport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpointReport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpointStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTranscript;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessEnvVar;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
@@ -76,6 +81,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testFakeLineTransportTracksLifecycleAndRejectsAfterClose();
 		testFakeLineTransportRejectsMismatchedOutboundLine();
 		testFakeLineTransportRecordsOutboundOnlyPostWriteRejection();
+		testLineEndpointPlansAreTyped();
 		testFakeWireSessionSequencesInboundRecords();
 		testFakeWireSessionRejectsMismatchedInboundLine();
 		testFakeWireSessionRejectsMismatchedOutboundRecord();
@@ -403,6 +409,43 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertLineTranscript(outcome.transcript(), request.messageJson() + "\n", 0, 1, "fake line transport exchange rejection transcript");
 		assertIntEquals(1, lineTransport.outboundLineCount(), "fake line transport exchange rejection outbound count");
 		assertIntEquals(0, lineTransport.inboundLineCount(), "fake line transport exchange rejection inbound count");
+	}
+
+	static function testLineEndpointPlansAreTyped():Void {
+		final args = ["app-server", "--json-rpc"];
+		final env = [
+			new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home"),
+			new TuiAppServerJsonRpcProcessEnvVar("RUST_LOG", "info")
+		];
+		final plan = TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex", args, "/workspace", env);
+		args[0] = "mutated";
+		env.push(new TuiAppServerJsonRpcProcessEnvVar("MUTATED", "yes"));
+		final stdio = TuiAppServerJsonRpcLineEndpointReport.inspect(TuiAppServerJsonRpcLineEndpoint.Stdio(plan));
+		assertLineEndpoint(stdio, TuiAppServerJsonRpcLineEndpointStatus.StdioReady, "ready", true, "codex", 2, "/workspace", 2, "", 0, "stdio line endpoint");
+		assertStringEquals("app-server", stdio.argAt(0), "stdio line endpoint first arg copy");
+		assertStringEquals("--json-rpc", stdio.argAt(1), "stdio line endpoint second arg");
+		assertEnvVar(stdio.envAt(0), "CODEX_HOME", "/tmp/codex-home", "stdio line endpoint first env");
+		assertEnvVar(stdio.envAt(1), "RUST_LOG", "info", "stdio line endpoint second env");
+
+		final socket = TuiAppServerJsonRpcLineEndpointReport.inspect(TuiAppServerJsonRpcLineEndpoint.TcpSocket("127.0.0.1", 43817));
+		assertLineEndpoint(socket, TuiAppServerJsonRpcLineEndpointStatus.SocketReady, "ready", true, "", 0, "", 0, "127.0.0.1", 43817, "socket line endpoint");
+
+		final missingCommand = TuiAppServerJsonRpcLineEndpointReport.inspect(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("",
+			[], "", [])));
+		assertLineEndpoint(missingCommand, TuiAppServerJsonRpcLineEndpointStatus.Invalid, "missing_command", false, "", 0, "", 0, "", 0,
+			"missing command endpoint");
+
+		final invalidEnv = TuiAppServerJsonRpcLineEndpointReport.inspect(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			[], "", [new TuiAppServerJsonRpcProcessEnvVar("", "value")])));
+		assertLineEndpoint(invalidEnv, TuiAppServerJsonRpcLineEndpointStatus.Invalid, "invalid_env", false, "", 0, "", 0, "", 0, "invalid env endpoint");
+
+		final invalidSocket = TuiAppServerJsonRpcLineEndpointReport.inspect(TuiAppServerJsonRpcLineEndpoint.TcpSocket("127.0.0.1", 70000));
+		assertLineEndpoint(invalidSocket, TuiAppServerJsonRpcLineEndpointStatus.Invalid, "invalid_socket_port", false, "", 0, "", 0, "", 0,
+			"invalid socket endpoint");
+
+		final unsupported = TuiAppServerJsonRpcLineEndpointReport.inspect(TuiAppServerJsonRpcLineEndpoint.Unsupported("named_pipe"));
+		assertLineEndpoint(unsupported, TuiAppServerJsonRpcLineEndpointStatus.Unsupported, "named_pipe", false, "", 0, "", 0, "", 0,
+			"unsupported line endpoint");
 	}
 
 	static function testFakeWireSessionSequencesInboundRecords():Void {
@@ -892,6 +935,32 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedTotalLineCount, transcript.totalLineCount(), label + " total count");
 		if (expectedOutboundLine.length > 0)
 			assertStringEquals(expectedOutboundLine, transcript.lineAt(0), label + " first line");
+	}
+
+	static function assertLineEndpoint(report:TuiAppServerJsonRpcLineEndpointReport, expectedStatus:TuiAppServerJsonRpcLineEndpointStatus,
+			expectedCode:String, expectedReady:Bool, expectedCommand:String, expectedArgCount:Int, expectedCwd:String, expectedEnvCount:Int,
+			expectedHost:String, expectedPort:Int, label:String):Void {
+		if (report == null)
+			throw label + ": missing report";
+		assertStringEquals(expectedStatus.text(), report.statusText(), label + " status");
+		assertStringEquals(expectedCode, report.code, label + " code");
+		if (expectedReady)
+			assertTrue(report.isReady(), label + " ready");
+		else
+			assertFalse(report.isReady(), label + " not ready");
+		assertStringEquals(expectedCommand, report.command(), label + " command");
+		assertIntEquals(expectedArgCount, report.argCount(), label + " arg count");
+		assertStringEquals(expectedCwd, report.cwd(), label + " cwd");
+		assertIntEquals(expectedEnvCount, report.envCount(), label + " env count");
+		assertStringEquals(expectedHost, report.host, label + " host");
+		assertIntEquals(expectedPort, report.port, label + " port");
+	}
+
+	static function assertEnvVar(env:Null<TuiAppServerJsonRpcProcessEnvVar>, expectedName:String, expectedValue:String, label:String):Void {
+		if (env == null)
+			throw label + ": missing env";
+		assertStringEquals(expectedName, env.name, label + " name");
+		assertStringEquals(expectedValue, env.value, label + " value");
 	}
 
 	static function expectResponseFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcResponse {
