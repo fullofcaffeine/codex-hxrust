@@ -2,10 +2,10 @@ package codexhx.runtime.tui.appserver;
 
 /**
 	Credential-free prompt transport that records the outbound JSON-RPC request
-	before sending it through a typed in-process JSON-RPC exchange.
+	before sending it through a typed app-server JSON-RPC transport.
 **/
 class JsonRpcTuiPromptTransport implements TuiPromptTransport {
-	final exchange:TuiPromptJsonRpcExchange;
+	final appServerTransport:TuiAppServerJsonRpcTransport;
 	var lastRequestValue:Null<TuiPromptJsonRpcRequest>;
 	var lastResponseValue:Null<TuiPromptJsonRpcResponse>;
 	var lastNotificationsValue:Array<TuiPromptJsonRpcNotification>;
@@ -16,8 +16,8 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastStreamScopeValue:TuiPromptJsonRpcStreamScopeReport;
 	var lastTurnLifecycleValue:TuiPromptTurnLifecycleReport;
 
-	public function new(?exchange:TuiPromptJsonRpcExchange) {
-		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
+	public function new(?appServerTransport:TuiAppServerJsonRpcTransport) {
+		this.appServerTransport = appServerTransport == null ? new FakeTuiAppServerJsonRpcTransport() : appServerTransport;
 		this.lastRequestValue = null;
 		this.lastResponseValue = null;
 		this.lastNotificationsValue = [];
@@ -38,19 +38,19 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		lastNotificationsValue = [];
 		lastStreamNotificationsValue = [];
 		replaceLastFrames([TuiPromptJsonRpcFrame.Request(request)]);
-		final exchangeOutcome = exchange.send(request, envelope);
-		if (exchangeOutcome == null || !exchangeOutcome.isAccepted())
-			return TuiPromptTransportOutcome.rejected(exchangeOutcome == null ? "missing_exchange_outcome" : exchangeOutcome.code());
-		final response = exchangeOutcome.response();
+		final transportOutcome = appServerTransport.sendPrompt(request, envelope);
+		if (transportOutcome == null || !transportOutcome.isAccepted())
+			return TuiPromptTransportOutcome.rejected(transportOutcome == null ? "missing_transport_outcome" : transportOutcome.code());
+		final response = transportOutcome.response();
 		if (response == null)
-			return TuiPromptTransportOutcome.rejected("missing_exchange_response");
+			return TuiPromptTransportOutcome.rejected("missing_transport_response");
 		final responseFrames = [TuiPromptJsonRpcFrame.Request(request), TuiPromptJsonRpcFrame.Response(response)];
 		final responseCorrelation = TuiPromptJsonRpcFrameCorrelation.fromFrames(responseFrames);
 		if (!responseCorrelation.isComplete()) {
 			replaceLastFrames(responseFrames);
 			return TuiPromptTransportOutcome.rejected(responseCorrelation.code());
 		}
-		final exchangeStreamNotifications = exchangeOutcome.streamNotifications();
+		final exchangeStreamNotifications = transportOutcome.streamNotifications();
 		final streamFrames = responseFrames.copy();
 		for (notification in exchangeStreamNotifications)
 			streamFrames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
@@ -65,14 +65,14 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 			return TuiPromptTransportOutcome.rejected(turnLifecycle.code());
 		}
 		lastResponseValue = response;
-		lastNotificationsValue = exchangeOutcome.notifications();
+		lastNotificationsValue = transportOutcome.notifications();
 		lastStreamNotificationsValue = exchangeStreamNotifications;
 		final frames = responseFrames.copy();
 		for (notification in lastStreamNotificationsValue)
 			frames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
 		replaceLastFrames(frames);
 		return TuiPromptTransportOutcome.acceptedWithResponse(response.result,
-			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, exchangeOutcome.events()));
+			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, transportOutcome.events()));
 	}
 
 	public function lastRequest():Null<TuiPromptJsonRpcRequest> {

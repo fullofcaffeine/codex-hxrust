@@ -4,7 +4,11 @@ import codexhx.protocol.ThreadId;
 import codexhx.protocol.app.AppProtocol;
 import codexhx.protocol.json.CodexJson;
 import codexhx.protocol.json.JsonParseOutcome;
+import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
@@ -58,6 +62,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
 		testJsonRpcNotificationsProjectToTransportEvents();
 		testJsonRpcExchangeRejectedSubmitIsTypedRefusal();
+		testJsonRpcTransportDisconnectedSubmitIsTypedRefusal();
+		testJsonRpcTransportMissingResponseIsTypedRefusal();
 		testJsonRpcMismatchedResponseIsTypedRefusal();
 		testJsonRpcWrongThreadStreamIsTypedRefusal();
 		testJsonRpcWrongTurnStreamIsTypedRefusal();
@@ -298,7 +304,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function testJsonRpcExchangeRejectedSubmitIsTypedRefusal():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000005557");
-		final transport = new JsonRpcTuiPromptTransport(new RejectingPromptJsonRpcExchange("exchange_offline"));
+		final transport = new JsonRpcTuiPromptTransport(new FakeTuiAppServerJsonRpcTransport(new RejectingPromptJsonRpcExchange("exchange_offline")));
 		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
 		final result = facade.submitPrompt(RequestId.fromInteger(79), "json rpc blocked");
 		assertFalse(result.acceptedPrompt(), "json-rpc exchange rejection refused");
@@ -326,10 +332,63 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
 	}
 
+	static function testJsonRpcTransportDisconnectedSubmitIsTypedRefusal():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005564");
+		final transport = new JsonRpcTuiPromptTransport(new DisconnectedAppServerJsonRpcTransport("socket_disconnected"));
+		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
+		final result = facade.submitPrompt(RequestId.fromInteger(86), "json rpc disconnected");
+		assertFalse(result.acceptedPrompt(), "json-rpc transport disconnect refused");
+		assertStringEquals("86", result.requestIdText(), "json-rpc transport disconnect request id");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Rejected, "86", 1, 0,
+			"json-rpc transport disconnect prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "json-rpc transport disconnect leaves no pending request");
+		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc transport disconnect request recorded");
+		if (transport.lastResponse() != null)
+			throw "json-rpc transport disconnect should not record response";
+		assertIntEquals(0, transport.lastNotificationCount(), "json-rpc transport disconnect should not record notifications");
+		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc transport disconnect should not record stream notifications");
+		assertIntEquals(1, transport.lastFrameCount(), "json-rpc transport disconnect should record outbound frame only");
+		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc transport disconnect request frame");
+		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.RequestOnly, "86", "", 0, "json-rpc transport disconnect correlation");
+		assertStreamScope(transport.lastStreamScope(), TuiPromptJsonRpcStreamScopeStatus.Empty, "", "", "", "", 0, -1,
+			"json-rpc transport disconnect stream scope");
+		assertTurnLifecycle(transport.lastTurnLifecycle(), TuiPromptTurnLifecycleStatus.MissingStartedAndCompleted, "", "", "", 0, 0, 0,
+			"json-rpc transport disconnect turn lifecycle");
+		assertIntEquals(0, facade.queuedCount(), "json-rpc transport disconnect queues no fake events");
+	}
+
+	static function testJsonRpcTransportMissingResponseIsTypedRefusal():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005565");
+		final transport = new JsonRpcTuiPromptTransport(new MissingResponseAppServerJsonRpcTransport());
+		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
+		final result = facade.submitPrompt(RequestId.fromInteger(87), "json rpc missing response");
+		assertFalse(result.acceptedPrompt(), "json-rpc missing transport response refused");
+		assertStringEquals("87", result.requestIdText(), "json-rpc missing transport response request id");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Rejected, "87", 1, 0,
+			"json-rpc missing transport response prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "json-rpc missing transport response leaves no pending request");
+		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc missing transport response request recorded");
+		if (transport.lastResponse() != null)
+			throw "json-rpc missing transport response should not record response";
+		assertIntEquals(0, transport.lastNotificationCount(), "json-rpc missing transport response should not record notifications");
+		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc missing transport response should not record stream notifications");
+		assertIntEquals(1, transport.lastFrameCount(), "json-rpc missing transport response should record outbound frame only");
+		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc missing transport response request frame");
+		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.RequestOnly, "87", "", 0,
+			"json-rpc missing transport response correlation");
+		assertStreamScope(transport.lastStreamScope(), TuiPromptJsonRpcStreamScopeStatus.Empty, "", "", "", "", 0, -1,
+			"json-rpc missing transport response stream scope");
+		assertTurnLifecycle(transport.lastTurnLifecycle(), TuiPromptTurnLifecycleStatus.MissingStartedAndCompleted, "", "", "", 0, 0, 0,
+			"json-rpc missing transport response turn lifecycle");
+		assertIntEquals(0, facade.queuedCount(), "json-rpc missing transport response queues no fake events");
+	}
+
 	static function testJsonRpcMismatchedResponseIsTypedRefusal():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000005559");
-		final transport = new JsonRpcTuiPromptTransport(new MismatchedResponsePromptJsonRpcExchange());
+		final transport = new JsonRpcTuiPromptTransport(new FakeTuiAppServerJsonRpcTransport(new MismatchedResponsePromptJsonRpcExchange()));
 		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
 		final result = facade.submitPrompt(RequestId.fromInteger(81), "json rpc stale response");
 		assertFalse(result.acceptedPrompt(), "json-rpc mismatched response refused");
@@ -369,7 +428,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000005560");
 		final wrongThread = thread("00000000-0000-0000-0000-000000009560");
-		final transport = new JsonRpcTuiPromptTransport(new WrongThreadStreamPromptJsonRpcExchange(wrongThread));
+		final transport = new JsonRpcTuiPromptTransport(new FakeTuiAppServerJsonRpcTransport(new WrongThreadStreamPromptJsonRpcExchange(wrongThread)));
 		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
 		final result = facade.submitPrompt(RequestId.fromInteger(82), "json rpc wrong thread");
 		assertFalse(result.acceptedPrompt(), "json-rpc wrong-thread stream refused");
@@ -397,7 +456,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function testJsonRpcWrongTurnStreamIsTypedRefusal():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000005561");
-		final transport = new JsonRpcTuiPromptTransport(new WrongTurnStreamPromptJsonRpcExchange());
+		final transport = new JsonRpcTuiPromptTransport(new FakeTuiAppServerJsonRpcTransport(new WrongTurnStreamPromptJsonRpcExchange()));
 		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
 		final result = facade.submitPrompt(RequestId.fromInteger(83), "json rpc wrong turn");
 		assertFalse(result.acceptedPrompt(), "json-rpc wrong-turn stream refused");
@@ -423,7 +482,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function testJsonRpcMissingCompletedTurnLifecycleIsTypedRefusal():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000005562");
-		final transport = new JsonRpcTuiPromptTransport(new IncompleteTurnLifecyclePromptJsonRpcExchange(true, false));
+		final transport = new JsonRpcTuiPromptTransport(new FakeTuiAppServerJsonRpcTransport(new IncompleteTurnLifecyclePromptJsonRpcExchange(true, false)));
 		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
 		final result = facade.submitPrompt(RequestId.fromInteger(84), "json rpc missing completed");
 		assertFalse(result.acceptedPrompt(), "json-rpc missing-completed lifecycle refused");
@@ -443,7 +502,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function testJsonRpcMissingStartedTurnLifecycleIsTypedRefusal():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000005563");
-		final transport = new JsonRpcTuiPromptTransport(new IncompleteTurnLifecyclePromptJsonRpcExchange(false, true));
+		final transport = new JsonRpcTuiPromptTransport(new FakeTuiAppServerJsonRpcTransport(new IncompleteTurnLifecyclePromptJsonRpcExchange(false, true)));
 		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
 		final result = facade.submitPrompt(RequestId.fromInteger(85), "json rpc missing started");
 		assertFalse(result.acceptedPrompt(), "json-rpc missing-started lifecycle refused");
@@ -923,6 +982,27 @@ class RejectingPromptTransport implements TuiPromptTransport {
 		if (envelope == null)
 			return TuiPromptTransportOutcome.rejected("missing_envelope");
 		return TuiPromptTransportOutcome.rejected(code);
+	}
+}
+
+class DisconnectedAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
+	final code:String;
+
+	public function new(code:String) {
+		this.code = code;
+	}
+
+	public function sendPrompt(_request:TuiPromptJsonRpcRequest, _envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
+		return TuiAppServerJsonRpcTransportOutcome.disconnected(code);
+	}
+}
+
+class MissingResponseAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
+	public function new() {}
+
+	public function sendPrompt(_request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
+		return new TuiAppServerJsonRpcTransportOutcome(TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", null, [], [],
+			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")]);
 	}
 }
 

@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`, `TUI-LIVE-27` / `codex-hxrust-notn`, `TUI-LIVE-28` / `codex-hxrust-6k41`, `TUI-LIVE-29` / `codex-hxrust-4jpd`, `TUI-LIVE-30` / `codex-hxrust-c0wj`, `TUI-LIVE-31` / `codex-hxrust-jb4r`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`, `TUI-LIVE-27` / `codex-hxrust-notn`, `TUI-LIVE-28` / `codex-hxrust-6k41`, `TUI-LIVE-29` / `codex-hxrust-4jpd`, `TUI-LIVE-30` / `codex-hxrust-c0wj`, `TUI-LIVE-31` / `codex-hxrust-jb4r`, `TUI-LIVE-32` / `codex-hxrust-5mcs`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -9,10 +9,12 @@ validation and still defaults to fake echo behavior, but it now asks a
 `TuiAppServerEvent` values.
 
 The default `JsonRpcTuiPromptTransport` records an outbound JSON-RPC
-`turn/start` request and sends it through a credential-free
-`TuiPromptJsonRpcExchange`. The request keeps a typed `RequestId`, typed method,
-and typed `turn/start` params with the active `ThreadId` plus one text
-user-input entry:
+`turn/start` request and sends it through the typed
+`TuiAppServerJsonRpcTransport` contract. `FakeTuiAppServerJsonRpcTransport`
+keeps the credential-free `TuiPromptJsonRpcExchange` implementation behind that
+runtime-facing boundary until a process/socket transport exists. The request
+keeps a typed `RequestId`, typed method, and typed `turn/start` params with the
+active `ThreadId` plus one text user-input entry:
 
 ```json
 {
@@ -266,6 +268,14 @@ selected turn includes both `turn/started` and `turn/completed`. Missing either
 side of that lifecycle returns a typed refusal such as `missing_started` or
 `missing_completed` before response state is marked accepted or shell events
 are queued.
+
+`TuiAppServerJsonRpcTransportOutcome` is the first app-server transport-level
+result shape for prompt requests. It carries accepted responses, stream
+notifications, shell events, typed rejection codes, and disconnect outcomes
+without requiring ChatWidget or terminal-loop code to know whether the source
+was an in-process fake exchange or a future real transport. The prompt-submit
+gate covers disconnect-before-response and accepted-with-missing-response paths
+as typed refusals with no queued shell events.
 
 Tests can inject another transport to prove refusal behavior. A rejected
 transport preserves the prompt envelope and request-registration effects, but

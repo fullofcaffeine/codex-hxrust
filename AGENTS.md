@@ -131,6 +131,10 @@ Do not "fix" a giant source filename by leaving a giant typedef alias in that sa
 
 The generated Rust is a product surface. Haxe design choices should help haxe.rust emit readable, idiomatic, warning-clean, production-quality Rust with native representations and minimal hxrt/runtime involvement wherever the active semantic contract permits it. If high-quality Haxe still produces poor Rust, track and fix that as a generic haxe.rust compiler/runtime improvement rather than working around it with Codex-specific source contortions.
 
+Generated Rust quality must be actively inspected for runtime, TUI, transport, persistence, process, and other production-shaped slices, not merely assumed from interpreter success. Each such slice should keep generated Cargo output warning-clean, review the relevant generated module shape when the Haxe source introduces a new boundary or abstraction, and prefer Haxe APIs that lower toward hand-written-quality Rust: typed records/enums, narrow interfaces, predictable ownership, low allocation, and no gratuitous hxrt/runtime artifacts on hot or host-boundary paths. Haxe-only artifacts, compatibility wrappers, and helper classes should exist only when they carry a real source-level contract, remove duplication, or improve type safety; delete or avoid scaffolding that exists only because a previous slice needed a temporary test shape.
+
+When codexhx needs low-level Rust authority such as native handles, raw terminal/process/socket/SQLite primitives, RAII guards, ownership/borrow-shaped access, or zero/low-copy data flow, expose that capability through typed Haxe-facing abstractions and generic haxe.rust primitives or metal/native facades. Do not hide missing low-level Rust support behind dynamic Haxe, stringly escape hatches, generated-Rust edits, or Codex-specific compiler hacks. If haxe.rust cannot yet expose the primitive in a way that emits idiomatic Rust, reduce it to a generic backend improvement and fix or track it in `../haxe.rust`.
+
 ## haxe.rust Profile Language
 
 Use haxe.rust's supported profile selectors precisely:
