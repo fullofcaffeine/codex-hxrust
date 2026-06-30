@@ -183,6 +183,19 @@ final async app-server transport: socket transport, background reader/writer
 tasks, cancellation/backpressure, credentials, model calls, persistence, and
 tools remain deferred.
 
+`PersistentStdioTuiAppServerJsonRpcLineTransportAttacher` and
+`PersistentTuiAppServerJsonRpcLineConnectedTransport` lift the persistent stdio
+session into the connector-backed JSON-RPC prompt path. The persistent transport
+connects and materializes once, reuses the same line transport across multiple
+`sendPrompt` calls, keeps per-send attempt diagnostics without closing between
+sends, and exposes an explicit close report for final cleanup. The prompt-submit
+harness proves two `FakeTuiAppServerFacade.submitPrompt` calls through one
+shell-backed stdio session, aggregate close counts, after-close disconnection,
+interpreter execution, generated Cargo checks/tests, generated binary execution,
+and focused generated-Rust inspection. This is still synchronous and bounded:
+background app-server pumps, sockets, cancellation/backpressure, credentials,
+model calls, persistence, and tools remain deferred.
+
 `TuiLiveShellRunRequest` can now select that connector-backed JSON-RPC line
 pipeline without replacing the whole fake facade. `withJsonRpcPromptTransport`
 accepts the concrete JSON-RPC prompt transport, and

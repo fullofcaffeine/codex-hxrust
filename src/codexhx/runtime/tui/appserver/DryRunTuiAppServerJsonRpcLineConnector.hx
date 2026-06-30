@@ -22,6 +22,11 @@ class DryRunTuiAppServerJsonRpcLineConnector implements TuiAppServerJsonRpcLineC
 		return new DryRunTuiAppServerJsonRpcLineConnector(defaultOpener(), new ProcessBackedTuiAppServerJsonRpcLineTransportAttacher());
 	}
 
+	public static function persistentStdio(maxInboundLinesPerPrompt:Int):DryRunTuiAppServerJsonRpcLineConnector {
+		return new DryRunTuiAppServerJsonRpcLineConnector(defaultOpener(),
+			new PersistentStdioTuiAppServerJsonRpcLineTransportAttacher(maxInboundLinesPerPrompt));
+	}
+
 	public function connect(endpoint:TuiAppServerJsonRpcLineEndpoint):TuiAppServerJsonRpcLineConnectReport {
 		final endpointReport = TuiAppServerJsonRpcLineEndpointReport.inspect(endpoint);
 		final intent = TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(endpoint);

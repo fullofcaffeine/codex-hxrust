@@ -12,6 +12,7 @@ import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
+import codexhx.runtime.tui.appserver.PersistentTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.ProcessBackedTuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
@@ -52,6 +53,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
+import codexhx.runtime.tui.appserver.PersistentStdioTuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.ProcessBackedTuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageCompletedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
@@ -115,6 +117,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testProcessBackedLineTransportReportsFailuresAndClose();
 		testPersistentStdioSessionHandlesTwoPromptLines();
 		testPersistentStdioSessionReportsRefusalsAndClose();
+		testPersistentConnectorBackedTransportReusesOneSession();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
 		testLineConnectorComposesEndpointOpenAndAttachment();
@@ -770,6 +773,60 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(1, invalidStream.inboundLineCount(), "persistent stdio invalid stream inbound count");
 		assertLineCloseReport(invalidStream.close("invalid_stream_done"), TuiAppServerJsonRpcLineTransportState.Closed, "invalid_stream_done", 1, 1,
 			"persistent stdio invalid stream close");
+	}
+
+	static function testPersistentConnectorBackedTransportReusesOneSession():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005594");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final firstEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(117), activeSession, activeThread, "persistent connector first");
+		final firstRequest = TuiPromptJsonRpcRequest.turnStart(firstEnvelope);
+		final firstExpected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(firstRequest, firstEnvelope, firstRequest.messageJson() + "\n");
+		assertTrue(firstExpected.isAccepted(), "persistent connector first expected fake line outcome");
+		final secondEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(118), activeSession, activeThread, "persistent connector second");
+		final secondRequest = TuiPromptJsonRpcRequest.turnStart(secondEnvelope);
+		final secondExpected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(secondRequest, secondEnvelope, secondRequest.messageJson() + "\n");
+		assertTrue(secondExpected.isAccepted(), "persistent connector second expected fake line outcome");
+		final inbound = firstExpected.inboundLines();
+		for (line in secondExpected.inboundLines())
+			inbound.push(line);
+
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			firstExpected.inboundLineCount());
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport);
+		final facade = attachedFacadeWithTransport(shell, activeThread, promptTransport);
+
+		final first = facade.submitPrompt(RequestId.fromInteger(117), "persistent connector first");
+		assertTrue(first.acceptedPrompt(), "persistent connector first accepted");
+		facade.drainQueued();
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Resolved, "117", 1, 0, "persistent connector first lifecycle");
+		assertTrue(appServerTransport.isConnected(), "persistent connector stays connected after first send");
+		assertIntEquals(1, appServerTransport.sendCount(), "persistent connector first send count");
+		assertLineConnectReport(appServerTransport.lastConnectReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:sh", 1, true,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "persistent connector connect report");
+		assertLineTransportAttempt(appServerTransport.lastAttemptReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true,
+			TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", null, "", 0, 0, "persistent connector first attempt");
+		assertStringEquals("assistant> echo: persistent connector first", shell.transcriptAt(1).renderText(), "persistent connector first echo row");
+
+		final second = facade.submitPrompt(RequestId.fromInteger(118), "persistent connector second");
+		assertTrue(second.acceptedPrompt(), "persistent connector second accepted");
+		facade.drainQueued();
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Resolved, "118", 1, 0, "persistent connector second lifecycle");
+		assertTrue(appServerTransport.isConnected(), "persistent connector stays connected after second send");
+		assertIntEquals(2, appServerTransport.sendCount(), "persistent connector second send count");
+		assertIntEquals(10, appServerTransport.lastLineOutcome().inboundLineCount(), "persistent connector second inbound count");
+		assertLineTransportAttempt(appServerTransport.lastAttemptReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true,
+			TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", null, "", 0, 0, "persistent connector second attempt");
+		assertStringEquals("assistant> echo: persistent connector second", shell.transcriptAt(2).renderText(), "persistent connector second echo row");
+		assertIntEquals(0, facade.pendingCount(), "persistent connector leaves no pending requests");
+
+		assertLineCloseReport(appServerTransport.close("persistent_connector_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"persistent_connector_done", 2, firstExpected.inboundLineCount() + secondExpected.inboundLineCount(), "persistent connector close");
+		assertFalse(appServerTransport.isConnected(), "persistent connector disconnected after close");
+		final afterClose = appServerTransport.sendPrompt(secondRequest, secondEnvelope);
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), afterClose.status.text(), "persistent connector after close status");
+		assertStringEquals("line_connected_transport_closed", afterClose.code(), "persistent connector after close code");
 	}
 
 	static function testProcessBackedLineConnectorUsesProcessAttacher():Void {
