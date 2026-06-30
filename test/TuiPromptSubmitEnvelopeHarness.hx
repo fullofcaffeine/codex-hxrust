@@ -12,6 +12,7 @@ import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
+import codexhx.runtime.tui.appserver.ProcessBackedTuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
@@ -108,6 +109,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testLineTransportAttachesAfterOpen();
 		testStdioLineRunnerSpawnsWritesAndReadsJsonLines();
 		testStdioLineRunnerReportsFailureAndRefusals();
+		testProcessBackedLineTransportFeedsWireSession();
+		testProcessBackedLineTransportReportsFailuresAndClose();
 		testLineConnectorComposesEndpointOpenAndAttachment();
 		testLineConnectorUsesInjectedNativeBoundaries();
 		testLineConnectorPropagatesInjectedNativeOpenRefusal();
@@ -620,6 +623,71 @@ class TuiPromptSubmitEnvelopeHarness {
 			TuiAppServerJsonRpcStdioLineRunStatus.Rejected, "stdio_env_unsupported", -1, "", 0, 0, "stdio line runner env refusal");
 		assertStdioLineRun(runner.run(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", ["-c", "cat"], "", []), ""),
 			TuiAppServerJsonRpcStdioLineRunStatus.Rejected, "missing_outbound_line", -1, "", 0, 0, "stdio line runner missing outbound");
+	}
+
+	static function testProcessBackedLineTransportFeedsWireSession():Void {
+		final threadId = thread("00000000-0000-0000-0000-000000005587");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(110), session("00000000-0000-0000-0000-000000009978"), threadId,
+			"stdio transport ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final expected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertTrue(expected.isAccepted(), "process-backed transport expected fake line outcome");
+
+		final lineTransport = new ProcessBackedTuiAppServerJsonRpcLineTransport(stdioEchoPlan(expected.inboundLines()));
+		final wireSession = new FakeTuiAppServerJsonRpcWireSession(null, lineTransport);
+		final outcome = wireSession.sendPrompt(request, envelope, TuiPromptJsonRpcFrameCodec.record(0, TuiPromptJsonRpcFrame.Request(request)));
+
+		assertTrue(outcome.isAccepted(), "process-backed wire session accepted");
+		assertIntEquals(expected.inboundLineCount(), outcome.inboundRecordCount(), "process-backed wire inbound record count");
+		assertWireRecord(outcome.inboundRecordAt(0), 1, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Response, request.methodText(),
+			expected.inboundLineAt(0).substr(0, expected.inboundLineAt(0).length - 1), "process-backed response record");
+		assertWireRecord(outcome.inboundRecordAt(9), 10, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Notification,
+			TuiPromptJsonRpcNotificationMethod.ThreadStatusChanged.text(), expected.inboundLineAt(9).substr(0, expected.inboundLineAt(9).length - 1),
+			"process-backed idle status record");
+		assertIntEquals(1, lineTransport.outboundLineCount(), "process-backed line outbound count");
+		assertIntEquals(expected.inboundLineCount(), lineTransport.inboundLineCount(), "process-backed line inbound count");
+		assertStdioLineRun(lineTransport.lastRunReport(), TuiAppServerJsonRpcStdioLineRunStatus.Succeeded, "ok", 0, "", 1, expected.inboundLineCount(),
+			"process-backed line run report");
+		final close = lineTransport.close("process_transport_done");
+		assertLineCloseReport(close, TuiAppServerJsonRpcLineTransportState.Closed, "process_transport_done", 1, expected.inboundLineCount(),
+			"process-backed line close");
+	}
+
+	static function testProcessBackedLineTransportReportsFailuresAndClose():Void {
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(111), session("00000000-0000-0000-0000-000000009979"),
+			thread("00000000-0000-0000-0000-000000005588"), "stdio transport failure");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final nonzero = new ProcessBackedTuiAppServerJsonRpcLineTransport(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", [
+			"-c",
+			"cat >/dev/null; printf '%s\\n' '{\"jsonrpc\":\"2.0\",\"id\":111,\"result\":{\"turn\":{\"id\":\"turn-111\",\"status\":\"inProgress\",\"itemsView\":\"full\",\"items\":[]}}}'; echo boom >&2; exit 7"
+		], "", []));
+		final failed = nonzero.sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), failed.statusText(), "process-backed nonzero status");
+		assertStringEquals("exit_nonzero", failed.code(), "process-backed nonzero code");
+		assertIntEquals(1, failed.inboundLineCount(), "process-backed nonzero inbound evidence");
+		assertIntEquals(1, nonzero.outboundLineCount(), "process-backed nonzero outbound count");
+		assertIntEquals(1, nonzero.inboundLineCount(), "process-backed nonzero inbound count");
+
+		final unknownMethod = new ProcessBackedTuiAppServerJsonRpcLineTransport(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", [
+			"-c",
+			"cat >/dev/null; printf '%s\\n' '{\"jsonrpc\":\"2.0\",\"method\":\"unknown/event\",\"params\":{}}'"
+		], "", []));
+		final decodeFailure = unknownMethod.sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Rejected.text(), decodeFailure.statusText(), "process-backed unknown method status");
+		assertStringEquals("unknown_inbound_method", decodeFailure.code(), "process-backed unknown method code");
+		assertIntEquals(1, decodeFailure.inboundLineCount(), "process-backed unknown method inbound evidence");
+
+		final refused = new ProcessBackedTuiAppServerJsonRpcLineTransport(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", ["-c", "cat"], "/tmp",
+			[])).sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Rejected.text(), refused.statusText(), "process-backed refused status");
+		assertStringEquals("stdio_cwd_unsupported", refused.code(), "process-backed refused code");
+		assertIntEquals(0, refused.inboundLineCount(), "process-backed refused inbound count");
+
+		final closed = new ProcessBackedTuiAppServerJsonRpcLineTransport(stdioEchoPlan([]));
+		assertLineCloseReport(closed.close("preclosed"), TuiAppServerJsonRpcLineTransportState.Closed, "preclosed", 0, 0, "process-backed preclose");
+		final afterClose = closed.sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), afterClose.statusText(), "process-backed after close status");
+		assertStringEquals("line_transport_closed", afterClose.code(), "process-backed after close code");
 	}
 
 	static function testLineConnectorComposesEndpointOpenAndAttachment():Void {
