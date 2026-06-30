@@ -1,13 +1,13 @@
 package codexhx.runtime.tui.appserver;
 
 /**
-	Credential-free app-server JSON-RPC transport backed by an in-process exchange.
+	Credential-free app-server JSON-RPC transport backed by a fake wire session.
 **/
 class FakeTuiAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
-	final exchange:TuiPromptJsonRpcExchange;
+	final wireSession:TuiAppServerJsonRpcWireSession;
 
-	public function new(?exchange:TuiPromptJsonRpcExchange) {
-		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
+	public function new(?exchange:TuiPromptJsonRpcExchange, ?wireSession:TuiAppServerJsonRpcWireSession) {
+		this.wireSession = wireSession == null ? new FakeTuiAppServerJsonRpcWireSession(exchange) : wireSession;
 	}
 
 	public function sendPrompt(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
@@ -16,12 +16,13 @@ class FakeTuiAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
 		final outbound = TuiAppServerJsonRpcTransportTranscript.outbound(request);
 		if (envelope == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_envelope", outbound);
-		final outcome = exchange.send(request, envelope);
+		final outboundRecord = TuiPromptJsonRpcFrameCodec.record(0, TuiPromptJsonRpcFrame.Request(request));
+		final outcome = wireSession.sendPrompt(request, envelope, outboundRecord);
 		if (outcome == null)
-			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_exchange_outcome", outbound);
+			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_wire_outcome", outbound);
+		final transcript = new TuiAppServerJsonRpcTransportTranscript(request, outcome.inboundFrames());
 		if (!outcome.isAccepted())
-			return TuiAppServerJsonRpcTransportOutcome.rejected(outcome.code(), outbound);
-		final transcript = TuiAppServerJsonRpcTransportTranscript.accepted(request, outcome.response(), outcome.streamNotifications());
+			return TuiAppServerJsonRpcTransportOutcome.rejected(outcome.code(), transcript);
 		return TuiAppServerJsonRpcTransportOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(),
 			transcript);
 	}

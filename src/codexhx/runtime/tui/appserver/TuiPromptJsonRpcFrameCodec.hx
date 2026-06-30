@@ -6,8 +6,12 @@ package codexhx.runtime.tui.appserver;
 **/
 class TuiPromptJsonRpcFrameCodec {
 	public static function records(frames:Array<TuiPromptJsonRpcFrame>):Array<TuiPromptJsonRpcFrameRecord> {
+		return recordsFrom(0, frames);
+	}
+
+	public static function recordsFrom(firstSequence:Int, frames:Array<TuiPromptJsonRpcFrame>):Array<TuiPromptJsonRpcFrameRecord> {
 		final out:Array<TuiPromptJsonRpcFrameRecord> = [];
-		var index = 0;
+		var index = firstSequence;
 		for (frame in frames) {
 			out.push(record(index, frame));
 			index = index + 1;
@@ -22,7 +26,7 @@ class TuiPromptJsonRpcFrameCodec {
 		return out.join("");
 	}
 
-	static function record(sequence:Int, frame:TuiPromptJsonRpcFrame):TuiPromptJsonRpcFrameRecord {
+	public static function record(sequence:Int, frame:TuiPromptJsonRpcFrame):TuiPromptJsonRpcFrameRecord {
 		return switch frame {
 			case TuiPromptJsonRpcFrame.Request(_):
 				new TuiPromptJsonRpcFrameRecord(sequence, TuiPromptJsonRpcFrameDirection.Outbound, TuiPromptJsonRpcFrameKind.Request, frame);

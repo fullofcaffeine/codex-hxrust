@@ -5,11 +5,14 @@ import codexhx.protocol.app.AppProtocol;
 import codexhx.protocol.json.CodexJson;
 import codexhx.protocol.json.JsonParseOutcome;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcTransport;
+import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportTranscript;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
@@ -23,6 +26,7 @@ import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcCorrelationStatus;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrame;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameCorrelation;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameCodec;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameDirection;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameKind;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameRecord;
@@ -62,6 +66,9 @@ class TuiPromptSubmitEnvelopeHarness {
 		testPromptSubmitEnvelopeEchoAndRedraw();
 		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
 		testFakeAppServerJsonRpcTransportOwnsTranscript();
+		testFakeWireSessionSequencesInboundRecords();
+		testFakeWireSessionRejectsMismatchedOutboundRecord();
+		testFakeTransportWritesOutboundRecordThroughWireSession();
 		testJsonRpcNotificationsProjectToTransportEvents();
 		testJsonRpcExchangeRejectedSubmitIsTypedRefusal();
 		testJsonRpcTransportDisconnectedSubmitIsTypedRefusal();
@@ -314,6 +321,56 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertTransportTranscript(outcome.transcript(), request.messageJson(), 11, 10, "fake app-server transport transcript");
 		assertResponseFrame(outcome.transcript().frameAt(1), expectJsonRpcResponse(outcome.response(), "fake app-server transport response"),
 			"fake app-server transport response");
+	}
+
+	static function testFakeWireSessionSequencesInboundRecords():Void {
+		final wireSession = new FakeTuiAppServerJsonRpcWireSession();
+		final threadId = thread("00000000-0000-0000-0000-000000005567");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(89), session("00000000-0000-0000-0000-000000009996"), threadId, "wire ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final outbound = TuiPromptJsonRpcFrameCodec.record(0, TuiPromptJsonRpcFrame.Request(request));
+		final outcome = wireSession.sendPrompt(request, envelope, outbound);
+		assertTrue(outcome.isAccepted(), "fake wire session accepted");
+		assertStringEquals("accepted", outcome.code(), "fake wire session code");
+		assertStringEquals("accepted", outcome.statusText(), "fake wire session status");
+		assertIntEquals(10, outcome.inboundRecordCount(), "fake wire session inbound record count");
+		final response = expectJsonRpcResponse(outcome.response(), "fake wire session response");
+		assertWireRecord(outcome.inboundRecordAt(0), 1, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Response, response.methodText(),
+			response.messageJson(), "fake wire session response record");
+		final idle = expectThreadStatusChangedStreamNotification(outcome.streamNotifications()[8], "fake wire session idle stream");
+		assertWireRecord(outcome.inboundRecordAt(9), 10, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Notification, idle.methodText(),
+			idle.messageJson(), "fake wire session idle record");
+		assertResponseFrame(outcome.inboundFrames()[0], response, "fake wire session inbound response frame");
+	}
+
+	static function testFakeWireSessionRejectsMismatchedOutboundRecord():Void {
+		final wireSession = new FakeTuiAppServerJsonRpcWireSession();
+		final threadId = thread("00000000-0000-0000-0000-000000005568");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(90), session("00000000-0000-0000-0000-000000009995"), threadId, "wire mismatch ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final otherEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(91), envelope.sessionId, threadId, "other wire ask");
+		final otherRequest = TuiPromptJsonRpcRequest.turnStart(otherEnvelope);
+		final mismatchedOutbound = TuiPromptJsonRpcFrameCodec.record(0, TuiPromptJsonRpcFrame.Request(otherRequest));
+		final outcome = wireSession.sendPrompt(request, envelope, mismatchedOutbound);
+		assertFalse(outcome.isAccepted(), "fake wire session mismatched outbound rejected");
+		assertStringEquals("rejected", outcome.statusText(), "fake wire session mismatched status");
+		assertStringEquals("mismatched_outbound_request", outcome.code(), "fake wire session mismatched code");
+		assertIntEquals(0, outcome.inboundRecordCount(), "fake wire session mismatched inbound record count");
+	}
+
+	static function testFakeTransportWritesOutboundRecordThroughWireSession():Void {
+		final recordingWireSession = new RecordingWireSession(new FakeTuiAppServerJsonRpcWireSession());
+		final appServerTransport = new FakeTuiAppServerJsonRpcTransport(null, recordingWireSession);
+		final threadId = thread("00000000-0000-0000-0000-000000005569");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(92), session("00000000-0000-0000-0000-000000009994"), threadId,
+			"transport wire ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final outcome = appServerTransport.sendPrompt(request, envelope);
+		assertTrue(outcome.isAccepted(), "transport wire session accepted");
+		assertIntEquals(1, recordingWireSession.callCount(), "transport wire session call count");
+		assertWireRecord(recordingWireSession.lastOutboundRecord(), 0, TuiPromptJsonRpcFrameDirection.Outbound, TuiPromptJsonRpcFrameKind.Request,
+			request.methodText(), request.messageJson(), "transport wire session outbound record");
+		assertTransportTranscript(outcome.transcript(), request.messageJson(), 11, 10, "transport wire session transcript");
 	}
 
 	static function testJsonRpcExchangeRejectedSubmitIsTypedRefusal():Void {
@@ -1029,6 +1086,33 @@ class MissingResponseAppServerJsonRpcTransport implements TuiAppServerJsonRpcTra
 	public function sendPrompt(_request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
 		return new TuiAppServerJsonRpcTransportOutcome(TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", null, [], [],
 			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")], TuiAppServerJsonRpcTransportTranscript.outbound(_request));
+	}
+}
+
+class RecordingWireSession implements TuiAppServerJsonRpcWireSession {
+	final delegate:TuiAppServerJsonRpcWireSession;
+	var calls:Int;
+	var lastOutboundRecordValue:Null<TuiPromptJsonRpcFrameRecord>;
+
+	public function new(delegate:TuiAppServerJsonRpcWireSession) {
+		this.delegate = delegate;
+		this.calls = 0;
+		this.lastOutboundRecordValue = null;
+	}
+
+	public function sendPrompt(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope,
+			outboundRecord:TuiPromptJsonRpcFrameRecord):TuiAppServerJsonRpcWireOutcome {
+		calls = calls + 1;
+		lastOutboundRecordValue = outboundRecord;
+		return delegate.sendPrompt(request, envelope, outboundRecord);
+	}
+
+	public function callCount():Int {
+		return calls;
+	}
+
+	public function lastOutboundRecord():Null<TuiPromptJsonRpcFrameRecord> {
+		return lastOutboundRecordValue;
 	}
 }
 
