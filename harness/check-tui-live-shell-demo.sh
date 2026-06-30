@@ -13,5 +13,6 @@ cargo run --manifest-path generated/tui-live-shell-demo-harness/Cargo.toml --loc
 haxe hxml/tui-live-shell-demo.hxml
 cargo check --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked
 cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked --quiet
+cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked --quiet -- --transport=line-stdio --line-command=codex --line-arg=app-server --line-arg=--json-rpc
 
 echo "TUI live shell demo harness passed."
