@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`, `TUI-LIVE-27` / `codex-hxrust-notn`, `TUI-LIVE-28` / `codex-hxrust-6k41`, `TUI-LIVE-29` / `codex-hxrust-4jpd`, `TUI-LIVE-30` / `codex-hxrust-c0wj`, `TUI-LIVE-31` / `codex-hxrust-jb4r`, `TUI-LIVE-32` / `codex-hxrust-5mcs`, `TUI-LIVE-33` / `codex-hxrust-55o0`, `TUI-LIVE-34` / `codex-hxrust-4i2c`, `TUI-LIVE-35` / `codex-hxrust-fcy7`, `TUI-LIVE-36` / `codex-hxrust-vdtr`, `TUI-LIVE-37` / `codex-hxrust-ahkq`, `TUI-LIVE-38` / `codex-hxrust-h9e4`, `TUI-LIVE-39` / `codex-hxrust-swjp`, `TUI-LIVE-40` / `codex-hxrust-1cii`, `TUI-LIVE-41` / `codex-hxrust-0blg`, `TUI-LIVE-42` / `codex-hxrust-urdy`, `TUI-LIVE-43` / `codex-hxrust-pc6f`, `TUI-LIVE-44` / `codex-hxrust-cfmt`, `TUI-LIVE-45` / `codex-hxrust-tf5g`, `TUI-LIVE-46` / `codex-hxrust-85n6`, `TUI-LIVE-47` / `codex-hxrust-9dsd`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-51` / `codex-hxrust-qzqn`, `TUI-LIVE-52` / `codex-hxrust-z0st`, `TUI-LIVE-53` / `codex-hxrust-iwy1`, `TUI-LIVE-54` / `codex-hxrust-tmvb`, `TUI-LIVE-55` / `codex-hxrust-fet2`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`, `TUI-LIVE-27` / `codex-hxrust-notn`, `TUI-LIVE-28` / `codex-hxrust-6k41`, `TUI-LIVE-29` / `codex-hxrust-4jpd`, `TUI-LIVE-30` / `codex-hxrust-c0wj`, `TUI-LIVE-31` / `codex-hxrust-jb4r`, `TUI-LIVE-32` / `codex-hxrust-5mcs`, `TUI-LIVE-33` / `codex-hxrust-55o0`, `TUI-LIVE-34` / `codex-hxrust-4i2c`, `TUI-LIVE-35` / `codex-hxrust-fcy7`, `TUI-LIVE-36` / `codex-hxrust-vdtr`, `TUI-LIVE-37` / `codex-hxrust-ahkq`, `TUI-LIVE-38` / `codex-hxrust-h9e4`, `TUI-LIVE-39` / `codex-hxrust-swjp`, `TUI-LIVE-40` / `codex-hxrust-1cii`, `TUI-LIVE-41` / `codex-hxrust-0blg`, `TUI-LIVE-42` / `codex-hxrust-urdy`, `TUI-LIVE-43` / `codex-hxrust-pc6f`, `TUI-LIVE-44` / `codex-hxrust-cfmt`, `TUI-LIVE-45` / `codex-hxrust-tf5g`, `TUI-LIVE-46` / `codex-hxrust-85n6`, `TUI-LIVE-47` / `codex-hxrust-9dsd`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-51` / `codex-hxrust-qzqn`, `TUI-LIVE-52` / `codex-hxrust-z0st`, `TUI-LIVE-53` / `codex-hxrust-iwy1`, `TUI-LIVE-54` / `codex-hxrust-tmvb`, `TUI-LIVE-55` / `codex-hxrust-fet2`, `TUI-LIVE-56` / `codex-hxrust-4cp2`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -159,6 +159,15 @@ send-after-close all remain typed rejected or disconnected outcomes with raw
 transcript evidence. This is still a one-shot, credential-free process boundary:
 it does not own a long-lived app-server child, async reader/writer tasks, socket
 transport, model calls, persistence, or tools.
+
+`ProcessBackedTuiAppServerJsonRpcLineTransportAttacher` lets the existing typed
+line connector materialize that process-backed transport from a ready stdio
+attachment. The dry-run fake attacher remains the default, while tests can now
+inject the process-backed attacher through `DryRunTuiAppServerJsonRpcLineConnector`
+and prove accepted prompt submission plus decoder rejection through the same
+connector-backed transport used by the live shell prompt path. Socket transport,
+long-lived child ownership, async reader/writer tasks, credentials, model calls,
+persistence, and tools remain deferred.
 
 `TuiLiveShellRunRequest` can now select that connector-backed JSON-RPC line
 pipeline without replacing the whole fake facade. `withJsonRpcPromptTransport`

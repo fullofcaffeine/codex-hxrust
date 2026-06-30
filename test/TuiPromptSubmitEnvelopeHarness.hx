@@ -51,6 +51,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
+import codexhx.runtime.tui.appserver.ProcessBackedTuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageCompletedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageStartedNotification;
@@ -111,6 +112,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testStdioLineRunnerReportsFailureAndRefusals();
 		testProcessBackedLineTransportFeedsWireSession();
 		testProcessBackedLineTransportReportsFailuresAndClose();
+		testProcessBackedLineConnectorUsesProcessAttacher();
+		testProcessBackedLineConnectorPreservesDecoderRejection();
 		testLineConnectorComposesEndpointOpenAndAttachment();
 		testLineConnectorUsesInjectedNativeBoundaries();
 		testLineConnectorPropagatesInjectedNativeOpenRefusal();
@@ -688,6 +691,70 @@ class TuiPromptSubmitEnvelopeHarness {
 		final afterClose = closed.sendPromptLine(request, envelope, request.messageJson() + "\n");
 		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), afterClose.statusText(), "process-backed after close status");
 		assertStringEquals("line_transport_closed", afterClose.code(), "process-backed after close code");
+	}
+
+	static function testProcessBackedLineConnectorUsesProcessAttacher():Void {
+		final threadId = thread("00000000-0000-0000-0000-000000005589");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(112), session("00000000-0000-0000-0000-000000009980"), threadId,
+			"process connector ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final expected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertTrue(expected.isAccepted(), "process connector expected fake line outcome");
+
+		final connector = new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+			new ProcessBackedTuiAppServerJsonRpcLineTransportAttacher());
+		final appServerTransport = DryRunTuiAppServerJsonRpcLineConnectedTransport.withConnector(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioEchoPlan(expected.inboundLines())),
+			"", connector);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport);
+		final outcome = promptTransport.submitPrompt(envelope);
+
+		assertTrue(outcome.isAccepted(), "process connector json-rpc accepted");
+		assertIntEquals(3, outcome.eventCount(), "process connector event count");
+		assertLineConnectReport(appServerTransport.lastConnectReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:sh", 1, true,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "process connector report");
+		final lineOutcome = appServerTransport.lastLineOutcome();
+		assertTrue(lineOutcome != null && lineOutcome.isAccepted(), "process connector line outcome accepted");
+		assertIntEquals(expected.inboundLineCount(), lineOutcome.inboundLineCount(), "process connector line inbound count");
+		assertLineCloseReport(appServerTransport.lastCloseReport(), TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1,
+			expected.inboundLineCount(), "process connector close report");
+		assertLineTransportAttempt(appServerTransport.lastAttemptReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true,
+			TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1,
+			expected.inboundLineCount(), "process connector attempt report");
+		assertIntEquals(11, promptTransport.lastWireRecordCount(), "process connector wire record count");
+		assertCorrelation(promptTransport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.Complete, "112", "112", 9, "process connector correlation");
+	}
+
+	static function testProcessBackedLineConnectorPreservesDecoderRejection():Void {
+		final threadId = thread("00000000-0000-0000-0000-000000005590");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(113), session("00000000-0000-0000-0000-000000009981"), threadId,
+			"process connector rejected ask");
+		final connector = new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+			new ProcessBackedTuiAppServerJsonRpcLineTransportAttacher());
+		final plan = TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", [
+			"-c",
+			"cat >/dev/null; printf '%s\\n' '{\"jsonrpc\":\"2.0\",\"method\":\"unknown/event\",\"params\":{}}'"
+		], "", []);
+		final appServerTransport = DryRunTuiAppServerJsonRpcLineConnectedTransport.withConnector(TuiAppServerJsonRpcLineEndpoint.Stdio(plan), "", connector);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport);
+		final outcome = promptTransport.submitPrompt(envelope);
+
+		assertFalse(outcome.isAccepted(), "process connector decoder rejection refused");
+		assertStringEquals("unknown_inbound_method", outcome.code(), "process connector decoder rejection code");
+		assertLineConnectReport(appServerTransport.lastConnectReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:sh", 1, true,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "process connector decoder rejection report");
+		final lineOutcome = appServerTransport.lastLineOutcome();
+		assertTrue(lineOutcome != null, "process connector decoder rejection line outcome");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Rejected.text(), lineOutcome.statusText(), "process connector decoder rejection line status");
+		assertStringEquals("unknown_inbound_method", lineOutcome.code(), "process connector decoder rejection line code");
+		assertIntEquals(1, lineOutcome.inboundLineCount(), "process connector decoder rejection inbound evidence");
+		assertLineCloseReport(appServerTransport.lastCloseReport(), TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1, 1,
+			"process connector decoder rejection close report");
+		assertLineTransportAttempt(appServerTransport.lastAttemptReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true,
+			TuiAppServerJsonRpcTransportStatus.Rejected, "unknown_inbound_method", TuiAppServerJsonRpcLineTransportState.Closed,
+			"line_connected_transport_done", 1, 1, "process connector decoder rejection attempt report");
+		assertIntEquals(1, promptTransport.lastWireRecordCount(), "process connector decoder rejection wire count");
 	}
 
 	static function testLineConnectorComposesEndpointOpenAndAttachment():Void {
