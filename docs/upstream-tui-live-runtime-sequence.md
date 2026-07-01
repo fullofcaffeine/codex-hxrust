@@ -4701,6 +4701,35 @@ models a persistent-session late-line pump; it does not own real provider
 streaming, socket sessions, Tokio reader/writer tasks, model calls, tool
 execution, process teardown, or persistence.
 
+### TUI-LIVE-72 Submitted Turn Bounded Late JSONL Pump Drain
+
+Status: TUI-LIVE-72 adds a bounded drain over the persistent submitted-turn late
+JSONL pump. `TuiPromptSubmittedTurnLateJsonlDrainStatus` and
+`TuiPromptSubmittedTurnLateJsonlDrainResult` provide scalar typed evidence for
+completion, max-batch stop, line/disconnect refusal, invalid limits, and batch
+rejection. The drain aggregates attempted and accepted batch counts, line
+counts, notification counts, applied notification counts, queued events,
+assistant-delta counts, completion counts, and the stop pump/line/batch status.
+
+`PersistentTuiAppServerJsonRpcLineConnectedTransport.drainSubmittedTurnLateJsonlBatches()`
+reuses `pumpSubmittedTurnLateJsonlBatch()` with explicit `maxLinesPerBatch` and
+`maxBatches` bounds. It stops as soon as a completion batch is accepted, as soon
+as a line read or batch rejects, or when the caller-supplied batch bound is
+reached. Prefix-applied failures remain visible through the aggregate counts and
+the final stop status instead of becoming a trace-only side effect.
+
+The prompt-submit and live-shell gates prove a submitted prompt can drain
+multiple one-line batches from the persistent session boundary, preserve
+assistant-delta and completion ordering through the app-server pump, render both
+assistant rows, clear `activeTurn`, and render ready. The same gates prove typed
+max-bound, wrong-turn prefix-applied, stale-after-Ctrl-C,
+unsupported-notification, and closed-transport line/disconnect stops.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models repeated persistent-session late-line draining; it does not own real
+provider streaming, socket sessions, Tokio reader/writer tasks, model calls,
+tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

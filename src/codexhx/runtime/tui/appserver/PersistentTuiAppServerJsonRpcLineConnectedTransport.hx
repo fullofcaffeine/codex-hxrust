@@ -31,6 +31,7 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 	var lastInterruptLineOutcomeValue:TuiPromptTurnInterruptLineOutcome;
 	var lastLateJsonlBatchValue:TuiAppServerJsonRpcLateJsonlBatch;
 	var lastLateJsonlPumpResultValue:TuiPromptSubmittedTurnLateJsonlPumpResult;
+	var lastLateJsonlDrainResultValue:TuiPromptSubmittedTurnLateJsonlDrainResult;
 	var lastCloseReportValue:TuiAppServerJsonRpcLineCloseReport;
 	var lastAttemptReportValue:TuiAppServerJsonRpcLineTransportAttemptReport;
 	var sendCountValue:Int;
@@ -45,6 +46,7 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		this.lastInterruptLineOutcomeValue = null;
 		this.lastLateJsonlBatchValue = null;
 		this.lastLateJsonlPumpResultValue = null;
+		this.lastLateJsonlDrainResultValue = null;
 		this.lastCloseReportValue = null;
 		this.lastAttemptReportValue = null;
 		this.sendCountValue = 0;
@@ -160,6 +162,77 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		return lastLateJsonlPumpResultValue;
 	}
 
+	public function drainSubmittedTurnLateJsonlBatches(facade:FakeTuiAppServerFacade, maxLinesPerBatch:Int,
+			maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		lastLateJsonlDrainResultValue = null;
+		if (maxLinesPerBatch <= 0) {
+			lastLateJsonlDrainResultValue = TuiPromptSubmittedTurnLateJsonlDrainResult.invalid("invalid_late_jsonl_drain_line_count");
+			return lastLateJsonlDrainResultValue;
+		}
+		if (maxBatches <= 0) {
+			lastLateJsonlDrainResultValue = TuiPromptSubmittedTurnLateJsonlDrainResult.invalid("invalid_late_jsonl_drain_batch_count");
+			return lastLateJsonlDrainResultValue;
+		}
+
+		var attemptedBatchCount = 0;
+		var acceptedBatchCount = 0;
+		var lineCount = 0;
+		var notificationCount = 0;
+		var appliedNotificationCount = 0;
+		var eventsQueued = 0;
+		var assistantDeltaCount = 0;
+		var completionCount = 0;
+		var lastThreadId = "";
+		var lastTurnId = "";
+		var lastDelta = "";
+		var stopPump:TuiPromptSubmittedTurnLateJsonlPumpResult = null;
+
+		for (_ in 0...maxBatches) {
+			attemptedBatchCount = attemptedBatchCount + 1;
+			stopPump = pumpSubmittedTurnLateJsonlBatch(facade, maxLinesPerBatch);
+			if (stopPump == null) {
+				lastLateJsonlDrainResultValue = lateJsonlDrainResult(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected,
+					"missing_late_jsonl_pump_result", attemptedBatchCount, acceptedBatchCount, lineCount, notificationCount, appliedNotificationCount,
+					eventsQueued, assistantDeltaCount, completionCount, stopPump, lastThreadId, lastTurnId, lastDelta);
+				return lastLateJsonlDrainResultValue;
+			}
+
+			lineCount = lineCount + stopPump.lineCount();
+			notificationCount = notificationCount + stopPump.notificationCount();
+			appliedNotificationCount = appliedNotificationCount + stopPump.appliedNotificationCount();
+			eventsQueued = eventsQueued + stopPump.eventsQueued();
+			assistantDeltaCount = assistantDeltaCount + stopPump.assistantDeltaCount();
+			completionCount = completionCount + stopPump.completionCount();
+			if (stopPump.threadIdText().length > 0)
+				lastThreadId = stopPump.threadIdText();
+			if (stopPump.turnIdText().length > 0)
+				lastTurnId = stopPump.turnIdText();
+			if (stopPump.deltaText().length > 0)
+				lastDelta = stopPump.deltaText();
+
+			if (!stopPump.acceptedPump()) {
+				final status = stopPump.status() == TuiPromptSubmittedTurnLateJsonlPumpStatus.LineReadRejected ? TuiPromptSubmittedTurnLateJsonlDrainStatus.LineReadRejected : TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected;
+				lastLateJsonlDrainResultValue = lateJsonlDrainResult(status, stopPump.code(), attemptedBatchCount, acceptedBatchCount, lineCount,
+					notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount, completionCount, stopPump, lastThreadId, lastTurnId,
+					lastDelta);
+				return lastLateJsonlDrainResultValue;
+			}
+
+			acceptedBatchCount = acceptedBatchCount + 1;
+			if (stopPump.completionCount() > 0) {
+				lastLateJsonlDrainResultValue = lateJsonlDrainResult(TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed, "completed", attemptedBatchCount,
+					acceptedBatchCount, lineCount, notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount, completionCount, stopPump,
+					lastThreadId, lastTurnId, lastDelta);
+				return lastLateJsonlDrainResultValue;
+			}
+		}
+
+		lastLateJsonlDrainResultValue = lateJsonlDrainResult(TuiPromptSubmittedTurnLateJsonlDrainStatus.MaxBatchesReached, "max_batches_reached",
+			attemptedBatchCount, acceptedBatchCount, lineCount, notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount,
+			completionCount, stopPump, lastThreadId, lastTurnId, lastDelta);
+		return lastLateJsonlDrainResultValue;
+	}
+
 	public function close(code:String):TuiAppServerJsonRpcLineCloseReport {
 		closedValue = true;
 		if (lastCloseReportValue != null)
@@ -202,6 +275,10 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		return lastLateJsonlPumpResultValue;
 	}
 
+	public function lastLateJsonlDrainResult():TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return lastLateJsonlDrainResultValue;
+	}
+
 	public function lastCloseReport():TuiAppServerJsonRpcLineCloseReport {
 		return lastCloseReportValue;
 	}
@@ -233,6 +310,15 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 
 	function recordAttempt(lineOutcome:TuiAppServerJsonRpcLineOutcome, transportMaterialized:Bool):Void {
 		lastAttemptReportValue = TuiAppServerJsonRpcLineTransportAttemptReport.fromParts(connectReportValue, lineOutcome, null, transportMaterialized);
+	}
+
+	static function lateJsonlDrainResult(status:TuiPromptSubmittedTurnLateJsonlDrainStatus, code:String, attemptedBatchCount:Int, acceptedBatchCount:Int,
+			lineCount:Int, notificationCount:Int, appliedNotificationCount:Int, eventsQueued:Int, assistantDeltaCount:Int, completionCount:Int,
+			stopPump:TuiPromptSubmittedTurnLateJsonlPumpResult, threadId:String, turnId:String, delta:String):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return new TuiPromptSubmittedTurnLateJsonlDrainResult(status, code, attemptedBatchCount, acceptedBatchCount, lineCount, notificationCount,
+			appliedNotificationCount, eventsQueued, assistantDeltaCount, completionCount, stopPump == null ? "" : stopPump.statusText(),
+			stopPump == null ? "" : stopPump.code(), stopPump == null ? "" : stopPump.lineStatusText(), stopPump == null ? "" : stopPump.lineCode(),
+			stopPump == null ? "" : stopPump.batchStatusText(), stopPump == null ? "" : stopPump.batchCode(), threadId, turnId, delta);
 	}
 
 	static function inboundFramesFromLineOutcome(outcome:TuiAppServerJsonRpcLineOutcome):Array<TuiPromptJsonRpcFrame> {

@@ -346,6 +346,21 @@ typed. This remains synchronous and credential-free; it is not real provider
 streaming, socket ownership, Tokio task cancellation, model execution, tools, or
 persistence.
 
+`TUI-LIVE-72` extends the one-shot pump into a bounded late JSONL drain.
+`PersistentTuiAppServerJsonRpcLineConnectedTransport.drainSubmittedTurnLateJsonlBatches()`
+reuses the typed batch pump repeatedly with explicit `maxLinesPerBatch` and
+`maxBatches` limits, aggregates attempted/accepted batch counts, read line
+counts, notification counts, applied counts, queued events, assistant deltas,
+and completions, and stops on completion, max-bound, line/disconnect refusal, or
+batch rejection. The result also preserves the stop pump, line-read, and batch
+statuses so prefix-applied failures do not hide partial mutation. Harnesses
+prove multi-batch assistant deltas followed by completion, max-bound stop,
+wrong-turn prefix-applied rejection, stale-after-interrupt rejection,
+unsupported notification rejection, and closed-transport line rejection. This
+remains synchronous and credential-free; it is not real provider streaming,
+socket ownership, Tokio task cancellation, model execution, tools, or
+persistence.
+
 ```json
 {
   "jsonrpc": "2.0",
