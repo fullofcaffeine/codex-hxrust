@@ -166,6 +166,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testComposerSubmitLateJsonlDrainStopsAreTyped();
 		testComposerSubmitLateJsonlDrainInterruptInterleave();
 		testComposerSubmitLateJsonlDrainNoDataStop();
+		testComposerSubmitLateJsonlDrainResumesAfterNoData();
 		testSubmittedTurnAcceptanceRejectsMissingStartedEvidence();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
@@ -1964,6 +1965,50 @@ class TuiPromptSubmitEnvelopeHarness {
 		backend.restore(TerminalRestoreReason.NormalExit);
 	}
 
+	static function testComposerSubmitLateJsonlDrainResumesAfterNoData():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005624");
+		final turnId = turn("turn-273");
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-composer-resume-273"), "composer resumed delta").messageJson() + "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(), new NoDataLateJsonlLineTransportAttacher(lateLines)));
+		final facade = attachedFacadeWithTransport(shell, activeThread,
+			new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "composer late jsonl resume setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		pump.submitComposerInput(TerminalInputEvent.Text("composer drain resumes"), RequestId.fromInteger(995), TuiAppServerPumpPolicy.lossless());
+		final submit = pump.submitComposerInput(TerminalInputEvent.Submit, RequestId.fromInteger(273),
+			TuiAppServerPumpPolicy.withSubmittedTurnLateJsonlDrain(1, 3));
+		assertAcceptedSubmit(submit, "273", "composer drain resumes", "composer late jsonl resume submit");
+		assertSubmittedLateJsonlDrain(submit.lateJsonlDrainResult(), TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData, "late_jsonl_not_ready", 1, 0, 0, 0, 0,
+			0, 0, 0, TuiPromptSubmittedTurnLateJsonlPumpStatus.NoData, "late_jsonl_not_ready", TuiAppServerJsonRpcTransportStatus.NotReady,
+			"late_jsonl_not_ready", null, "", "", "", "", "composer late jsonl resume first no-data");
+		assertStringEquals("turn-273", facade.activeTurnIdText(), "composer late jsonl resume active after no-data");
+		assertIntEquals(0, facade.completedTurnCount(), "composer late jsonl resume completed after no-data");
+
+		final resumed = facade.drainSubmittedTurnLateJsonl(1, 3);
+		assertSubmittedLateJsonlDrain(resumed, TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed, "completed", 2, 2, 2, 2, 2, 3, 1, 1,
+			TuiPromptSubmittedTurnLateJsonlPumpStatus.Accepted, "accepted", TuiAppServerJsonRpcTransportStatus.Accepted, "accepted",
+			TuiPromptSubmittedTurnJsonlBatchStatus.Accepted, "accepted", activeThread.toString(), "turn-273", "composer resumed delta",
+			"composer late jsonl resume completed drain");
+		assertStringEquals("turn-273", facade.activeTurnIdText(), "composer late jsonl resume active before event pump");
+		final outcome = pump.drain(TuiAppServerPumpPolicy.lossless());
+		assertIntEquals(3, outcome.eventsDrained(), "composer late jsonl resume drained events");
+		assertStringEquals("", facade.activeTurnIdText(), "composer late jsonl resume active cleared");
+		assertIntEquals(1, facade.completedTurnCount(), "composer late jsonl resume completed count");
+		assertIntEquals(3, shell.transcriptCount(), "composer late jsonl resume transcript count");
+		assertStringEquals("user> composer drain resumes", shell.transcriptAt(1).renderText(), "composer late jsonl resume user row");
+		assertStringEquals("assistant> composer resumed delta", shell.transcriptAt(2).renderText(), "composer late jsonl resume assistant row");
+		assertLineCloseReport(appServerTransport.close("composer_late_jsonl_resume_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"composer_late_jsonl_resume_done", 1, 4, "composer late jsonl resume close");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
 	static function testSubmittedTurnAcceptanceRejectsMissingStartedEvidence():Void {
 		final activeThread = thread("00000000-0000-0000-0000-000000005599");
 		final activeSession = session("00000000-0000-0000-0000-000000009999");
@@ -3746,8 +3791,8 @@ class LineRejectedDrainPromptTransport implements TuiPromptTransport {
 class NoDataLateJsonlLineTransportAttacher implements TuiAppServerJsonRpcLineTransportAttacher {
 	final transport:NoDataLateJsonlLineTransport;
 
-	public function new() {
-		this.transport = new NoDataLateJsonlLineTransport();
+	public function new(?lateLines:Array<String>) {
+		this.transport = new NoDataLateJsonlLineTransport(lateLines);
 	}
 
 	public function attach(outcome:TuiAppServerJsonRpcLineOpenOutcome):TuiAppServerJsonRpcLineTransportAttachment {
@@ -3768,11 +3813,17 @@ class NoDataLateJsonlLineTransport implements TuiAppServerJsonRpcLineTransport {
 	var state:TuiAppServerJsonRpcLineTransportState;
 	var outboundLinesValue:Int;
 	var inboundLinesValue:Int;
+	final lateLinesValue:Array<String>;
+	var lateLineIndex:Int;
+	var notReadyReadCount:Int;
 
-	public function new() {
+	public function new(?lateLines:Array<String>) {
 		this.state = TuiAppServerJsonRpcLineTransportState.Open;
 		this.outboundLinesValue = 0;
 		this.inboundLinesValue = 0;
+		this.lateLinesValue = lateLines == null ? [] : lateLines.copy();
+		this.lateLineIndex = 0;
+		this.notReadyReadCount = 0;
 	}
 
 	public function sendPromptLine(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope, outboundLine:String):TuiAppServerJsonRpcLineOutcome {
@@ -3798,10 +3849,23 @@ class NoDataLateJsonlLineTransport implements TuiAppServerJsonRpcLineTransport {
 		return TuiPromptTurnInterruptLineOutcome.rejected("no_data_transport_interrupt_unsupported");
 	}
 
-	public function readLateJsonlBatchLines(_maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
+	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
 		if (!isOpen())
 			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
-		return TuiAppServerJsonRpcLateJsonlBatch.notReady("late_jsonl_not_ready");
+		if (notReadyReadCount == 0) {
+			notReadyReadCount = notReadyReadCount + 1;
+			return TuiAppServerJsonRpcLateJsonlBatch.notReady("late_jsonl_not_ready");
+		}
+		if (lateLineIndex >= lateLinesValue.length)
+			return TuiAppServerJsonRpcLateJsonlBatch.notReady("late_jsonl_not_ready");
+		final limit = maxLines <= 0 ? 0 : maxLines;
+		final lines:Array<String> = [];
+		while (lines.length < limit && lateLineIndex < lateLinesValue.length) {
+			lines.push(lateLinesValue[lateLineIndex]);
+			lateLineIndex = lateLineIndex + 1;
+		}
+		inboundLinesValue = inboundLinesValue + lines.length;
+		return TuiAppServerJsonRpcLateJsonlBatch.accepted(lines);
 	}
 
 	public function isOpen():Bool {

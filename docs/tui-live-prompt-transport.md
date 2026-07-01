@@ -397,6 +397,17 @@ result carries structured stop evidence. This is deterministic no-data modeling
 for the current synchronous harness path; it is not real async socket polling,
 Tokio readiness, provider streaming, model execution, tools, or persistence.
 
+`TUI-LIVE-76` proves that `no_data` is resumable state rather than a terminal
+failure. A harness-only line transport now stages a deterministic readiness
+transition: the composer-triggered drain first returns `not_ready`, then a later
+bounded drain through the facade/prompt-transport seam consumes assistant delta
+and completion JSONL for the still-active submitted turn. The app-server pump
+then applies exactly one assistant row, records exactly one completion, clears
+`activeTurn`, and leaves the existing no-data, completion, max-bound,
+prefix-applied, disconnect, unsupported, and stale-after-interrupt stops intact.
+This is retry/resume modeling for synchronous gates, not real async socket
+polling, Tokio tasks, provider streaming, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

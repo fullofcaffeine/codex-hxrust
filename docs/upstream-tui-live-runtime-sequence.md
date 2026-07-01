@@ -4799,6 +4799,26 @@ models a readiness/no-data boundary for the current drain loop; it does not own
 real async socket polling, Tokio readiness, provider streaming, model calls,
 tool execution, process teardown, or persistence.
 
+### TUI-LIVE-76 Submitted Turn Drain Resumes After No-Data
+
+Status: TUI-LIVE-76 proves that a `no_data` drain stop keeps the submitted turn
+resumable. The prompt-submit gate uses the same composer submit, facade,
+prompt-transport, persistent JSON-RPC transport, and event-pump path to admit a
+submitted turn. Its first bounded late JSONL drain reports typed `not_ready` /
+`no_data` evidence without mutating transcript or completion state.
+
+A later bounded drain through the facade/prompt-transport seam consumes the
+staged assistant delta and completion JSONL for the same active turn. Pumping
+the queued app-server events appends exactly one assistant row, records exactly
+one completion, and clears `activeTurn`. Existing no-data, normal completion,
+max-bound, prefix-applied rejection, line-disconnect, unsupported notification,
+and stale-after-interrupt paths remain covered by the prompt-submit harness.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models retry/resume ordering around a typed readiness stop; it does not own real
+async socket polling, Tokio readiness, provider streaming, model calls, tool
+execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.
