@@ -430,6 +430,15 @@ or completion records. This is deterministic readiness coalescing, not real
 async socket polling, Tokio tasks, provider streaming, model execution, tools,
 or persistence.
 
+`TUI-LIVE-79` makes readiness pumping explicitly backpressure-aware. A
+readiness-triggered late JSONL drain can queue assistant delta, completion, and
+status events while a bounded `TuiAppServerPumpPolicy` applies only the first
+event. The returned `TuiAppServerPumpOutcome` reports backpressure, the facade
+keeps the remaining events queued, and a later pump drain applies completion
+and idle status without duplicating the assistant row or completion record.
+This is deterministic backpressure modeling, not real async socket polling,
+Tokio tasks, provider streaming, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",
