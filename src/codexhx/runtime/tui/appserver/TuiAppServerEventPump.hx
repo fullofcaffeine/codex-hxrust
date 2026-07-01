@@ -59,15 +59,16 @@ class TuiAppServerEventPump {
 		final safePolicy = policy == null ? TuiAppServerPumpPolicy.lossless() : policy;
 		final navigationOutcome = handleAgentNavigationInput(input);
 		if (navigationOutcome != null)
-			return new TuiPromptSubmitInteraction([], null, navigationOutcome);
+			return new TuiPromptSubmitInteraction([], null, navigationOutcome, null, null);
 		final shellEffects = facade.shell().applyInput(input);
 		final submitResult = submitPromptFromShellEffects(shellEffects, requestId, input);
+		final lateJsonlInterruptResult = interruptSubmittedTurnBeforeLateJsonlDrain(submitResult, safePolicy);
 		final lateJsonlDrainResult = drainSubmittedTurnLateJsonlAfterSubmit(submitResult, safePolicy);
 		final immediateSchedulerEffects = requestShellDraws(shellEffects);
 		final outcome = drain(safePolicy);
 		outcome.recordSchedulerEffects(immediateSchedulerEffects);
 		outcome.recordTerminalOperations(TerminalSchedulerRunner.applyEffects(backend, immediateSchedulerEffects));
-		return new TuiPromptSubmitInteraction(shellEffects, submitResult, outcome, lateJsonlDrainResult);
+		return new TuiPromptSubmitInteraction(shellEffects, submitResult, outcome, lateJsonlDrainResult, lateJsonlInterruptResult);
 	}
 
 	function handleAgentNavigationInput(input:TerminalInputEvent):Null<TuiAppServerPumpOutcome> {
@@ -94,6 +95,18 @@ class TuiAppServerEventPump {
 		if (isSubmitInput(input))
 			return TuiPromptSubmitResult.refused(TuiPromptSubmitStatus.EmptyPrompt);
 		return null;
+	}
+
+	function interruptSubmittedTurnBeforeLateJsonlDrain(submitResult:Null<TuiPromptSubmitResult>,
+			policy:TuiAppServerPumpPolicy):Null<TuiPromptTurnInterruptResult> {
+		if (submitResult == null || !submitResult.acceptedPrompt())
+			return null;
+		if (policy == null || !policy.shouldInterruptSubmittedTurnBeforeLateJsonlDrain())
+			return null;
+		final requestId = policy.interruptBeforeLateJsonlDrainRequestId();
+		if (requestId == null)
+			return null;
+		return facade.interruptActiveTurn(requestId);
 	}
 
 	function drainSubmittedTurnLateJsonlAfterSubmit(submitResult:Null<TuiPromptSubmitResult>,

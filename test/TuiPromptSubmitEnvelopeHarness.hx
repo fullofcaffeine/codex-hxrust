@@ -164,6 +164,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testSubmittedTurnPersistentLateJsonlDrainStopsAreTyped();
 		testComposerSubmitTriggersPersistentLateJsonlDrain();
 		testComposerSubmitLateJsonlDrainStopsAreTyped();
+		testComposerSubmitLateJsonlDrainInterruptInterleave();
 		testSubmittedTurnAcceptanceRejectsMissingStartedEvidence();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
@@ -1883,6 +1884,55 @@ class TuiPromptSubmitEnvelopeHarness {
 			0, 0, 0, 0, 0, 0, 0, TuiPromptSubmittedTurnLateJsonlPumpStatus.LineReadRejected, "stdio_eof", TuiAppServerJsonRpcTransportStatus.Disconnected,
 			"stdio_eof", null, "", "", "", "", "composer late jsonl drain disconnected stop");
 		disconnectedBackend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testComposerSubmitLateJsonlDrainInterruptInterleave():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final activeThread = thread("00000000-0000-0000-0000-000000005622");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(270), activeSession, activeThread, "composer drain interrupt");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final interruptEnvelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(271), activeSession, activeThread, turnId);
+		final interruptLines = interruptReadyThenResponseLines(TuiPromptTurnInterruptRequest.fromEnvelope(interruptEnvelope), activeThread);
+		final staleDelta = new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-composer-stale-270"), "composer stale delta");
+		final lateLines = [staleDelta.messageJson() + "\n", turnCompletedLine(activeThread, turnId)];
+		final inbound = promptLines.copy();
+		for (line in interruptLines)
+			inbound.push(line);
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final facade = attachedFacadeWithTransport(shell, activeThread,
+			new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "composer late jsonl interrupt setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		pump.submitComposerInput(TerminalInputEvent.Text("composer drain interrupt"), RequestId.fromInteger(997), TuiAppServerPumpPolicy.lossless());
+		final submit = pump.submitComposerInput(TerminalInputEvent.Submit, RequestId.fromInteger(270),
+			TuiAppServerPumpPolicy.withSubmittedTurnInterruptBeforeLateJsonlDrain(1, 1, RequestId.fromInteger(271)));
+		assertAcceptedSubmit(submit, "270", "composer drain interrupt", "composer late jsonl drain interrupt submit");
+		assertTrue(submit.hasLateJsonlInterruptResult(), "composer late jsonl interrupt has result");
+		assertTrue(submit.lateJsonlInterruptAccepted(), "composer late jsonl interrupt accepted");
+		assertStringEquals("accepted", submit.lateJsonlInterruptCode(), "composer late jsonl interrupt code");
+		assertTrue(submit.hasLateJsonlDrainResult(), "composer late jsonl interrupt has drain result");
+		assertSubmittedLateJsonlDrain(submit.lateJsonlDrainResult(), TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected,
+			TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn.text(), 1, 0, 1, 1, 0, 0, 0, 0,
+			TuiPromptSubmittedTurnLateJsonlPumpStatus.BatchRejected, TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn.text(),
+			TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", TuiPromptSubmittedTurnJsonlBatchStatus.StreamDeliveryRejected,
+			TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn.text(), activeThread.toString(), "turn-270", "composer stale delta",
+			"composer late jsonl drain interrupt stale stop");
+		assertStringEquals("", facade.activeTurnIdText(), "composer late jsonl interrupt active turn cleared");
+		assertIntEquals(1, facade.interruptedTurnCount(), "composer late jsonl interrupt count");
+		assertIntEquals(0, facade.completedTurnCount(), "composer late jsonl interrupt suppresses completion");
+		assertIntEquals(2, shell.transcriptCount(), "composer late jsonl interrupt transcript count");
+		assertStringEquals("user> composer drain interrupt", shell.transcriptAt(1).renderText(), "composer late jsonl interrupt user row");
+		assertLineCloseReport(appServerTransport.close("composer_late_jsonl_interrupt_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"composer_late_jsonl_interrupt_done", 2, promptLines.length + interruptLines.length + 1, "composer late jsonl interrupt close");
+		backend.restore(TerminalRestoreReason.NormalExit);
 	}
 
 	static function testSubmittedTurnAcceptanceRejectsMissingStartedEvidence():Void {

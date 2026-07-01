@@ -4758,6 +4758,26 @@ models a composer-to-drain bridge; it does not own real provider streaming,
 socket sessions, Tokio reader/writer tasks, model calls, tool execution,
 process teardown, persistence, or true async Ctrl-C interleaving.
 
+### TUI-LIVE-74 Submitted Turn Composer Drain Interrupt Interleave
+
+Status: TUI-LIVE-74 adds a deterministic interrupt point between composer prompt
+admission and the bounded submitted-turn late JSONL drain. `TuiAppServerPumpPolicy`
+can opt into a pre-drain interrupt with a typed `RequestId`, and
+`TuiAppServerEventPump.submitComposerInput()` records the resulting
+`TuiPromptTurnInterruptResult` on `TuiPromptSubmitInteraction` before it drains
+late JSONL.
+
+The prompt-submit gate proves a composer prompt is admitted as a submitted turn,
+the persistent JSONL transport consumes a typed `turn/interrupt` response before
+late assistant lines, and the first late assistant delta stops with the existing
+`StaleInterruptedTurn` typed outcome. The stale delta and following completion
+do not mutate the transcript, completed-turn count, or active turn.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models interrupt ordering around the current drain loop; it does not own real
+async cancellation, provider streaming, socket readiness, Tokio reader/writer
+tasks, model calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

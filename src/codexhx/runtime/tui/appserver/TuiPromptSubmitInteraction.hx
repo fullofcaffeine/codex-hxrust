@@ -9,13 +9,15 @@ class TuiPromptSubmitInteraction {
 	final shellEffectsValue:Array<ChatWidgetShellEffect>;
 	final submitResultValue:Null<TuiPromptSubmitResult>;
 	final lateJsonlDrainResultValue:Null<TuiPromptSubmittedTurnLateJsonlDrainResult>;
+	final lateJsonlInterruptResultValue:Null<TuiPromptTurnInterruptResult>;
 	final pumpOutcomeValue:TuiAppServerPumpOutcome;
 
 	public function new(shellEffects:Array<ChatWidgetShellEffect>, submitResult:Null<TuiPromptSubmitResult>, pumpOutcome:TuiAppServerPumpOutcome,
-			?lateJsonlDrainResult:Null<TuiPromptSubmittedTurnLateJsonlDrainResult>) {
+			lateJsonlDrainResult:Null<TuiPromptSubmittedTurnLateJsonlDrainResult>, lateJsonlInterruptResult:Null<TuiPromptTurnInterruptResult>) {
 		this.shellEffectsValue = shellEffects == null ? [] : shellEffects;
 		this.submitResultValue = submitResult;
 		this.lateJsonlDrainResultValue = lateJsonlDrainResult;
+		this.lateJsonlInterruptResultValue = lateJsonlInterruptResult;
 		this.pumpOutcomeValue = pumpOutcome == null ? new TuiAppServerPumpOutcome() : pumpOutcome;
 	}
 
@@ -91,6 +93,22 @@ class TuiPromptSubmitInteraction {
 
 	public function lateJsonlDrainCode():String {
 		return lateJsonlDrainResultValue == null ? "" : lateJsonlDrainResultValue.code();
+	}
+
+	public function hasLateJsonlInterruptResult():Bool {
+		return lateJsonlInterruptResultValue != null;
+	}
+
+	public function lateJsonlInterruptResult():Null<TuiPromptTurnInterruptResult> {
+		return lateJsonlInterruptResultValue;
+	}
+
+	public function lateJsonlInterruptAccepted():Bool {
+		return lateJsonlInterruptResultValue != null && lateJsonlInterruptResultValue.acceptedInterrupt();
+	}
+
+	public function lateJsonlInterruptCode():String {
+		return lateJsonlInterruptResultValue == null ? "" : lateJsonlInterruptResultValue.code();
 	}
 
 	public function pumpOutcome():TuiAppServerPumpOutcome {

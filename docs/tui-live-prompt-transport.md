@@ -376,6 +376,17 @@ rejection, and line-disconnect stop. This remains synchronous and
 credential-free; it is not real provider streaming, socket ownership, Tokio task
 cancellation, model execution, tools, or persistence.
 
+`TUI-LIVE-74` adds a deterministic Ctrl-C/interrupt interleave to that
+composer-triggered drain path. `TuiAppServerPumpPolicy` can now request a typed
+`turn/interrupt` before the bounded late JSONL drain starts, and
+`TuiPromptSubmitInteraction` exposes both the interrupt result and the drain
+result. The prompt-submit harness proves a submitted composer prompt can be
+admitted, interrupted through the persistent JSONL session, and then reject a
+later assistant delta as the existing stale-after-interrupt typed outcome
+without applying assistant text or marking completion. This is still a
+synchronous deterministic interleave, not real async cancellation, socket
+readiness, provider streaming, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",
