@@ -4628,6 +4628,26 @@ late JSONL notification handoff into the minimal live TUI shell; it does not own
 real provider streaming, socket sessions, Tokio reader/writer tasks, model
 calls, tool execution, process teardown, or persistence.
 
+### TUI-LIVE-69 Submitted Turn Late JSONL Completion Handoff
+
+Status: TUI-LIVE-69 connects delayed `turn/completed` JSONL notification
+handoff to the submitted-turn completion path. The existing notification-only
+decoder narrows raw inbound JSONL lines into typed stream notifications, while
+`TuiPromptJsonRpcNotificationProjector.projectTurnCompletionNotifications()`
+preserves thread and turn identity as `TuiAppServerEvent.TurnCompleted` without
+changing the older prompt-submit stream projection. `FakeTuiAppServerFacade`
+accepts that projected completion event only through
+`deliverSubmittedTurnCompletion()`, so wrong-thread, wrong-turn, no-active-turn,
+duplicate-completion, and stale-after-Ctrl-C checks stay centralized. The
+prompt-submit gate proves a later `turn/completed` JSONL line clears the active
+turn through the app-server pump and renders ready, while rejected late
+completion lines leave transcript and completed-turn accounting unchanged.
+
+This is still deterministic, synchronous, and credential-free. It models the
+late JSONL completion handoff into the minimal live TUI shell; it does not own
+real provider streaming, socket sessions, Tokio reader/writer tasks, model
+calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

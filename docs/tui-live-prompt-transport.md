@@ -305,6 +305,19 @@ without transcript mutation. This remains deterministic and credential-free; it
 is not real provider streaming, socket ownership, Tokio task cancellation,
 model execution, tools, or persistence.
 
+`TUI-LIVE-69` routes delayed `turn/completed` JSONL notifications through the
+same strict notification-only decode boundary. `TuiPromptJsonRpcNotificationProjector`
+now exposes a narrow completion projection that preserves `ThreadId` and
+`TurnId` as `TuiAppServerEvent.TurnCompleted`, and
+`FakeTuiAppServerFacade.deliverSubmittedTurnJsonlCompletionLines()` delegates
+that projected event to `deliverSubmittedTurnCompletion()`. The prompt-submit
+gate proves accepted late completion JSONL clears `activeTurn`, queues the idle
+status redraw, and renders ready; wrong-thread, wrong-turn, no-active,
+duplicate, stale-interrupted, and unknown-method completion lines remain typed
+no-mutation rejections. This remains deterministic and credential-free; it is
+not real provider streaming, socket ownership, Tokio task cancellation, model
+execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

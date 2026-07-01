@@ -25,6 +25,15 @@ class TuiPromptJsonRpcNotificationProjector {
 		return events;
 	}
 
+	public static function projectTurnCompletionNotifications(notifications:Array<TuiPromptJsonRpcStreamNotification>):Array<TuiAppServerEvent> {
+		final events:Array<TuiAppServerEvent> = [];
+		if (notifications != null) {
+			for (notification in notifications)
+				appendTurnCompletionNotification(events, notification);
+		}
+		return events;
+	}
+
 	static function appendStreamNotification(events:Array<TuiAppServerEvent>, notification:TuiPromptJsonRpcStreamNotification):Void {
 		switch notification {
 			case ThreadStatusChanged(_):
@@ -44,6 +53,15 @@ class TuiPromptJsonRpcNotificationProjector {
 			events.push(TuiAppServerEvent.ThreadStatus(notification.threadId, TuiAppServerThreadStatus.Working("submitted")));
 		if (notification.method == TuiPromptJsonRpcNotificationMethod.TurnCompleted)
 			events.push(TuiAppServerEvent.ThreadStatus(notification.threadId, TuiAppServerThreadStatus.Ready("ready")));
+	}
+
+	static function appendTurnCompletionNotification(events:Array<TuiAppServerEvent>, notification:TuiPromptJsonRpcStreamNotification):Void {
+		switch notification {
+			case Turn(turnNotification):
+				if (turnNotification.method == TuiPromptJsonRpcNotificationMethod.TurnCompleted)
+					events.push(TuiAppServerEvent.TurnCompleted(turnNotification.threadId, turnNotification.turn.turnId));
+			case _:
+		}
 	}
 
 	static function appendStarted(events:Array<TuiAppServerEvent>, notifications:Array<TuiPromptJsonRpcNotification>):Void {
