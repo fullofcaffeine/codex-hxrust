@@ -4819,6 +4819,28 @@ models retry/resume ordering around a typed readiness stop; it does not own real
 async socket polling, Tokio readiness, provider streaming, model calls, tool
 execution, process teardown, or persistence.
 
+### TUI-LIVE-77 Submitted Turn Drain Readiness Scheduler Trigger
+
+Status: TUI-LIVE-77 moves retry-after-no-data behind a typed app-server
+readiness event. `TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady`
+represents that bounded late JSONL can be attempted again, and
+`TuiAppServerEventPump.handleReadinessEvent()` owns the drain plus the
+subsequent app-server event pump.
+
+The prompt-submit gate proves a composer-submitted turn first stops with typed
+`not_ready` / `no_data` evidence. A later readiness event triggers the bounded
+late JSONL drain through the facade/prompt-transport seam, consumes assistant
+delta and completion JSONL for the same active turn, appends exactly one
+assistant row, records exactly one completion, and clears `activeTurn`. Existing
+direct no-data, direct resume, normal completion, max-bound, prefix-applied
+rejection, line-disconnect, unsupported notification, and stale-after-interrupt
+paths remain covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models a scheduler/readiness trigger around the current drain loop; it does not
+own real async socket polling, Tokio readiness, provider streaming, model calls,
+tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

@@ -408,6 +408,17 @@ prefix-applied, disconnect, unsupported, and stale-after-interrupt stops intact.
 This is retry/resume modeling for synchronous gates, not real async socket
 polling, Tokio tasks, provider streaming, model execution, tools, or persistence.
 
+`TUI-LIVE-77` moves that retry behind a typed app-server readiness event. The
+event pump now accepts `TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady`,
+runs the bounded late JSONL drain through the facade/prompt-transport seam, and
+returns a `TuiAppServerReadinessInteraction` containing both drain evidence and
+the app-server pump outcome that applied queued transcript/completion events.
+The prompt-submit harness proves a composer-submitted turn can first stop with
+`no_data`, then a later readiness event appends exactly one assistant row,
+records exactly one completion, and clears `activeTurn`. This is deterministic
+scheduler/readiness modeling, not real async socket polling, Tokio tasks,
+provider streaming, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",
