@@ -318,6 +318,19 @@ no-mutation rejections. This remains deterministic and credential-free; it is
 not real provider streaming, socket ownership, Tokio task cancellation, model
 execution, tools, or persistence.
 
+`TUI-LIVE-70` adds ordered late JSONL batch handoff for submitted turns.
+`FakeTuiAppServerFacade.deliverSubmittedTurnJsonlBatchLines()` decodes an
+ordered notification batch and applies supported `item/agentMessage/delta` and
+`turn/completed` notifications directly through the existing submitted-turn
+delivery and completion checks. Accepted batches preserve notification order
+through the app-server pump, render the assistant row, clear `activeTurn`, and
+render ready. Wrong-thread, wrong-turn, no-active-turn, stale-after-interrupt,
+and unsupported batches return typed scalar results; if an earlier notification
+was already accepted, the result records the explicit prefix-applied counts
+instead of hiding partial mutation behind trace strings. This remains
+deterministic and credential-free; it is not real provider streaming, socket
+ownership, Tokio task cancellation, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

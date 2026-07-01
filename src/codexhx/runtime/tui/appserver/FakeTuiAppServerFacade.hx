@@ -261,6 +261,62 @@ class FakeTuiAppServerFacade {
 		return deliverSubmittedTurnProjectedCompletionEvent(events[0], lineCount, notifications.length);
 	}
 
+	public function deliverSubmittedTurnJsonlBatchLines(lines:Array<String>):TuiPromptSubmittedTurnJsonlBatchResult {
+		final lineCount = lines == null ? 0 : lines.length;
+		final decoded = new TuiPromptJsonRpcInboundLineDecoder().decodeStreamNotifications(lines);
+		if (!decoded.isAccepted()) {
+			return submittedTurnJsonlBatchResult(TuiPromptSubmittedTurnJsonlBatchStatus.DecodeRejected, decoded.code(), "", "", "", "", "", lineCount, 0, 0,
+				0, 0, 0);
+		}
+		final notifications = decoded.streamNotifications();
+		final notificationCount = notifications.length;
+		var appliedNotificationCount = 0;
+		var eventsQueued = 0;
+		var assistantDeltaCount = 0;
+		var completionCount = 0;
+		var lastThreadId = "";
+		var lastTurnId = "";
+		var lastDelta = "";
+		for (notification in notifications) {
+			switch notification {
+				case AgentMessageDelta(delta):
+					final delivered = deliverSubmittedTurnAssistantDelta(delta.threadId, delta.turnId, delta.delta);
+					lastThreadId = delivered.threadIdText();
+					lastTurnId = delivered.turnIdText();
+					lastDelta = delivered.deltaText();
+					if (!delivered.acceptedDelivery()) {
+						return submittedTurnJsonlBatchResult(TuiPromptSubmittedTurnJsonlBatchStatus.StreamDeliveryRejected, delivered.statusText(),
+							delivered.statusText(), "", lastThreadId, lastTurnId, lastDelta, lineCount, notificationCount, appliedNotificationCount,
+							eventsQueued, assistantDeltaCount, completionCount);
+					}
+					appliedNotificationCount = appliedNotificationCount + 1;
+					eventsQueued = eventsQueued + delivered.eventsQueued();
+					assistantDeltaCount = assistantDeltaCount + 1;
+				case Turn(turnNotification):
+					if (turnNotification.method != TuiPromptJsonRpcNotificationMethod.TurnCompleted) {
+						return submittedTurnJsonlBatchUnsupported(lineCount, notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount,
+							completionCount, lastThreadId, lastTurnId, lastDelta, "unsupported_turn_notification");
+					}
+					final delivered = deliverSubmittedTurnCompletion(turnNotification.threadId, turnNotification.turn.turnId);
+					lastThreadId = delivered.threadIdText();
+					lastTurnId = delivered.turnIdText();
+					if (!delivered.acceptedCompletion()) {
+						return submittedTurnJsonlBatchResult(TuiPromptSubmittedTurnJsonlBatchStatus.CompletionDeliveryRejected, delivered.statusText(), "",
+							delivered.statusText(), lastThreadId, lastTurnId, lastDelta, lineCount, notificationCount, appliedNotificationCount, eventsQueued,
+							assistantDeltaCount, completionCount);
+					}
+					appliedNotificationCount = appliedNotificationCount + 1;
+					eventsQueued = eventsQueued + delivered.eventsQueued();
+					completionCount = completionCount + 1;
+				case ThreadStatusChanged(_), UserMessageCompleted(_), AgentMessageStarted(_), RawResponseItemCompleted(_), AgentMessageCompleted(_):
+					return submittedTurnJsonlBatchUnsupported(lineCount, notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount,
+						completionCount, lastThreadId, lastTurnId, lastDelta, "unsupported_stream_notification");
+			}
+		}
+		return submittedTurnJsonlBatchResult(TuiPromptSubmittedTurnJsonlBatchStatus.Accepted, notificationCount == 0 ? "empty_batch" : "accepted", "", "",
+			lastThreadId, lastTurnId, lastDelta, lineCount, notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount, completionCount);
+	}
+
 	public function shutdownPromptTransport(code:String):TuiPromptTransportShutdownReport {
 		return promptTransport.shutdown(code);
 	}
@@ -525,6 +581,19 @@ class FakeTuiAppServerFacade {
 				TuiPromptSubmittedTurnJsonlCompletionResult.rejected(TuiPromptSubmittedTurnJsonlCompletionStatus.UnsupportedNotification,
 					"unsupported_projected_event", lineCount, notificationCount);
 		}
+	}
+
+	function submittedTurnJsonlBatchUnsupported(lineCount:Int, notificationCount:Int, appliedNotificationCount:Int, eventsQueued:Int, assistantDeltaCount:Int,
+			completionCount:Int, threadId:String, turnId:String, delta:String, code:String):TuiPromptSubmittedTurnJsonlBatchResult {
+		return submittedTurnJsonlBatchResult(TuiPromptSubmittedTurnJsonlBatchStatus.UnsupportedNotification, code, "", "", threadId, turnId, delta, lineCount,
+			notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount, completionCount);
+	}
+
+	static function submittedTurnJsonlBatchResult(status:TuiPromptSubmittedTurnJsonlBatchStatus, code:String, streamStatus:String, completionStatus:String,
+			threadId:String, turnId:String, delta:String, lineCount:Int, notificationCount:Int, appliedNotificationCount:Int, eventsQueued:Int,
+			assistantDeltaCount:Int, completionCount:Int):TuiPromptSubmittedTurnJsonlBatchResult {
+		return new TuiPromptSubmittedTurnJsonlBatchResult(status, code, streamStatus, completionStatus, threadId, turnId, delta, lineCount, notificationCount,
+			appliedNotificationCount, eventsQueued, assistantDeltaCount, completionCount);
 	}
 
 	function refreshAgentLabel(effects:Array<TuiAppServerShellEffect>):Void {

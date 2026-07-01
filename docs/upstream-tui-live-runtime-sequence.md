@@ -4648,6 +4648,33 @@ late JSONL completion handoff into the minimal live TUI shell; it does not own
 real provider streaming, socket sessions, Tokio reader/writer tasks, model
 calls, tool execution, process teardown, or persistence.
 
+### TUI-LIVE-70 Submitted Turn Ordered Late JSONL Batch Handoff
+
+Status: TUI-LIVE-70 adds ordered late JSONL batch handoff after submitted prompt
+admission. `TuiPromptSubmittedTurnJsonlBatchStatus` and
+`TuiPromptSubmittedTurnJsonlBatchResult` provide scalar typed evidence for batch
+status, rejection code, thread/turn identity, accepted notification counts,
+queued event counts, assistant-delta counts, and completion counts without a
+giant nullable event record or anonymous-record generated Rust surface.
+`FakeTuiAppServerFacade.deliverSubmittedTurnJsonlBatchLines()` uses the
+existing strict notification-only decoder, applies supported
+`item/agentMessage/delta` and `turn/completed` notifications in source order,
+and delegates each mutation to the existing submitted-turn stream delivery and
+completion checks.
+
+The prompt-submit gate proves that an ordered batch containing
+`item/agentMessage/delta` followed by `turn/completed` queues start, delta,
+completion, and ready events in order through the app-server pump, renders the
+assistant row, clears `activeTurn`, and renders ready. The same gate proves
+wrong-thread, no-active-turn, stale-after-Ctrl-C, unsupported-notification, and
+prefix-applied wrong-turn completion batches return typed no-mutation or
+explicit prefix-applied results instead of trace-only assertions.
+
+This is still deterministic, synchronous, and credential-free. It models
+ordered late JSONL handoff into the minimal live TUI shell; it does not own real
+provider streaming, socket sessions, Tokio reader/writer tasks, model calls,
+tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.
