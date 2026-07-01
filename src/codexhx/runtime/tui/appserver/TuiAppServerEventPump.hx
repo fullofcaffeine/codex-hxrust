@@ -85,6 +85,13 @@ class TuiAppServerEventPump {
 		return TuiAppServerReadinessInteraction.drained(drainResult, outcome);
 	}
 
+	public function handlePumpEvent(_event:TuiAppServerPumpEvent, policy:TuiAppServerPumpPolicy):TuiAppServerPumpOutcome {
+		return switch _event {
+			case DrainQueuedEvents:
+				drain(policy);
+		}
+	}
+
 	function handleAgentNavigationInput(input:TerminalInputEvent):Null<TuiAppServerPumpOutcome> {
 		final direction = agentNavigationDirection(input);
 		if (direction == null)

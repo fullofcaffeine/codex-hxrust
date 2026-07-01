@@ -47,6 +47,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessEnvVar;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
+import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessInteractionStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioSession;
@@ -2178,7 +2179,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("assistant> composer backpressure readiness delta", shell.transcriptAt(2).renderText(),
 			"composer late jsonl readiness backpressure assistant row");
 
-		final resumed = pump.drain(TuiAppServerPumpPolicy.lossless());
+		final resumed = pump.handlePumpEvent(TuiAppServerPumpEvent.DrainQueuedEvents, TuiAppServerPumpPolicy.lossless());
 		assertIntEquals(2, resumed.eventsDrained(), "composer late jsonl readiness backpressure resumes remaining events");
 		assertFalse(resumed.backpressureApplied(), "composer late jsonl readiness backpressure cleared on resume");
 		assertIntEquals(0, facade.queuedCount(), "composer late jsonl readiness backpressure queue drained");

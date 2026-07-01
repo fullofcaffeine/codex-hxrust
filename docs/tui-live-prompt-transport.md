@@ -439,6 +439,15 @@ and idle status without duplicating the assistant row or completion record.
 This is deterministic backpressure modeling, not real async socket polling,
 Tokio tasks, provider streaming, model execution, tools, or persistence.
 
+`TUI-LIVE-80` moves the recovery pass behind a typed app-server pump event.
+`TuiAppServerPumpEvent.DrainQueuedEvents` asks the same event pump to resume
+the preserved queue after readiness backpressure, rather than letting tests call
+`drain()` directly. The prompt-submit harness proves the queued completion and
+idle status are applied through that event, `activeTurn` clears, completion is
+recorded once, and the assistant row is not duplicated. This is deterministic
+scheduler/pump recovery modeling, not real async socket polling, Tokio tasks,
+provider streaming, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",
