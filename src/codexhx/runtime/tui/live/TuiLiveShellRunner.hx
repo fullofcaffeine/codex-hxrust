@@ -82,6 +82,16 @@ class TuiLiveShellRunner {
 			&& outcome.iterations() < request.policy.maxIterations
 			&& idleEvents < request.policy.idleEventLimit) {
 			outcome.recordIteration();
+			if (request.facade.hasPendingSubmittedTurn()) {
+				final queuedReadinessEvent = request.shiftReadinessEvent();
+				if (queuedReadinessEvent != null) {
+					outcome.recordReadinessEvent();
+					recordReadiness(request, outcome, pump.handleReadinessEvent(queuedReadinessEvent, request.policy.appServerPolicy));
+					if (request.scheduler.exitRequested())
+						break;
+				}
+			}
+
 			final queuedPumpEvent = request.shiftPumpEvent();
 			final pumpEvent = queuedPumpEvent == null ? TuiAppServerPumpEvent.DrainQueuedEvents : queuedPumpEvent;
 			if (queuedPumpEvent != null)
@@ -139,6 +149,13 @@ class TuiLiveShellRunner {
 			pumpOutcome:codexhx.runtime.tui.appserver.TuiAppServerPumpOutcome):Void {
 		outcome.recordPumpOutcome(pumpOutcome);
 		if (pumpOutcome != null && pumpOutcome.schedulerDrawFrameCount() > 0)
+			recordCurrentFrame(request, outcome);
+	}
+
+	static function recordReadiness(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome,
+			interaction:codexhx.runtime.tui.appserver.TuiAppServerReadinessInteraction):Void {
+		outcome.recordReadinessInteraction(interaction);
+		if (interaction != null && interaction.pumpOutcome().schedulerDrawFrameCount() > 0)
 			recordCurrentFrame(request, outcome);
 	}
 

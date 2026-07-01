@@ -11,6 +11,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.terminal.TerminalBackend;
 import codexhx.runtime.tui.terminal.TerminalRedrawScheduler;
@@ -36,6 +37,7 @@ class TuiLiveShellRunRequest {
 	public var policy:TuiLiveShellRunPolicy;
 	public var initialEvents:Array<TuiAppServerEvent>;
 	public var pumpEvents:Array<TuiAppServerPumpEvent>;
+	public var readinessEvents:Array<TuiAppServerReadinessEvent>;
 
 	public function new(backend:TerminalBackend, setup:TerminalSetup, sessionId:SessionId, primaryThreadId:ThreadId, modelLabel:String) {
 		this.backend = backend;
@@ -49,6 +51,7 @@ class TuiLiveShellRunRequest {
 		this.policy = TuiLiveShellRunPolicy.bounded(64, 4);
 		this.initialEvents = [];
 		this.pumpEvents = [];
+		this.readinessEvents = [];
 	}
 
 	public function withShell(shell:ChatWidgetShellState):TuiLiveShellRunRequest {
@@ -109,10 +112,21 @@ class TuiLiveShellRunRequest {
 		return this;
 	}
 
+	public function withReadinessEvents(events:Array<TuiAppServerReadinessEvent>):TuiLiveShellRunRequest {
+		this.readinessEvents = events == null ? [] : events.copy();
+		return this;
+	}
+
 	public function shiftPumpEvent():Null<TuiAppServerPumpEvent> {
 		if (pumpEvents.length == 0)
 			return null;
 		return pumpEvents.shift();
+	}
+
+	public function shiftReadinessEvent():Null<TuiAppServerReadinessEvent> {
+		if (readinessEvents.length == 0)
+			return null;
+		return readinessEvents.shift();
 	}
 
 	static function normalize(value:String, fallback:String):String {

@@ -1,6 +1,8 @@
+import codexhx.protocol.ItemId;
 import codexhx.protocol.RequestId;
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.protocol.TurnId;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineNativeOpener;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineTransportAttacher;
@@ -22,8 +24,13 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
+import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerReadinessInteractionStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
+import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnLateJsonlDrainStatus;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
@@ -38,6 +45,7 @@ import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptRequest;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptResponse;
 import codexhx.runtime.tui.appserver.TuiPromptTurnStartResponse;
+import codexhx.runtime.tui.appserver.TuiPromptTurnStatus;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.live.TuiLiveShellRunOutcome;
 import codexhx.runtime.tui.live.TuiLiveShellRunPolicy;
@@ -61,6 +69,7 @@ class TuiLiveShellRunnerHarness {
 		testTextSubmitThroughInjectedLineConnector();
 		testAgentNavigationInputRoutesActiveThread();
 		testPumpEventRoutesThroughRunner();
+		testReadinessEventRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
 		testLiveBackendNoTtyRunPath();
 		Sys.println("tui-live-shell-runner ok");
@@ -303,6 +312,58 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals("assistant> runner pump three", outcome.finalFrameLineAt(5), "runner pump final frame");
 	}
 
+	static function testReadinessEventRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(7), activeSession, activeThread, "ready");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-ready-7"), "runner readiness delta").messageJson() + "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("d")),
+			TerminalEvent.Key(TerminalKey.Character("y")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(24,
+				2)).withJsonRpcPromptTransport(promptTransport).withReadinessEvents([TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)]);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner readiness accepted prompts");
+		assertIntEquals(1, outcome.appServerReadinessEvents(), "runner readiness event count");
+		assertIntEquals(1, outcome.appServerReadinessDrained(), "runner readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner readiness no pending count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(), "runner readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner readiness late jsonl drain status");
+		assertStringEquals("completed", outcome.latestReadinessLateJsonlDrainCode(), "runner readiness late jsonl drain code");
+		assertTrue(outcome.appServerEvents() >= 3, "runner readiness pumped app-server events");
+		assertStringEquals("turn-7", outcome.lastStartedTurnIdText(), "runner readiness last started");
+		assertStringEquals("turn-7", outcome.lastCompletedTurnIdText(), "runner readiness last completed");
+		assertStringEquals("", outcome.activeTurnIdText(), "runner readiness active cleared");
+		assertIntEquals(1, outcome.completedTurns(), "runner readiness completed count");
+		assertStringEquals("user> ready", shell.transcriptAt(1).renderText(), "runner readiness user row");
+		assertStringEquals("assistant> runner readiness delta", shell.transcriptAt(2).renderText(), "runner readiness assistant row");
+		assertStringEquals("assistant> runner readiness delta", outcome.finalFrameLineAt(4), "runner readiness final frame");
+	}
+
 	static function testEscapeCtrlCAndQExit():Void {
 		final escapeBackend = new HeadlessTerminalBackend([TerminalEvent.Key(TerminalKey.Escape)]);
 		final escapeOutcome = TuiLiveShellRunner.run(request(ChatWidgetShellState.initial("pending"), escapeBackend, [], TuiLiveShellRunPolicy.bounded(4, 2)));
@@ -349,6 +410,13 @@ class TuiLiveShellRunnerHarness {
 		return ThreadId.unsafeAssumeValid(value);
 	}
 
+	static function item(value:String):ItemId {
+		final parsed = ItemId.fromString(value);
+		if (parsed == null)
+			throw "invalid item id " + value;
+		return parsed;
+	}
+
 	static function stdioPersistentPlan(lines:Array<String>):TuiAppServerJsonRpcProcessLaunchPlan {
 		final args = [
 			"-c",
@@ -367,6 +435,12 @@ class TuiLiveShellRunnerHarness {
 			TuiPromptThreadStatusChangedNotification.active(envelope.threadId).messageJson() + "\n",
 			TuiPromptJsonRpcNotification.turnStarted(envelope, response.result).messageJson() + "\n"
 		];
+	}
+
+	static function turnCompletedLine(threadId:ThreadId, turnId:TurnId):String {
+		return new TuiPromptJsonRpcNotification(TuiPromptJsonRpcNotificationMethod.TurnCompleted, threadId,
+			new TuiPromptTurnStartResponse(turnId, TuiPromptTurnStatus.Completed)).messageJson()
+			+ "\n";
 	}
 
 	static function interruptReadyThenResponseLines(request:TuiPromptTurnInterruptRequest, threadId:ThreadId):Array<String> {
