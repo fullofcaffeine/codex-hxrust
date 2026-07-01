@@ -105,6 +105,12 @@ class ProcessBackedTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonR
 		return TuiPromptTurnInterruptLineOutcome.accepted(decoded.response(), decoded.events(), report.transcript().inboundLines(), report.transcript());
 	}
 
+	public function readLateJsonlBatchLines(_maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
+		if (!isOpen())
+			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
+		return TuiAppServerJsonRpcLateJsonlBatch.rejected("late_jsonl_read_unsupported");
+	}
+
 	public function isOpen():Bool {
 		return state == TuiAppServerJsonRpcLineTransportState.Open;
 	}

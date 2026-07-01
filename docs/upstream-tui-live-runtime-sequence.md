@@ -4675,6 +4675,32 @@ ordered late JSONL handoff into the minimal live TUI shell; it does not own real
 provider streaming, socket sessions, Tokio reader/writer tasks, model calls,
 tool execution, process teardown, or persistence.
 
+### TUI-LIVE-71 Submitted Turn Persistent Late JSONL Session Pump
+
+Status: TUI-LIVE-71 moves ordered submitted-turn late JSONL handoff one step
+closer to the persistent app-server session shape. `TuiAppServerJsonRpcLineTransport`
+now has a typed `readLateJsonlBatchLines()` boundary, and
+`TuiAppServerJsonRpcStdioSession` can synchronously read a bounded late batch
+from the already-open deterministic session after `turn/start` admission.
+`PersistentTuiAppServerJsonRpcLineConnectedTransport.pumpSubmittedTurnLateJsonlBatch()`
+then applies the batch through
+`FakeTuiAppServerFacade.deliverSubmittedTurnJsonlBatchLines()` and records
+`TuiPromptSubmittedTurnLateJsonlPumpResult` evidence for line-read status, batch
+status, stream/completion status, thread/turn identity, notification counts,
+applied counts, assistant deltas, completions, and queued events.
+
+The prompt-submit and live-shell gates prove a persistent submitted prompt can
+admit a running turn, read a late `item/agentMessage/delta` plus
+`turn/completed` batch from the session boundary, preserve event order through
+the app-server pump, render the assistant row, clear `activeTurn`, and render
+ready. They also prove typed wrong-thread, wrong-turn prefix-applied,
+stale-after-Ctrl-C, and unsupported-notification rejection paths.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models a persistent-session late-line pump; it does not own real provider
+streaming, socket sessions, Tokio reader/writer tasks, model calls, tool
+execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

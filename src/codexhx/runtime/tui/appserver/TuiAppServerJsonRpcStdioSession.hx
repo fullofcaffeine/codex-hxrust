@@ -163,6 +163,32 @@ class TuiAppServerJsonRpcStdioSession implements TuiAppServerJsonRpcLineTranspor
 			TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
 	}
 
+	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
+		if (!isOpen())
+			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
+		if (maxLines <= 0)
+			return TuiAppServerJsonRpcLateJsonlBatch.rejected("invalid_late_jsonl_batch_line_count");
+		final refusal = refusalCode();
+		if (refusal.length > 0)
+			return TuiAppServerJsonRpcLateJsonlBatch.rejected(refusal);
+		final started = ensureStarted();
+		if (started.length > 0)
+			return TuiAppServerJsonRpcLateJsonlBatch.disconnected(started, []);
+		final active = process;
+		if (active == null)
+			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("missing_stdio_process", []);
+
+		final lines:Array<String> = [];
+		for (_ in 0...maxLines) {
+			final line = readInboundLine(active);
+			if (!line.ok)
+				return TuiAppServerJsonRpcLateJsonlBatch.disconnected(line.code, lines);
+			lines.push(line.value);
+			inboundLines = inboundLines + 1;
+		}
+		return TuiAppServerJsonRpcLateJsonlBatch.accepted(lines);
+	}
+
 	public function isOpen():Bool {
 		return state == TuiAppServerJsonRpcLineTransportState.Open;
 	}

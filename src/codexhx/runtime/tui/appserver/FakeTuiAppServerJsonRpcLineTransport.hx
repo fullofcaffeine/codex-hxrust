@@ -61,6 +61,12 @@ class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTra
 		return TuiPromptTurnInterruptLineOutcome.accepted(response, [], lines, TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, lines));
 	}
 
+	public function readLateJsonlBatchLines(_maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
+		if (!isOpen())
+			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
+		return TuiAppServerJsonRpcLateJsonlBatch.rejected("late_jsonl_read_unsupported");
+	}
+
 	public function isOpen():Bool {
 		return state == TuiAppServerJsonRpcLineTransportState.Open;
 	}

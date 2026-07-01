@@ -331,6 +331,21 @@ instead of hiding partial mutation behind trace strings. This remains
 deterministic and credential-free; it is not real provider streaming, socket
 ownership, Tokio task cancellation, model execution, tools, or persistence.
 
+`TUI-LIVE-71` moves ordered late JSONL batch handoff behind a deterministic
+persistent-session pump. `TuiAppServerJsonRpcLineTransport` now exposes a typed
+late-batch read, `TuiAppServerJsonRpcStdioSession` can read a bounded batch from
+the already-open session after prompt admission, and
+`PersistentTuiAppServerJsonRpcLineConnectedTransport.pumpSubmittedTurnLateJsonlBatch()`
+applies those lines through `FakeTuiAppServerFacade.deliverSubmittedTurnJsonlBatchLines()`.
+The pump records typed line-read status, batch status, stream/completion status,
+thread/turn identity, applied counts, and queued event counts without direct
+facade calls from the harness. Accepted persistent-session batches render the
+assistant row, clear `activeTurn`, and render ready; wrong-thread, wrong-turn,
+stale-after-interrupt, unsupported, and prefix-applied rejection paths remain
+typed. This remains synchronous and credential-free; it is not real provider
+streaming, socket ownership, Tokio task cancellation, model execution, tools, or
+persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

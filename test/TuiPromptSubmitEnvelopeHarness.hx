@@ -42,6 +42,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachment;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachmentReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLateJsonlBatch;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessEnvVar;
@@ -86,6 +87,8 @@ import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnJsonlCompletionResult
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnJsonlCompletionStatus;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnJsonlDeliveryResult;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnJsonlDeliveryStatus;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnLateJsonlPumpResult;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnLateJsonlPumpStatus;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnCompletionResult;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnCompletionStatus;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnStreamDeliveryResult;
@@ -153,6 +156,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testSubmittedTurnLateJsonlCompletionRejectionsAreTyped();
 		testSubmittedTurnLateJsonlBatchHandoffCompletesInOrder();
 		testSubmittedTurnLateJsonlBatchRejectionsAreTyped();
+		testSubmittedTurnPersistentLateJsonlSessionPumpCompletesInOrder();
+		testSubmittedTurnPersistentLateJsonlSessionPumpRejectionsAreTyped();
 		testSubmittedTurnAcceptanceRejectsMissingStartedEvidence();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
@@ -1496,6 +1501,144 @@ class TuiPromptSubmitEnvelopeHarness {
 			"submitted late jsonl batch unsupported");
 	}
 
+	static function testSubmittedTurnPersistentLateJsonlSessionPumpCompletesInOrder():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005615");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(252), activeSession, activeThread, "persistent late jsonl pump");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final delta = new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-pump-252"), "pumped assistant delta");
+		final lateLines = [delta.messageJson() + "\n", turnCompletedLine(activeThread, turnId)];
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final facade = attachedFacadeWithTransport(shell, activeThread, promptTransport);
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "submitted late jsonl pump setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		final submit = facade.submitPrompt(RequestId.fromInteger(252), "persistent late jsonl pump");
+		assertTrue(submit.acceptedPrompt(), "submitted late jsonl pump prompt accepted");
+		assertStringEquals("turn-252", facade.activeTurnIdText(), "submitted late jsonl pump active turn retained");
+
+		final pumped = appServerTransport.pumpSubmittedTurnLateJsonlBatch(facade, lateLines.length);
+		assertSubmittedLateJsonlPump(pumped, TuiPromptSubmittedTurnLateJsonlPumpStatus.Accepted, "accepted", TuiAppServerJsonRpcTransportStatus.Accepted,
+			"accepted", lateLines.length, TuiPromptSubmittedTurnJsonlBatchStatus.Accepted, "accepted", null, null, activeThread.toString(), "turn-252",
+			"pumped assistant delta", 2, 2, 3, 1, 1, "submitted late jsonl pump accepted");
+		assertTrue(appServerTransport.lastLateJsonlBatch() != null && appServerTransport.lastLateJsonlBatch().isAccepted(),
+			"submitted late jsonl pump line batch recorded");
+		assertStringEquals(lateLines[0], appServerTransport.lastLateJsonlBatch().lineAt(0), "submitted late jsonl pump first late line");
+
+		final outcome = pump.drain(TuiAppServerPumpPolicy.lossless());
+		assertIntEquals(4, outcome.eventsDrained(), "submitted late jsonl pump drains start delta completion idle events");
+		assertStringEquals("", facade.activeTurnIdText(), "submitted late jsonl pump active turn cleared");
+		assertIntEquals(1, facade.completedTurnCount(), "submitted late jsonl pump completed count");
+		assertStringEquals("assistant> pumped assistant delta", shell.transcriptAt(1).renderText(), "submitted late jsonl pump assistant row");
+		assertStringEquals("Codex | model: gpt-live | status: ready", backend.currentFrame().lineAt(0), "submitted late jsonl pump ready header");
+		assertLineCloseReport(appServerTransport.close("submitted_late_jsonl_pump_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"submitted_late_jsonl_pump_done", 1, promptLines.length + lateLines.length, "submitted late jsonl pump close");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testSubmittedTurnPersistentLateJsonlSessionPumpRejectionsAreTyped():Void {
+		final activeThread = thread("00000000-0000-0000-0000-000000005616");
+
+		final wrongThread = thread("00000000-0000-0000-0000-000000005617");
+		final wrongThreadRequestId = RequestId.fromInteger(253);
+		final wrongThreadTransport = persistentLateJsonlTransport(activeThread, wrongThreadRequestId, "persistent pump wrong thread", [
+			new TuiPromptAgentMessageDeltaNotification(wrongThread, turn("turn-253"), item("item-pump-wrong-thread-253"), "pump wrong thread").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turn("turn-253"))
+		]);
+		final wrongThreadFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread,
+			new JsonRpcTuiPromptTransport(wrongThreadTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		assertTrue(wrongThreadFacade.submitPrompt(wrongThreadRequestId, "persistent pump wrong thread").acceptedPrompt(),
+			"submitted late jsonl pump wrong thread prompt accepted");
+		final wrongThreadPump = wrongThreadTransport.pumpSubmittedTurnLateJsonlBatch(wrongThreadFacade, 2);
+		assertSubmittedLateJsonlPump(wrongThreadPump, TuiPromptSubmittedTurnLateJsonlPumpStatus.BatchRejected,
+			TuiPromptSubmittedTurnStreamDeliveryStatus.WrongThread.text(), TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", 2,
+			TuiPromptSubmittedTurnJsonlBatchStatus.StreamDeliveryRejected, TuiPromptSubmittedTurnStreamDeliveryStatus.WrongThread.text(),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.WrongThread, null, wrongThread.toString(), "turn-253", "pump wrong thread", 2, 0, 0, 0, 0,
+			"submitted late jsonl pump wrong thread");
+		assertIntEquals(1, wrongThreadFacade.shell().transcriptCount(), "submitted late jsonl pump wrong thread transcript unchanged");
+		wrongThreadTransport.close("submitted_late_jsonl_pump_wrong_thread_done");
+
+		final prefixRequestId = RequestId.fromInteger(254);
+		final prefixTransport = persistentLateJsonlTransport(activeThread, prefixRequestId, "persistent pump prefix", [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turn("turn-254"), item("item-pump-prefix-254"), "pump prefix delta").messageJson() + "\n",
+			turnCompletedLine(activeThread, turn("turn-stale-254"))
+		]);
+		final prefixFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread,
+			new JsonRpcTuiPromptTransport(prefixTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		assertTrue(prefixFacade.submitPrompt(prefixRequestId, "persistent pump prefix").acceptedPrompt(), "submitted late jsonl pump prefix prompt accepted");
+		final prefixBackend = new HeadlessTerminalBackend([]);
+		assertTrue(prefixBackend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "submitted late jsonl pump prefix setup");
+		final prefixPump = new TuiAppServerEventPump(prefixFacade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), prefixBackend);
+		final prefix = prefixTransport.pumpSubmittedTurnLateJsonlBatch(prefixFacade, 2);
+		assertSubmittedLateJsonlPump(prefix, TuiPromptSubmittedTurnLateJsonlPumpStatus.BatchRejected, TuiPromptSubmittedTurnCompletionStatus.WrongTurn.text(),
+			TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", 2, TuiPromptSubmittedTurnJsonlBatchStatus.CompletionDeliveryRejected,
+			TuiPromptSubmittedTurnCompletionStatus.WrongTurn.text(), null, TuiPromptSubmittedTurnCompletionStatus.WrongTurn, activeThread.toString(),
+			"turn-stale-254", "pump prefix delta", 2, 1, 1, 1, 0, "submitted late jsonl pump prefix wrong turn");
+		final prefixOutcome = prefixPump.drain(TuiAppServerPumpPolicy.lossless());
+		assertIntEquals(2, prefixOutcome.eventsDrained(), "submitted late jsonl pump prefix drains start and delta only");
+		assertStringEquals("turn-254", prefixFacade.activeTurnIdText(), "submitted late jsonl pump prefix active turn remains");
+		assertIntEquals(0, prefixFacade.completedTurnCount(), "submitted late jsonl pump prefix completed count");
+		assertStringEquals("assistant> pump prefix delta", prefixFacade.shell()
+			.transcriptAt(1)
+			.renderText(), "submitted late jsonl pump prefix assistant row");
+		prefixTransport.close("submitted_late_jsonl_pump_prefix_done");
+		prefixBackend.restore(TerminalRestoreReason.NormalExit);
+
+		final stalePromptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(255), session("00000000-0000-0000-0000-000000009999"), activeThread,
+			"persistent pump interrupted");
+		final stalePromptRequest = TuiPromptJsonRpcRequest.turnStart(stalePromptEnvelope);
+		final stalePromptLines = submittedTurnInboundLines(stalePromptRequest, stalePromptEnvelope);
+		final staleTurnId = TuiPromptTurnStartResponse.fromEnvelope(stalePromptEnvelope).turnId;
+		final interruptEnvelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(256), stalePromptEnvelope.sessionId, activeThread, staleTurnId);
+		final interruptLines = interruptReadyThenResponseLines(TuiPromptTurnInterruptRequest.fromEnvelope(interruptEnvelope), activeThread);
+		final staleDelta = new TuiPromptAgentMessageDeltaNotification(activeThread, staleTurnId, item("item-pump-stale-255"), "pump stale delta");
+		final staleInbound = stalePromptLines.copy();
+		for (line in interruptLines)
+			staleInbound.push(line);
+		staleInbound.push(staleDelta.messageJson() + "\n");
+		staleInbound.push(turnCompletedLine(activeThread, staleTurnId));
+		final staleTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(staleInbound)),
+			stalePromptLines.length);
+		final staleFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread,
+			new JsonRpcTuiPromptTransport(staleTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		assertTrue(staleFacade.submitPrompt(RequestId.fromInteger(255), "persistent pump interrupted").acceptedPrompt(),
+			"submitted late jsonl pump stale prompt accepted");
+		assertTrue(staleFacade.interruptActiveTurn(RequestId.fromInteger(256)).acceptedInterrupt(), "submitted late jsonl pump stale interrupt accepted");
+		final stale = staleTransport.pumpSubmittedTurnLateJsonlBatch(staleFacade, 2);
+		assertSubmittedLateJsonlPump(stale, TuiPromptSubmittedTurnLateJsonlPumpStatus.BatchRejected,
+			TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn.text(), TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", 2,
+			TuiPromptSubmittedTurnJsonlBatchStatus.StreamDeliveryRejected, TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn.text(),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn, null, activeThread.toString(), "turn-255", "pump stale delta", 2, 0, 0, 0, 0,
+			"submitted late jsonl pump stale interrupt");
+		assertIntEquals(1, staleFacade.interruptedTurnCount(), "submitted late jsonl pump stale interrupted count");
+		assertIntEquals(0, staleFacade.completedTurnCount(), "submitted late jsonl pump stale completed count");
+		staleTransport.close("submitted_late_jsonl_pump_stale_done");
+
+		final unsupportedRequestId = RequestId.fromInteger(257);
+		final unsupportedTransport = persistentLateJsonlTransport(activeThread, unsupportedRequestId, "persistent pump unsupported", [
+			TuiPromptThreadStatusChangedNotification.active(activeThread).messageJson() + "\n"
+		]);
+		final unsupportedFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread,
+			new JsonRpcTuiPromptTransport(unsupportedTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		assertTrue(unsupportedFacade.submitPrompt(unsupportedRequestId, "persistent pump unsupported").acceptedPrompt(),
+			"submitted late jsonl pump unsupported prompt accepted");
+		final unsupported = unsupportedTransport.pumpSubmittedTurnLateJsonlBatch(unsupportedFacade, 1);
+		assertSubmittedLateJsonlPump(unsupported, TuiPromptSubmittedTurnLateJsonlPumpStatus.BatchRejected, "unsupported_stream_notification",
+			TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", 1, TuiPromptSubmittedTurnJsonlBatchStatus.UnsupportedNotification,
+			"unsupported_stream_notification", null, null, "", "", "", 1, 0, 0, 0, 0, "submitted late jsonl pump unsupported");
+		unsupportedTransport.close("submitted_late_jsonl_pump_unsupported_done");
+	}
+
 	static function testSubmittedTurnAcceptanceRejectsMissingStartedEvidence():Void {
 		final activeThread = thread("00000000-0000-0000-0000-000000005599");
 		final activeSession = session("00000000-0000-0000-0000-000000009999");
@@ -2215,6 +2358,20 @@ class TuiPromptSubmitEnvelopeHarness {
 		return facade;
 	}
 
+	static function persistentLateJsonlTransport(activeThread:ThreadId, requestId:RequestId, prompt:String,
+			lateLines:Array<String>):PersistentTuiAppServerJsonRpcLineConnectedTransport {
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final envelope = new TuiPromptSubmitEnvelope(requestId, activeSession, activeThread, prompt);
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final promptLines = submittedTurnInboundLines(request, envelope);
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		return
+			PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+				promptLines.length);
+	}
+
 	static function session(value:String):SessionId {
 		return SessionId.unsafeAssumeValid(value);
 	}
@@ -2771,6 +2928,34 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedCompletionCount, result.completionCount(), label + " completion count");
 	}
 
+	static function assertSubmittedLateJsonlPump(result:TuiPromptSubmittedTurnLateJsonlPumpResult, expectedStatus:TuiPromptSubmittedTurnLateJsonlPumpStatus,
+			expectedCode:String, expectedLineStatus:TuiAppServerJsonRpcTransportStatus, expectedLineCode:String, expectedLineCount:Int,
+			expectedBatchStatus:TuiPromptSubmittedTurnJsonlBatchStatus, expectedBatchCode:String,
+			expectedStreamStatus:Null<TuiPromptSubmittedTurnStreamDeliveryStatus>, expectedCompletionStatus:Null<TuiPromptSubmittedTurnCompletionStatus>,
+			expectedThreadId:String, expectedTurnId:String, expectedDelta:String, expectedNotificationCount:Int, expectedAppliedNotificationCount:Int,
+			expectedEventsQueued:Int, expectedAssistantDeltaCount:Int, expectedCompletionCount:Int, label:String):Void {
+		assertStringEquals(expectedStatus.text(), result.statusText(), label + " status");
+		assertStringEquals(expectedStatus == TuiPromptSubmittedTurnLateJsonlPumpStatus.Accepted ? "true" : "false", result.acceptedPump() ? "true" : "false",
+			label + " accepted flag");
+		assertStringEquals(expectedCode, result.code(), label + " code");
+		assertStringEquals(expectedLineStatus.text(), result.lineStatusText(), label + " line status");
+		assertStringEquals(expectedLineCode, result.lineCode(), label + " line code");
+		assertIntEquals(expectedLineCount, result.lineCount(), label + " line count");
+		assertStringEquals(expectedBatchStatus.text(), result.batchStatusText(), label + " batch status");
+		assertStringEquals(expectedBatchCode, result.batchCode(), label + " batch code");
+		assertStringEquals(expectedStreamStatus == null ? "" : expectedStreamStatus.text(), result.streamStatusText(), label + " stream status");
+		assertStringEquals(expectedCompletionStatus == null ? "" : expectedCompletionStatus.text(), result.completionStatusText(),
+			label + " completion status");
+		assertStringEquals(expectedThreadId, result.threadIdText(), label + " thread");
+		assertStringEquals(expectedTurnId, result.turnIdText(), label + " turn");
+		assertStringEquals(expectedDelta, result.deltaText(), label + " delta");
+		assertIntEquals(expectedNotificationCount, result.notificationCount(), label + " notification count");
+		assertIntEquals(expectedAppliedNotificationCount, result.appliedNotificationCount(), label + " applied notification count");
+		assertIntEquals(expectedEventsQueued, result.eventsQueued(), label + " events queued");
+		assertIntEquals(expectedAssistantDeltaCount, result.assistantDeltaCount(), label + " assistant delta count");
+		assertIntEquals(expectedCompletionCount, result.completionCount(), label + " completion count");
+	}
+
 	static function streamNotificationMethodText(notification:TuiPromptJsonRpcStreamNotification):String {
 		return switch notification {
 			case TuiPromptJsonRpcStreamNotification.ThreadStatusChanged(status):
@@ -3219,6 +3404,10 @@ class MismatchedInboundLineTransport implements TuiAppServerJsonRpcLineTransport
 	public function sendInterruptLine(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope,
 			outboundLine:String):TuiPromptTurnInterruptLineOutcome {
 		return delegate.sendInterruptLine(request, envelope, outboundLine);
+	}
+
+	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
+		return delegate.readLateJsonlBatchLines(maxLines);
 	}
 
 	public function isOpen():Bool {
