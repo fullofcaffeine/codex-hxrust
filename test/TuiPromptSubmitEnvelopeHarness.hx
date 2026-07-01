@@ -79,6 +79,8 @@ import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamNotification;
 import codexhx.runtime.tui.appserver.TuiPromptPendingRequestLifecycle;
 import codexhx.runtime.tui.appserver.TuiPromptPendingRequestStatus;
 import codexhx.runtime.tui.appserver.TuiPromptRawResponseItemCompletedNotification;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnCompletionResult;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnCompletionStatus;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
@@ -131,6 +133,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testPersistentConnectorBackedTransportSendsInterrupt();
 		testPersistentConnectorBackedTransportRejectsMalformedInterrupt();
 		testSubmittedTurnAcceptanceKeepsActiveTurnForInterrupt();
+		testSubmittedTurnCompletionDeliveryClearsActiveTurn();
+		testSubmittedTurnCompletionRejectionsAreTyped();
 		testSubmittedTurnAcceptanceRejectsMissingStartedEvidence();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
@@ -1007,6 +1011,82 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(2, appServerTransport.sendCount(), "submitted persistent send count");
 		assertLineCloseReport(appServerTransport.close("submitted_persistent_done"), TuiAppServerJsonRpcLineTransportState.Closed,
 			"submitted_persistent_done", 2, promptLines.length + interruptLines.length, "submitted persistent close");
+	}
+
+	static function testSubmittedTurnCompletionDeliveryClearsActiveTurn():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005600");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(225), activeSession, activeThread, "submitted completion prompt");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(promptLines)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final facade = attachedFacadeWithTransport(shell, activeThread, promptTransport);
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "submitted completion setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		final submit = facade.submitPrompt(RequestId.fromInteger(225), "submitted completion prompt");
+		assertTrue(submit.acceptedPrompt(), "submitted completion prompt accepted");
+		assertTurnLifecycle(promptTransport.lastTurnLifecycle(), TuiPromptTurnLifecycleStatus.MissingCompleted, "turn-225", "turn-225", "", 2, 1, 0,
+			"submitted completion initial lifecycle");
+		assertStringEquals("turn-225", facade.activeTurnIdText(), "submitted completion active turn retained");
+		assertTrue(facade.hasPendingSubmittedTurn(), "submitted completion pending record");
+
+		final completion = facade.deliverSubmittedTurnCompletion(activeThread, turnId);
+		assertSubmittedCompletion(completion, TuiPromptSubmittedTurnCompletionStatus.Accepted, activeThread.toString(), "turn-225", 2,
+			"submitted completion accepted");
+		final outcome = pump.drain(TuiAppServerPumpPolicy.lossless());
+		assertIntEquals(3, outcome.eventsDrained(), "submitted completion drains start completion idle events");
+		assertStringEquals("", facade.activeTurnIdText(), "submitted completion active turn cleared");
+		assertFalse(facade.hasPendingSubmittedTurn(), "submitted completion no pending record");
+		assertStringEquals("turn-225", facade.lastCompletedTurnIdText(), "submitted completion last completed");
+		assertIntEquals(1, facade.completedTurnCount(), "submitted completion completed count");
+		assertIntEquals(0, facade.interruptedTurnCount(), "submitted completion interrupted count");
+		assertStatusKindEquals(ChatWidgetStatusKind.Idle, shell.statusKind(), "submitted completion status kind");
+		assertStringEquals("ready", shell.statusText(), "submitted completion status text");
+		assertStringEquals("Codex | model: gpt-live | status: ready", backend.currentFrame().lineAt(0), "submitted completion drawn ready header");
+		assertLineCloseReport(appServerTransport.close("submitted_completion_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"submitted_completion_done", 1, promptLines.length, "submitted completion close");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testSubmittedTurnCompletionRejectionsAreTyped():Void {
+		final activeThread = thread("00000000-0000-0000-0000-000000005601");
+		final noTurnFacade = attachedFacade(ChatWidgetShellState.initial("pending"), activeThread);
+		final noTurn = noTurnFacade.deliverSubmittedTurnCompletion(activeThread, turn("turn-226"));
+		assertSubmittedCompletion(noTurn, TuiPromptSubmittedTurnCompletionStatus.NoSubmittedTurn, activeThread.toString(), "turn-226", 0,
+			"submitted completion no active turn");
+
+		final activeFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread, new LongRunningPromptTransport());
+		final submit = activeFacade.submitPrompt(RequestId.fromInteger(227), "completion rejection active");
+		assertTrue(submit.acceptedPrompt(), "submitted completion rejection prompt accepted");
+		final wrongThread = thread("00000000-0000-0000-0000-000000005602");
+		assertSubmittedCompletion(activeFacade.deliverSubmittedTurnCompletion(wrongThread, turn("turn-227")),
+			TuiPromptSubmittedTurnCompletionStatus.WrongThread, wrongThread.toString(), "turn-227", 0, "submitted completion wrong thread");
+		assertSubmittedCompletion(activeFacade.deliverSubmittedTurnCompletion(activeThread, turn("turn-stale-227")),
+			TuiPromptSubmittedTurnCompletionStatus.WrongTurn, activeThread.toString(), "turn-stale-227", 0, "submitted completion wrong turn");
+
+		final accepted = activeFacade.deliverSubmittedTurnCompletion(activeThread, turn("turn-227"));
+		assertSubmittedCompletion(accepted, TuiPromptSubmittedTurnCompletionStatus.Accepted, activeThread.toString(), "turn-227", 2,
+			"submitted completion rejection setup accepted");
+		activeFacade.drainQueued();
+		assertSubmittedCompletion(activeFacade.deliverSubmittedTurnCompletion(activeThread, turn("turn-227")),
+			TuiPromptSubmittedTurnCompletionStatus.DuplicateCompletion, activeThread.toString(), "turn-227", 0, "submitted completion duplicate");
+
+		final interruptedFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread, new LongRunningPromptTransport());
+		final interruptedSubmit = interruptedFacade.submitPrompt(RequestId.fromInteger(228), "completion rejection interrupted");
+		assertTrue(interruptedSubmit.acceptedPrompt(), "submitted stale completion prompt accepted");
+		final interrupt = interruptedFacade.interruptActiveTurn(RequestId.fromInteger(229));
+		assertTrue(interrupt.acceptedInterrupt(), "submitted stale completion interrupt accepted");
+		assertSubmittedCompletion(interruptedFacade.deliverSubmittedTurnCompletion(activeThread, turn("turn-228")),
+			TuiPromptSubmittedTurnCompletionStatus.StaleInterruptedTurn, activeThread.toString(), "turn-228", 0, "submitted completion stale interrupt");
+		assertStringEquals("", interruptedFacade.activeTurnIdText(), "submitted stale completion active still clear");
+		assertIntEquals(0, interruptedFacade.completedTurnCount(), "submitted stale completion suppressed completed count");
+		assertIntEquals(1, interruptedFacade.interruptedTurnCount(), "submitted stale completion interrupted count");
 	}
 
 	static function testSubmittedTurnAcceptanceRejectsMissingStartedEvidence():Void {
@@ -2191,6 +2271,16 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedCheckedCount, lifecycle.checkedNotificationCount, label + " checked count");
 		assertIntEquals(expectedStartedCount, lifecycle.startedCount, label + " started count");
 		assertIntEquals(expectedCompletedCount, lifecycle.completedCount, label + " completed count");
+	}
+
+	static function assertSubmittedCompletion(result:TuiPromptSubmittedTurnCompletionResult, expectedStatus:TuiPromptSubmittedTurnCompletionStatus,
+			expectedThreadId:String, expectedTurnId:String, expectedEventsQueued:Int, label:String):Void {
+		assertStringEquals(expectedStatus.text(), result.statusText(), label + " status");
+		assertStringEquals(expectedStatus == TuiPromptSubmittedTurnCompletionStatus.Accepted ? "true" : "false",
+			result.acceptedCompletion() ? "true" : "false", label + " accepted flag");
+		assertStringEquals(expectedThreadId, result.threadIdText(), label + " thread");
+		assertStringEquals(expectedTurnId, result.turnIdText(), label + " turn");
+		assertIntEquals(expectedEventsQueued, result.eventsQueued(), label + " events queued");
 	}
 
 	static function streamNotificationMethodText(notification:TuiPromptJsonRpcStreamNotification):String {

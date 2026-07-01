@@ -19,4 +19,8 @@ class TurnId {
 	public function toJsonString():String {
 		return JsonScalar.quote(value);
 	}
+
+	public function equals(other:TurnId):Bool {
+		return other != null && value == other.value;
+	}
 }

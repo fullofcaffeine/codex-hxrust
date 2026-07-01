@@ -269,6 +269,17 @@ leaving facade `activeTurn` populated. The runner harness proves the next
 Ctrl-C routes through the persistent `turn/interrupt` envelope and clears that
 active turn. Missing submitted-start evidence remains a typed rejection.
 
+`TUI-LIVE-66` adds the delayed completion half of that submitted-turn path.
+`FakeTuiAppServerFacade.deliverSubmittedTurnCompletion()` accepts only a
+matching active thread and active turn, queues a typed
+`TuiAppServerEvent.TurnCompleted(threadId, turnId)` followed by idle thread
+status evidence, and lets the normal app-server event pump render the ready
+frame. Wrong-thread, wrong-turn, duplicate, no-active, and stale-interrupted
+completion attempts return typed `TuiPromptSubmittedTurnCompletionStatus`
+values without mutating completed-turn accounting. This remains deterministic
+and credential-free; it is not real provider streaming, socket ownership,
+Tokio task cancellation, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

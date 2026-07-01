@@ -4567,6 +4567,25 @@ and interrupt request/response routing; it does not own provider streaming,
 Tokio task cancellation, sockets, model calls, tool execution, or process
 teardown.
 
+### TUI-LIVE-66 Submitted Turn Completion Delivery
+
+Status: TUI-LIVE-66 adds a typed delayed-completion path for the submitted
+turn contract introduced by TUI-LIVE-65. `TuiAppServerEvent.TurnCompleted`
+now carries the completing `ThreadId` and `TurnId`, and
+`FakeTuiAppServerFacade.deliverSubmittedTurnCompletion()` validates that the
+completion targets the active thread and active turn before queueing
+`TurnCompleted` plus idle thread status evidence. The prompt-submit generated
+gate proves the app-server pump clears `activeTurn`, increments completed-turn
+accounting, renders ready state, and leaves no pending submitted-turn record.
+It also proves typed rejections for no active submitted turn, wrong thread,
+wrong turn, duplicate completion, and stale completion after Ctrl-C
+interruption.
+
+This is still deterministic, synchronous, and credential-free. It models the
+TUI/app-server state transition for late completion; it does not own real
+provider streaming, socket sessions, Tokio reader/writer tasks, model calls,
+tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.
