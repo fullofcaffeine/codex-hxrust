@@ -81,6 +81,8 @@ import codexhx.runtime.tui.appserver.TuiPromptPendingRequestStatus;
 import codexhx.runtime.tui.appserver.TuiPromptRawResponseItemCompletedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnCompletionResult;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnCompletionStatus;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnStreamDeliveryResult;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnStreamDeliveryStatus;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
@@ -135,6 +137,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testSubmittedTurnAcceptanceKeepsActiveTurnForInterrupt();
 		testSubmittedTurnCompletionDeliveryClearsActiveTurn();
 		testSubmittedTurnCompletionRejectionsAreTyped();
+		testSubmittedTurnLateAssistantStreamDeliveryCompletesLater();
+		testSubmittedTurnLateAssistantStreamRejectionsAreTyped();
 		testSubmittedTurnAcceptanceRejectsMissingStartedEvidence();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
@@ -1087,6 +1091,93 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("", interruptedFacade.activeTurnIdText(), "submitted stale completion active still clear");
 		assertIntEquals(0, interruptedFacade.completedTurnCount(), "submitted stale completion suppressed completed count");
 		assertIntEquals(1, interruptedFacade.interruptedTurnCount(), "submitted stale completion interrupted count");
+	}
+
+	static function testSubmittedTurnLateAssistantStreamDeliveryCompletesLater():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005603");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(230), activeSession, activeThread, "submitted late stream prompt");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(promptLines)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final facade = attachedFacadeWithTransport(shell, activeThread, promptTransport);
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "submitted late stream setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		final submit = facade.submitPrompt(RequestId.fromInteger(230), "submitted late stream prompt");
+		assertTrue(submit.acceptedPrompt(), "submitted late stream prompt accepted");
+		assertStringEquals("turn-230", facade.activeTurnIdText(), "submitted late stream active turn retained");
+
+		final stream = facade.deliverSubmittedTurnAssistantDelta(activeThread, turnId, "late assistant delta");
+		assertSubmittedStreamDelivery(stream, TuiPromptSubmittedTurnStreamDeliveryStatus.Accepted, activeThread.toString(), "turn-230",
+			"late assistant delta", 1, "submitted late stream accepted");
+		final streamOutcome = pump.drain(TuiAppServerPumpPolicy.lossless());
+		assertIntEquals(2, streamOutcome.eventsDrained(), "submitted late stream drains start and delta");
+		assertStringEquals("turn-230", facade.activeTurnIdText(), "submitted late stream still active");
+		assertIntEquals(0, facade.completedTurnCount(), "submitted late stream not completed yet");
+		assertIntEquals(2, shell.transcriptCount(), "submitted late stream transcript count");
+		assertStringEquals("assistant> late assistant delta", shell.transcriptAt(1).renderText(), "submitted late stream assistant row");
+		assertStringEquals("Codex | model: gpt-live | status: submitted", backend.currentFrame().lineAt(0), "submitted late stream drawn working header");
+
+		final completion = facade.deliverSubmittedTurnCompletion(activeThread, turnId);
+		assertSubmittedCompletion(completion, TuiPromptSubmittedTurnCompletionStatus.Accepted, activeThread.toString(), "turn-230", 2,
+			"submitted late stream completion accepted");
+		final completionOutcome = pump.drain(TuiAppServerPumpPolicy.lossless());
+		assertIntEquals(2, completionOutcome.eventsDrained(), "submitted late stream drains completion and idle");
+		assertStringEquals("", facade.activeTurnIdText(), "submitted late stream active turn cleared");
+		assertStringEquals("turn-230", facade.lastCompletedTurnIdText(), "submitted late stream last completed");
+		assertIntEquals(1, facade.completedTurnCount(), "submitted late stream completed count");
+		assertStringEquals("Codex | model: gpt-live | status: ready", backend.currentFrame().lineAt(0), "submitted late stream drawn ready header");
+		assertLineCloseReport(appServerTransport.close("submitted_late_stream_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"submitted_late_stream_done", 1, promptLines.length, "submitted late stream close");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testSubmittedTurnLateAssistantStreamRejectionsAreTyped():Void {
+		final activeThread = thread("00000000-0000-0000-0000-000000005604");
+		final noTurnFacade = attachedFacade(ChatWidgetShellState.initial("pending"), activeThread);
+		assertSubmittedStreamDelivery(noTurnFacade.deliverSubmittedTurnAssistantDelta(activeThread, turn("turn-231"), "late"),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.NoSubmittedTurn, activeThread.toString(), "turn-231", "late", 0, "submitted late stream no active turn");
+
+		final activeFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread, new LongRunningPromptTransport());
+		final submit = activeFacade.submitPrompt(RequestId.fromInteger(232), "late stream rejection active");
+		assertTrue(submit.acceptedPrompt(), "submitted late stream rejection prompt accepted");
+		final wrongThread = thread("00000000-0000-0000-0000-000000005605");
+		assertSubmittedStreamDelivery(activeFacade.deliverSubmittedTurnAssistantDelta(wrongThread, turn("turn-232"), "wrong thread delta"),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.WrongThread, wrongThread.toString(), "turn-232", "wrong thread delta", 0,
+			"submitted late stream wrong thread");
+		assertSubmittedStreamDelivery(activeFacade.deliverSubmittedTurnAssistantDelta(activeThread, turn("turn-stale-232"), "wrong turn delta"),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.WrongTurn, activeThread.toString(), "turn-stale-232", "wrong turn delta", 0,
+			"submitted late stream wrong turn");
+		assertSubmittedStreamDelivery(activeFacade.deliverSubmittedTurnAssistantDelta(activeThread, turn("turn-232"), ""),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.EmptyDelta, activeThread.toString(), "turn-232", "", 0, "submitted late stream empty delta");
+
+		final acceptedCompletion = activeFacade.deliverSubmittedTurnCompletion(activeThread, turn("turn-232"));
+		assertSubmittedCompletion(acceptedCompletion, TuiPromptSubmittedTurnCompletionStatus.Accepted, activeThread.toString(), "turn-232", 2,
+			"submitted late stream completed setup");
+		activeFacade.drainQueued();
+		assertSubmittedStreamDelivery(activeFacade.deliverSubmittedTurnAssistantDelta(activeThread, turn("turn-232"), "after complete"),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.DuplicateCompletedTurn, activeThread.toString(), "turn-232", "after complete", 0,
+			"submitted late stream duplicate completed");
+
+		final interruptedFacade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread, new LongRunningPromptTransport());
+		final interruptedSubmit = interruptedFacade.submitPrompt(RequestId.fromInteger(233), "late stream interrupted");
+		assertTrue(interruptedSubmit.acceptedPrompt(), "submitted late stream interrupted prompt accepted");
+		final interrupt = interruptedFacade.interruptActiveTurn(RequestId.fromInteger(234));
+		assertTrue(interrupt.acceptedInterrupt(), "submitted late stream interrupt accepted");
+		assertSubmittedStreamDelivery(interruptedFacade.deliverSubmittedTurnAssistantDelta(activeThread, turn("turn-233"), "after interrupt"),
+			TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn, activeThread.toString(), "turn-233", "after interrupt", 0,
+			"submitted late stream stale interrupt");
+		assertSubmittedCompletion(interruptedFacade.deliverSubmittedTurnCompletion(activeThread, turn("turn-233")),
+			TuiPromptSubmittedTurnCompletionStatus.StaleInterruptedTurn, activeThread.toString(), "turn-233", 0, "submitted late stream stale completion");
+		assertIntEquals(1, interruptedFacade.interruptedTurnCount(), "submitted late stream interrupted count");
+		assertIntEquals(0, interruptedFacade.completedTurnCount(), "submitted late stream suppressed completed count");
+		assertIntEquals(1, interruptedFacade.shell().transcriptCount(), "submitted late stream stale transcript unchanged");
 	}
 
 	static function testSubmittedTurnAcceptanceRejectsMissingStartedEvidence():Void {
@@ -2283,6 +2374,18 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedEventsQueued, result.eventsQueued(), label + " events queued");
 	}
 
+	static function assertSubmittedStreamDelivery(result:TuiPromptSubmittedTurnStreamDeliveryResult,
+			expectedStatus:TuiPromptSubmittedTurnStreamDeliveryStatus, expectedThreadId:String, expectedTurnId:String, expectedDelta:String,
+			expectedEventsQueued:Int, label:String):Void {
+		assertStringEquals(expectedStatus.text(), result.statusText(), label + " status");
+		assertStringEquals(expectedStatus == TuiPromptSubmittedTurnStreamDeliveryStatus.Accepted ? "true" : "false",
+			result.acceptedDelivery() ? "true" : "false", label + " accepted flag");
+		assertStringEquals(expectedThreadId, result.threadIdText(), label + " thread");
+		assertStringEquals(expectedTurnId, result.turnIdText(), label + " turn");
+		assertStringEquals(expectedDelta, result.deltaText(), label + " delta");
+		assertIntEquals(expectedEventsQueued, result.eventsQueued(), label + " events queued");
+	}
+
 	static function streamNotificationMethodText(notification:TuiPromptJsonRpcStreamNotification):String {
 		return switch notification {
 			case TuiPromptJsonRpcStreamNotification.ThreadStatusChanged(status):
@@ -2423,6 +2526,9 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function assertAssistantDeltaEvent(event:TuiAppServerEvent, expectedThread:ThreadId, expectedDelta:String, label:String):Void {
 		switch event {
 			case TuiAppServerEvent.AssistantDelta(threadId, delta):
+				assertTrue(threadId.equals(expectedThread), label + " thread");
+				assertStringEquals(expectedDelta, delta, label + " delta");
+			case TuiAppServerEvent.AssistantTurnDelta(threadId, _, delta):
 				assertTrue(threadId.equals(expectedThread), label + " thread");
 				assertStringEquals(expectedDelta, delta, label + " delta");
 			case _:

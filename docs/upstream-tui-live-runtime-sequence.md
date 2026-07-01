@@ -4586,6 +4586,27 @@ TUI/app-server state transition for late completion; it does not own real
 provider streaming, socket sessions, Tokio reader/writer tasks, model calls,
 tool execution, process teardown, or persistence.
 
+### TUI-LIVE-67 Submitted Turn Late Assistant Stream Delivery
+
+Status: TUI-LIVE-67 adds turn-scoped late assistant stream delivery for the
+submitted-turn contract. `TuiAppServerEvent.AssistantTurnDelta` carries the
+active `ThreadId`, `TurnId`, and assistant delta text, and the JSON-RPC
+notification projector now preserves turn identity for `item/agentMessage/delta`
+notifications instead of downgrading them to thread-only assistant events.
+`FakeTuiAppServerFacade.deliverSubmittedTurnAssistantDelta()` validates the
+active thread and active submitted turn before queueing the assistant delta.
+The prompt-submit generated gate proves a late assistant row renders through
+the app-server pump while `activeTurn` remains populated, then a later matching
+completion clears active-turn state and renders ready. It also proves typed
+rejections for empty delta, no submitted turn, wrong thread, wrong turn,
+completed-turn duplicate delivery, and stale delivery after Ctrl-C
+interruption, including stale completion suppression.
+
+This is still deterministic, synchronous, and credential-free. It models the
+TUI/app-server state transition for late assistant stream evidence; it does not
+own real provider streaming, socket sessions, Tokio reader/writer tasks, model
+calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

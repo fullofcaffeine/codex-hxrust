@@ -280,6 +280,17 @@ values without mutating completed-turn accounting. This remains deterministic
 and credential-free; it is not real provider streaming, socket ownership,
 Tokio task cancellation, model execution, tools, or persistence.
 
+`TUI-LIVE-67` adds late assistant stream delivery while a submitted turn is
+still active. `TuiAppServerEvent.AssistantTurnDelta(threadId, turnId, delta)`
+preserves turn identity through the app-server/TUI event path, and
+`FakeTuiAppServerFacade.deliverSubmittedTurnAssistantDelta()` rejects empty,
+wrong-thread, wrong-turn, no-active, completed-turn, and stale-interrupted
+delivery attempts before they can mutate transcript state. Accepted delivery
+queues a single turn-scoped assistant delta; completion still arrives later
+through the TUI-LIVE-66 path. This remains deterministic and credential-free;
+it is not real provider streaming, socket ownership, Tokio task cancellation,
+model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

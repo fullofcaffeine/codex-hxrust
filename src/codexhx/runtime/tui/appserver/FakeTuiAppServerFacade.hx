@@ -217,6 +217,15 @@ class FakeTuiAppServerFacade {
 		return TuiPromptSubmittedTurnCompletionResult.accepted(threadId, turnId, 2);
 	}
 
+	public function deliverSubmittedTurnAssistantDelta(threadId:ThreadId, turnId:TurnId, delta:String):TuiPromptSubmittedTurnStreamDeliveryResult {
+		final text = normalized(delta, "");
+		final status = submittedTurnStreamDeliveryStatus(threadId, turnId, text);
+		if (status != TuiPromptSubmittedTurnStreamDeliveryStatus.Accepted)
+			return TuiPromptSubmittedTurnStreamDeliveryResult.rejected(status, threadId, turnId, text);
+		enqueue(TuiAppServerEvent.AssistantTurnDelta(threadId, turnId, text));
+		return TuiPromptSubmittedTurnStreamDeliveryResult.accepted(threadId, turnId, text, 1);
+	}
+
 	public function shutdownPromptTransport(code:String):TuiPromptTransportShutdownReport {
 		return promptTransport.shutdown(code);
 	}
@@ -248,6 +257,13 @@ class FakeTuiAppServerFacade {
 				}
 			case TuiAppServerEvent.AssistantDelta(threadId, delta):
 				if (!activeThreadMatches(threadId)) {
+					effects.push(TuiAppServerShellEffect.AppServerEventIgnored(event));
+				} else {
+					effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
+					appendShellEffects(effects, shellValue.appendTranscript(ChatWidgetTranscriptRole.Assistant, delta));
+				}
+			case TuiAppServerEvent.AssistantTurnDelta(threadId, turnId, delta):
+				if (!activeThreadMatches(threadId) || !activeTurnMatches(turnId)) {
 					effects.push(TuiAppServerShellEffect.AppServerEventIgnored(event));
 				} else {
 					effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
@@ -425,6 +441,25 @@ class FakeTuiAppServerFacade {
 		if (!activeTurnMatches(turnId))
 			return TuiPromptSubmittedTurnCompletionStatus.WrongTurn;
 		return TuiPromptSubmittedTurnCompletionStatus.Accepted;
+	}
+
+	function submittedTurnStreamDeliveryStatus(threadId:ThreadId, turnId:TurnId, delta:String):TuiPromptSubmittedTurnStreamDeliveryStatus {
+		if (delta.length == 0)
+			return TuiPromptSubmittedTurnStreamDeliveryStatus.EmptyDelta;
+		if (!activeThreadMatches(threadId))
+			return TuiPromptSubmittedTurnStreamDeliveryStatus.WrongThread;
+		if (activeTurnValue == null) {
+			final lastCompletedTurn = lastCompletedTurnValue;
+			if (lastCompletedTurn != null && lastCompletedTurn.equals(turnId))
+				return TuiPromptSubmittedTurnStreamDeliveryStatus.DuplicateCompletedTurn;
+			final lastInterruptedTurn = lastInterruptedTurnValue;
+			if (lastInterruptedTurn != null && lastInterruptedTurn.equals(turnId))
+				return TuiPromptSubmittedTurnStreamDeliveryStatus.StaleInterruptedTurn;
+			return TuiPromptSubmittedTurnStreamDeliveryStatus.NoSubmittedTurn;
+		}
+		if (!activeTurnMatches(turnId))
+			return TuiPromptSubmittedTurnStreamDeliveryStatus.WrongTurn;
+		return TuiPromptSubmittedTurnStreamDeliveryStatus.Accepted;
 	}
 
 	function refreshAgentLabel(effects:Array<TuiAppServerShellEffect>):Void {

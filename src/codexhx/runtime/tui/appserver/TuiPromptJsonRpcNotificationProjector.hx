@@ -33,7 +33,7 @@ class TuiPromptJsonRpcNotificationProjector {
 			case UserMessageCompleted(_):
 			case AgentMessageStarted(_):
 			case AgentMessageDelta(deltaNotification):
-				events.push(TuiAppServerEvent.AssistantDelta(deltaNotification.threadId, deltaNotification.delta));
+				events.push(TuiAppServerEvent.AssistantTurnDelta(deltaNotification.threadId, deltaNotification.turnId, deltaNotification.delta));
 			case RawResponseItemCompleted(_):
 			case AgentMessageCompleted(_):
 		}

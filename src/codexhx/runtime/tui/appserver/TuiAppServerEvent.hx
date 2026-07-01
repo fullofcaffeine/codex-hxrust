@@ -11,6 +11,7 @@ enum TuiAppServerEvent {
 	SessionStarted(sessionId:SessionId, threadId:ThreadId, modelLabel:String);
 	ThreadStatus(threadId:ThreadId, status:TuiAppServerThreadStatus);
 	AssistantDelta(threadId:ThreadId, delta:String);
+	AssistantTurnDelta(threadId:ThreadId, turnId:TurnId, delta:String);
 	TurnCompleted(threadId:ThreadId, turnId:TurnId);
 	AgentThreadUpsert(threadId:ThreadId, agentNickname:String, agentRole:String, isClosed:Bool);
 	AgentThreadActivity(threadId:ThreadId, agentPath:String, isRunning:Bool);
