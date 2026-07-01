@@ -2,6 +2,7 @@ package codexhx.runtime.tui.live;
 
 import codexhx.protocol.RequestId;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
+import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellRenderer;
 import codexhx.runtime.tui.terminal.TerminalEvent;
 import codexhx.runtime.tui.terminal.TerminalExitReason;
@@ -81,7 +82,11 @@ class TuiLiveShellRunner {
 			&& outcome.iterations() < request.policy.maxIterations
 			&& idleEvents < request.policy.idleEventLimit) {
 			outcome.recordIteration();
-			recordPump(request, outcome, pump.drain(request.policy.appServerPolicy));
+			final queuedPumpEvent = request.shiftPumpEvent();
+			final pumpEvent = queuedPumpEvent == null ? TuiAppServerPumpEvent.DrainQueuedEvents : queuedPumpEvent;
+			if (queuedPumpEvent != null)
+				outcome.recordPumpEvent();
+			recordPump(request, outcome, pump.handlePumpEvent(pumpEvent, request.policy.appServerPolicy));
 			if (request.scheduler.exitRequested())
 				break;
 
@@ -113,7 +118,7 @@ class TuiLiveShellRunner {
 					if (shouldInterruptOnKey(request, key)) {
 						request.facade.interruptActiveTurn(RequestId.fromInteger(nextRequestId));
 						nextRequestId = nextRequestId + 1;
-						recordPump(request, outcome, pump.drain(request.policy.appServerPolicy));
+						recordPump(request, outcome, pump.handlePumpEvent(TuiAppServerPumpEvent.DrainQueuedEvents, request.policy.appServerPolicy));
 						recordCurrentFrame(request, outcome);
 					} else if (shouldQuitOnKey(request, key)) {
 						handleExit(request, outcome, TerminalExitReason.Requested);

@@ -22,6 +22,8 @@ class TuiLiveShellRunOutcome {
 	var submittedPromptsValue:Int;
 	var acceptedPromptsValue:Int;
 	var appServerEventsValue:Int;
+	var appServerPumpEventsValue:Int;
+	var appServerBackpressureCountValue:Int;
 	var drawFramesValue:Int;
 	var terminalOperationsValue:Int;
 	var exitRequestedValue:Bool;
@@ -47,6 +49,8 @@ class TuiLiveShellRunOutcome {
 		this.submittedPromptsValue = 0;
 		this.acceptedPromptsValue = 0;
 		this.appServerEventsValue = 0;
+		this.appServerPumpEventsValue = 0;
+		this.appServerBackpressureCountValue = 0;
 		this.drawFramesValue = 0;
 		this.terminalOperationsValue = 0;
 		this.exitRequestedValue = false;
@@ -103,8 +107,14 @@ class TuiLiveShellRunOutcome {
 		if (outcome == null)
 			return;
 		appServerEventsValue = appServerEventsValue + outcome.eventsDrained();
+		if (outcome.backpressureApplied())
+			appServerBackpressureCountValue = appServerBackpressureCountValue + 1;
 		drawFramesValue = drawFramesValue + outcome.schedulerDrawFrameCount();
 		terminalOperationsValue = terminalOperationsValue + outcome.terminalOperationCount();
+	}
+
+	public function recordPumpEvent():Void {
+		appServerPumpEventsValue = appServerPumpEventsValue + 1;
 	}
 
 	public function recordTerminalOperations(operations:Array<TerminalOperation>):Void {
@@ -191,6 +201,14 @@ class TuiLiveShellRunOutcome {
 
 	public function appServerEvents():Int {
 		return appServerEventsValue;
+	}
+
+	public function appServerPumpEvents():Int {
+		return appServerPumpEventsValue;
+	}
+
+	public function appServerBackpressureCount():Int {
+		return appServerBackpressureCountValue;
 	}
 
 	public function drawFrames():Int {

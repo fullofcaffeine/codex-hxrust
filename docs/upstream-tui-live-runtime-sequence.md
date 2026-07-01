@@ -4909,6 +4909,27 @@ models scheduler/pump recovery around the current readiness/drain loop; it does
 not own real async socket polling, Tokio readiness, provider streaming, model
 calls, tool execution, process teardown, or persistence.
 
+### TUI-LIVE-81 App-Server Pump Event Routes Through Live Shell Runner
+
+Status: TUI-LIVE-81 adds runner-owned routing for typed app-server pump events.
+`TuiLiveShellRunRequest` can carry queued `TuiAppServerPumpEvent` values, and
+`TuiLiveShellRunner` consumes them through
+`TuiAppServerEventPump.handlePumpEvent()` before falling back to the normal
+automatic drain event. `TuiLiveShellRunOutcome` records explicit pump-event
+count and backpressure sightings.
+
+The live-shell runner gate proves an explicit `DrainQueuedEvents` event can
+apply one queued app-server event under a bounded app-server policy, report
+backpressure, preserve the remaining queue, and then let later runner loop
+passes drain the rest without dropping or duplicating transcript rows. Existing
+terminal setup/restore, text submit, line transport, agent navigation, resize,
+tick, Ctrl-C, q, and live-backend no-TTY paths remain covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models live-runner pump-event routing around the current scheduler/drain loop;
+it does not own real async socket polling, Tokio readiness, provider streaming,
+model calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

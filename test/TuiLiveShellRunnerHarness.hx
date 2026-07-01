@@ -20,6 +20,8 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
@@ -58,6 +60,7 @@ class TuiLiveShellRunnerHarness {
 		testTextSubmitThroughLineConnectedTransport();
 		testTextSubmitThroughInjectedLineConnector();
 		testAgentNavigationInputRoutesActiveThread();
+		testPumpEventRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
 		testLiveBackendNoTtyRunPath();
 		Sys.println("tui-live-shell-runner ok");
@@ -277,6 +280,27 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals("Robie [worker]", shell.activeAgentLabel(), "agent label");
 		assertStringEquals("Codex | model: gpt-live | status: ready | agent: Robie [worker]", outcome.finalFrameLineAt(0), "agent header");
 		assertStringEquals("assistant> echo: side", outcome.finalFrameLineAt(4), "side echo rendered");
+	}
+
+	static function testPumpEventRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final backend = new HeadlessTerminalBackend([TerminalEvent.NoEvent, TerminalEvent.NoEvent, TerminalEvent.NoEvent]);
+		final requestValue = request(shell, backend, [
+			TuiAppServerEvent.AssistantDelta(activeThread, "runner pump one"),
+			TuiAppServerEvent.AssistantDelta(activeThread, "runner pump two"),
+			TuiAppServerEvent.AssistantDelta(activeThread, "runner pump three")
+		],
+			new TuiLiveShellRunPolicy(8, 3, TuiAppServerPumpPolicy.bounded(1))).withPumpEvents([TuiAppServerPumpEvent.DrainQueuedEvents]);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.appServerPumpEvents(), "runner pump event count");
+		assertIntEquals(3, outcome.appServerEvents(), "runner pump drained queued events");
+		assertTrue(outcome.appServerBackpressureCount() >= 1, "runner pump backpressure recorded");
+		assertStringEquals("assistant> runner pump one", shell.transcriptAt(1).renderText(), "runner pump first row");
+		assertStringEquals("assistant> runner pump two", shell.transcriptAt(2).renderText(), "runner pump second row");
+		assertStringEquals("assistant> runner pump three", shell.transcriptAt(3).renderText(), "runner pump third row");
+		assertStringEquals("assistant> runner pump three", outcome.finalFrameLineAt(5), "runner pump final frame");
 	}
 
 	static function testEscapeCtrlCAndQExit():Void {

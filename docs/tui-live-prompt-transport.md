@@ -448,6 +448,14 @@ recorded once, and the assistant row is not duplicated. This is deterministic
 scheduler/pump recovery modeling, not real async socket polling, Tokio tasks,
 provider streaming, model execution, tools, or persistence.
 
+`TUI-LIVE-81` routes that pump event through the live shell runner. A run
+request can carry queued `TuiAppServerPumpEvent` values; the runner consumes
+them through `TuiAppServerEventPump.handlePumpEvent`, records explicit
+pump-event counts and pump backpressure evidence, and then lets the existing
+bounded loop continue draining preserved app-server work. This is deterministic
+live-runner pump-event routing, not real async socket polling, Tokio tasks,
+provider streaming, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",
