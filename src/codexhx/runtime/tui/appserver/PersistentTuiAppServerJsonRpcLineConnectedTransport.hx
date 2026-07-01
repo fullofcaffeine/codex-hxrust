@@ -233,6 +233,11 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		return lastLateJsonlDrainResultValue;
 	}
 
+	public function drainSubmittedTurnLateJsonl(facade:FakeTuiAppServerFacade, maxLinesPerBatch:Int,
+			maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return drainSubmittedTurnLateJsonlBatches(facade, maxLinesPerBatch, maxBatches);
+	}
+
 	public function close(code:String):TuiAppServerJsonRpcLineCloseReport {
 		closedValue = true;
 		if (lastCloseReportValue != null)

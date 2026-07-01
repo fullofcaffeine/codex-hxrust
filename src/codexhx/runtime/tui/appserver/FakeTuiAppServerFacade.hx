@@ -178,6 +178,10 @@ class FakeTuiAppServerFacade {
 		return TuiPromptSubmitResult.accepted(envelope, effects);
 	}
 
+	public function drainSubmittedTurnLateJsonl(maxLinesPerBatch:Int, maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return promptTransport.drainSubmittedTurnLateJsonl(this, maxLinesPerBatch, maxBatches);
+	}
+
 	public function interruptActiveTurn(requestId:RequestId):TuiPromptTurnInterruptResult {
 		if (activeSessionValue == null) {
 			lastInterruptCodeValue = "missing_session";

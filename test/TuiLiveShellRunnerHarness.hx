@@ -29,6 +29,7 @@ import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
 import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnLateJsonlDrainResult;
 import codexhx.runtime.tui.appserver.TuiPromptTurnAcceptanceMode;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptOutcome;
@@ -456,6 +457,11 @@ class RunnerLongRunningPromptTransport implements TuiPromptTransport {
 		return TuiPromptTurnInterruptOutcome.accepted(new TuiPromptTurnInterruptResponse(envelope.requestId), [
 			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("interrupted"))
 		]);
+	}
+
+	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("prompt_transport_late_jsonl_drain_unsupported");
 	}
 
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {

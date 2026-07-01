@@ -57,6 +57,11 @@ class TuiPromptSubmittedTurnLateJsonlDrainResult {
 			"", "", "", "", "", "", "");
 	}
 
+	public static function unsupported(code:String):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return new TuiPromptSubmittedTurnLateJsonlDrainResult(TuiPromptSubmittedTurnLateJsonlDrainStatus.Unsupported, code, 0, 0, 0, 0, 0, 0, 0, 0, "", "",
+			"", "", "", "", "", "", "");
+	}
+
 	public function completedDrain():Bool {
 		return statusValue == TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed;
 	}

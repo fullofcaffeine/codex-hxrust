@@ -361,6 +361,21 @@ remains synchronous and credential-free; it is not real provider streaming,
 socket ownership, Tokio task cancellation, model execution, tools, or
 persistence.
 
+`TUI-LIVE-73` wires the bounded drain into the composer submit path. A pump
+policy can now opt into submitted-turn late JSONL draining after a successful
+composer `Submit`, and `TuiAppServerEventPump.submitComposerInput()` records the
+typed drain result on `TuiPromptSubmitInteraction` before draining queued
+app-server events to the terminal. The drain is reached through
+`FakeTuiAppServerFacade`, `TuiPromptTransport`, and `TuiAppServerJsonRpcTransport`
+methods, so the pump no longer needs direct access to
+`PersistentTuiAppServerJsonRpcLineConnectedTransport`. The persistent transport
+performs the real deterministic drain; non-persistent transports return typed
+unsupported drain results. Harnesses prove composer-triggered completion,
+max-bound stop, wrong-turn prefix-applied rejection, unsupported notification
+rejection, and line-disconnect stop. This remains synchronous and
+credential-free; it is not real provider streaming, socket ownership, Tokio task
+cancellation, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

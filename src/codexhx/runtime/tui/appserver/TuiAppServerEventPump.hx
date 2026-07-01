@@ -56,16 +56,18 @@ class TuiAppServerEventPump {
 	}
 
 	public function submitComposerInput(input:TerminalInputEvent, requestId:RequestId, policy:TuiAppServerPumpPolicy):TuiPromptSubmitInteraction {
+		final safePolicy = policy == null ? TuiAppServerPumpPolicy.lossless() : policy;
 		final navigationOutcome = handleAgentNavigationInput(input);
 		if (navigationOutcome != null)
 			return new TuiPromptSubmitInteraction([], null, navigationOutcome);
 		final shellEffects = facade.shell().applyInput(input);
 		final submitResult = submitPromptFromShellEffects(shellEffects, requestId, input);
+		final lateJsonlDrainResult = drainSubmittedTurnLateJsonlAfterSubmit(submitResult, safePolicy);
 		final immediateSchedulerEffects = requestShellDraws(shellEffects);
-		final outcome = drain(policy);
+		final outcome = drain(safePolicy);
 		outcome.recordSchedulerEffects(immediateSchedulerEffects);
 		outcome.recordTerminalOperations(TerminalSchedulerRunner.applyEffects(backend, immediateSchedulerEffects));
-		return new TuiPromptSubmitInteraction(shellEffects, submitResult, outcome);
+		return new TuiPromptSubmitInteraction(shellEffects, submitResult, outcome, lateJsonlDrainResult);
 	}
 
 	function handleAgentNavigationInput(input:TerminalInputEvent):Null<TuiAppServerPumpOutcome> {
@@ -92,6 +94,15 @@ class TuiAppServerEventPump {
 		if (isSubmitInput(input))
 			return TuiPromptSubmitResult.refused(TuiPromptSubmitStatus.EmptyPrompt);
 		return null;
+	}
+
+	function drainSubmittedTurnLateJsonlAfterSubmit(submitResult:Null<TuiPromptSubmitResult>,
+			policy:TuiAppServerPumpPolicy):Null<TuiPromptSubmittedTurnLateJsonlDrainResult> {
+		if (submitResult == null || !submitResult.acceptedPrompt())
+			return null;
+		if (policy == null || !policy.shouldDrainSubmittedTurnLateJsonl())
+			return null;
+		return facade.drainSubmittedTurnLateJsonl(policy.lateJsonlMaxLinesPerBatch, policy.lateJsonlMaxBatches);
 	}
 
 	function requestShellDraws(effects:Array<ChatWidgetShellEffect>):Array<TerminalSchedulerEffect> {

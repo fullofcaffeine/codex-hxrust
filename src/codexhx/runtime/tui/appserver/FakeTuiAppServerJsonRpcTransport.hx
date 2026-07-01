@@ -37,6 +37,11 @@ class FakeTuiAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
 		]);
 	}
 
+	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("late_jsonl_drain_unsupported");
+	}
+
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {
 		return TuiPromptTransportShutdownReport.noLineClose(code);
 	}

@@ -4730,6 +4730,34 @@ models repeated persistent-session late-line draining; it does not own real
 provider streaming, socket sessions, Tokio reader/writer tasks, model calls,
 tool execution, process teardown, or persistence.
 
+### TUI-LIVE-73 Submitted Turn Composer-Triggered Late JSONL Drain
+
+Status: TUI-LIVE-73 moves the bounded submitted-turn late JSONL drain behind the
+composer submit/event-pump path. `TuiAppServerPumpPolicy` can opt into late JSONL
+draining with explicit line and batch bounds, and
+`TuiAppServerEventPump.submitComposerInput()` invokes the drain only after a
+successful prompt admission. `TuiPromptSubmitInteraction` now carries the typed
+drain result so callers can inspect completion, max-bound, line/disconnect, and
+batch-rejection stops without reading trace strings.
+
+The drain is reached through `FakeTuiAppServerFacade`, `TuiPromptTransport`, and
+`TuiAppServerJsonRpcTransport` methods. `JsonRpcTuiPromptTransport` delegates to
+the app-server transport; the persistent connected transport performs the
+deterministic drain; non-persistent transports return typed unsupported results.
+The pump no longer has to call the concrete persistent transport directly.
+
+The prompt-submit and live-shell gates prove composer text entry followed by
+`Submit` can admit a submitted turn, trigger a bounded late JSONL drain, preserve
+assistant-delta and completion ordering through the app-server pump, render
+assistant rows, clear `activeTurn`, and render ready. The same prompt-submit gate
+proves typed max-bound, wrong-turn prefix-applied, unsupported-notification, and
+line-disconnect stops through the composer-triggered path.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models a composer-to-drain bridge; it does not own real provider streaming,
+socket sessions, Tokio reader/writer tasks, model calls, tool execution,
+process teardown, persistence, or true async Ctrl-C interleaving.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

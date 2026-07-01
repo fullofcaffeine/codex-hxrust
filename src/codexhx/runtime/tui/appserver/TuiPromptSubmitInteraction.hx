@@ -8,11 +8,14 @@ import codexhx.runtime.tui.chatwidget.ChatWidgetShellEffect;
 class TuiPromptSubmitInteraction {
 	final shellEffectsValue:Array<ChatWidgetShellEffect>;
 	final submitResultValue:Null<TuiPromptSubmitResult>;
+	final lateJsonlDrainResultValue:Null<TuiPromptSubmittedTurnLateJsonlDrainResult>;
 	final pumpOutcomeValue:TuiAppServerPumpOutcome;
 
-	public function new(shellEffects:Array<ChatWidgetShellEffect>, submitResult:Null<TuiPromptSubmitResult>, pumpOutcome:TuiAppServerPumpOutcome) {
+	public function new(shellEffects:Array<ChatWidgetShellEffect>, submitResult:Null<TuiPromptSubmitResult>, pumpOutcome:TuiAppServerPumpOutcome,
+			?lateJsonlDrainResult:Null<TuiPromptSubmittedTurnLateJsonlDrainResult>) {
 		this.shellEffectsValue = shellEffects == null ? [] : shellEffects;
 		this.submitResultValue = submitResult;
+		this.lateJsonlDrainResultValue = lateJsonlDrainResult;
 		this.pumpOutcomeValue = pumpOutcome == null ? new TuiAppServerPumpOutcome() : pumpOutcome;
 	}
 
@@ -72,6 +75,22 @@ class TuiPromptSubmitInteraction {
 
 	public function registeredPromptRequestCount():Int {
 		return submitResultValue == null ? 0 : submitResultValue.registeredPromptRequestCount();
+	}
+
+	public function hasLateJsonlDrainResult():Bool {
+		return lateJsonlDrainResultValue != null;
+	}
+
+	public function lateJsonlDrainResult():Null<TuiPromptSubmittedTurnLateJsonlDrainResult> {
+		return lateJsonlDrainResultValue;
+	}
+
+	public function lateJsonlDrainStatusText():String {
+		return lateJsonlDrainResultValue == null ? "none" : lateJsonlDrainResultValue.statusText();
+	}
+
+	public function lateJsonlDrainCode():String {
+		return lateJsonlDrainResultValue == null ? "" : lateJsonlDrainResultValue.code();
 	}
 
 	public function pumpOutcome():TuiAppServerPumpOutcome {

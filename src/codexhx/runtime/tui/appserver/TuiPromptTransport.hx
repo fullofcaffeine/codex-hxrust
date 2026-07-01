@@ -10,5 +10,6 @@ package codexhx.runtime.tui.appserver;
 interface TuiPromptTransport {
 	function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome;
 	function interruptTurn(envelope:TuiPromptTurnInterruptEnvelope):TuiPromptTurnInterruptOutcome;
+	function drainSubmittedTurnLateJsonl(facade:FakeTuiAppServerFacade, maxLinesPerBatch:Int, maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult;
 	function shutdown(code:String):TuiPromptTransportShutdownReport;
 }
