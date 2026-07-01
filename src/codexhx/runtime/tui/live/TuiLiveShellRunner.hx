@@ -92,11 +92,11 @@ class TuiLiveShellRunner {
 				}
 			}
 
-			final queuedPumpEvent = request.shiftPumpEvent();
+			final queuedPumpEvent = request.facade.queuedCount() > 0 ? request.shiftPumpEvent() : null;
 			final pumpEvent = queuedPumpEvent == null ? TuiAppServerPumpEvent.DrainQueuedEvents : queuedPumpEvent;
 			if (queuedPumpEvent != null)
 				outcome.recordPumpEvent();
-			recordPump(request, outcome, pump.handlePumpEvent(pumpEvent, request.policy.appServerPolicy));
+			recordPump(request, outcome, pump.handlePumpEvent(pumpEvent, request.policy.appServerPolicy), queuedPumpEvent != null);
 			if (request.scheduler.exitRequested())
 				break;
 
@@ -128,7 +128,7 @@ class TuiLiveShellRunner {
 					if (shouldInterruptOnKey(request, key)) {
 						request.facade.interruptActiveTurn(RequestId.fromInteger(nextRequestId));
 						nextRequestId = nextRequestId + 1;
-						recordPump(request, outcome, pump.handlePumpEvent(TuiAppServerPumpEvent.DrainQueuedEvents, request.policy.appServerPolicy));
+						recordPump(request, outcome, pump.handlePumpEvent(TuiAppServerPumpEvent.DrainQueuedEvents, request.policy.appServerPolicy), false);
 						recordCurrentFrame(request, outcome);
 					} else if (shouldQuitOnKey(request, key)) {
 						handleExit(request, outcome, TerminalExitReason.Requested);
@@ -146,8 +146,11 @@ class TuiLiveShellRunner {
 	}
 
 	static function recordPump(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome,
-			pumpOutcome:codexhx.runtime.tui.appserver.TuiAppServerPumpOutcome):Void {
-		outcome.recordPumpOutcome(pumpOutcome);
+			pumpOutcome:codexhx.runtime.tui.appserver.TuiAppServerPumpOutcome, explicitPumpEvent:Bool):Void {
+		if (explicitPumpEvent)
+			outcome.recordPumpEventOutcome(pumpOutcome);
+		else
+			outcome.recordPumpOutcome(pumpOutcome);
 		if (pumpOutcome != null && pumpOutcome.schedulerDrawFrameCount() > 0)
 			recordCurrentFrame(request, outcome);
 	}
@@ -155,6 +158,7 @@ class TuiLiveShellRunner {
 	static function recordReadiness(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome,
 			interaction:codexhx.runtime.tui.appserver.TuiAppServerReadinessInteraction):Void {
 		outcome.recordReadinessInteraction(interaction);
+		outcome.recordReadinessActiveTurn(request.facade.activeTurnIdText());
 		if (interaction != null && interaction.pumpOutcome().schedulerDrawFrameCount() > 0)
 			recordCurrentFrame(request, outcome);
 	}

@@ -26,9 +26,12 @@ class TuiLiveShellRunOutcome {
 	var appServerEventsValue:Int;
 	var appServerPumpEventsValue:Int;
 	var appServerBackpressureCountValue:Int;
+	var appServerPumpEventBackpressureCountValue:Int;
 	var appServerReadinessEventsValue:Int;
 	var appServerReadinessDrainedValue:Int;
 	var appServerReadinessNoPendingValue:Int;
+	var appServerReadinessBackpressureCountValue:Int;
+	var latestReadinessActiveTurnIdValue:String;
 	var latestReadinessStatusValue:TuiAppServerReadinessInteractionStatus;
 	var latestReadinessLateJsonlDrainStatusValue:String;
 	var latestReadinessLateJsonlDrainCodeValue:String;
@@ -59,9 +62,12 @@ class TuiLiveShellRunOutcome {
 		this.appServerEventsValue = 0;
 		this.appServerPumpEventsValue = 0;
 		this.appServerBackpressureCountValue = 0;
+		this.appServerPumpEventBackpressureCountValue = 0;
 		this.appServerReadinessEventsValue = 0;
 		this.appServerReadinessDrainedValue = 0;
 		this.appServerReadinessNoPendingValue = 0;
+		this.appServerReadinessBackpressureCountValue = 0;
+		this.latestReadinessActiveTurnIdValue = "";
 		this.latestReadinessStatusValue = TuiAppServerReadinessInteractionStatus.NoPendingSubmittedTurn;
 		this.latestReadinessLateJsonlDrainStatusValue = "";
 		this.latestReadinessLateJsonlDrainCodeValue = "";
@@ -127,6 +133,12 @@ class TuiLiveShellRunOutcome {
 		terminalOperationsValue = terminalOperationsValue + outcome.terminalOperationCount();
 	}
 
+	public function recordPumpEventOutcome(outcome:TuiAppServerPumpOutcome):Void {
+		if (outcome != null && outcome.backpressureApplied())
+			appServerPumpEventBackpressureCountValue = appServerPumpEventBackpressureCountValue + 1;
+		recordPumpOutcome(outcome);
+	}
+
 	public function recordPumpEvent():Void {
 		appServerPumpEventsValue = appServerPumpEventsValue + 1;
 	}
@@ -150,7 +162,13 @@ class TuiLiveShellRunOutcome {
 			latestReadinessLateJsonlDrainStatusValue = drainResult == null ? "" : drainResult.statusText();
 			latestReadinessLateJsonlDrainCodeValue = drainResult == null ? "" : drainResult.code();
 		}
+		if (interaction.pumpOutcome().backpressureApplied())
+			appServerReadinessBackpressureCountValue = appServerReadinessBackpressureCountValue + 1;
 		recordPumpOutcome(interaction.pumpOutcome());
+	}
+
+	public function recordReadinessActiveTurn(activeTurnId:String):Void {
+		latestReadinessActiveTurnIdValue = normalize(activeTurnId);
 	}
 
 	public function recordTerminalOperations(operations:Array<TerminalOperation>):Void {
@@ -247,6 +265,10 @@ class TuiLiveShellRunOutcome {
 		return appServerBackpressureCountValue;
 	}
 
+	public function appServerPumpEventBackpressureCount():Int {
+		return appServerPumpEventBackpressureCountValue;
+	}
+
 	public function appServerReadinessEvents():Int {
 		return appServerReadinessEventsValue;
 	}
@@ -257,6 +279,14 @@ class TuiLiveShellRunOutcome {
 
 	public function appServerReadinessNoPending():Int {
 		return appServerReadinessNoPendingValue;
+	}
+
+	public function appServerReadinessBackpressureCount():Int {
+		return appServerReadinessBackpressureCountValue;
+	}
+
+	public function latestReadinessActiveTurnIdText():String {
+		return latestReadinessActiveTurnIdValue;
 	}
 
 	public function latestReadinessStatus():TuiAppServerReadinessInteractionStatus {

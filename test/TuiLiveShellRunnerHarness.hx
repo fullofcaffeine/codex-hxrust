@@ -70,6 +70,7 @@ class TuiLiveShellRunnerHarness {
 		testAgentNavigationInputRoutesActiveThread();
 		testPumpEventRoutesThroughRunner();
 		testReadinessEventRoutesThroughRunner();
+		testReadinessBackpressureRecoveryRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
 		testLiveBackendNoTtyRunPath();
 		Sys.println("tui-live-shell-runner ok");
@@ -362,6 +363,64 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals("user> ready", shell.transcriptAt(1).renderText(), "runner readiness user row");
 		assertStringEquals("assistant> runner readiness delta", shell.transcriptAt(2).renderText(), "runner readiness assistant row");
 		assertStringEquals("assistant> runner readiness delta", outcome.finalFrameLineAt(4), "runner readiness final frame");
+	}
+
+	static function testReadinessBackpressureRecoveryRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(9), activeSession, activeThread, "recover");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-recover-9"), "runner recovery delta").messageJson() + "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("v")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			new TuiLiveShellRunPolicy(32, 3,
+				TuiAppServerPumpPolicy.bounded(1))).withJsonRpcPromptTransport(promptTransport)
+			.withReadinessEvents([TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 2)])
+			.withPumpEvents([TuiAppServerPumpEvent.DrainQueuedEvents]);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner recovery submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner recovery accepted prompts");
+		assertIntEquals(1, outcome.appServerReadinessEvents(), "runner recovery readiness event count");
+		assertIntEquals(1, outcome.appServerReadinessBackpressureCount(), "runner recovery readiness backpressure count");
+		assertStringEquals("turn-9", outcome.latestReadinessActiveTurnIdText(), "runner recovery active turn preserved after readiness");
+		assertIntEquals(1, outcome.appServerPumpEvents(), "runner recovery pump event count");
+		assertIntEquals(1, outcome.appServerPumpEventBackpressureCount(), "runner recovery pump event backpressure count");
+		assertIntEquals(2, outcome.appServerBackpressureCount(), "runner recovery total backpressure count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(), "runner recovery readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner recovery late jsonl drain status");
+		assertStringEquals("completed", outcome.latestReadinessLateJsonlDrainCode(), "runner recovery late jsonl drain code");
+		assertStringEquals("turn-9", outcome.lastStartedTurnIdText(), "runner recovery last started");
+		assertStringEquals("turn-9", outcome.lastCompletedTurnIdText(), "runner recovery last completed");
+		assertStringEquals("", outcome.activeTurnIdText(), "runner recovery active cleared");
+		assertIntEquals(1, outcome.completedTurns(), "runner recovery completed exactly once");
+		assertStringEquals("assistant> runner recovery delta", shell.transcriptAt(2).renderText(), "runner recovery assistant row");
+		assertStringEquals("assistant> runner recovery delta", outcome.finalFrameLineAt(4), "runner recovery final frame");
 	}
 
 	static function testEscapeCtrlCAndQExit():Void {
