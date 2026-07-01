@@ -73,12 +73,16 @@ class TuiAppServerEventPump {
 
 	public function handleReadinessEvent(event:TuiAppServerReadinessEvent, policy:TuiAppServerPumpPolicy):TuiAppServerReadinessInteraction {
 		final safePolicy = policy == null ? TuiAppServerPumpPolicy.lossless() : policy;
+		if (!facade.hasPendingSubmittedTurn()) {
+			final outcome = drain(safePolicy);
+			return TuiAppServerReadinessInteraction.noPendingSubmittedTurn(outcome);
+		}
 		final drainResult = switch event {
 			case SubmittedTurnLateJsonlReady(maxLinesPerBatch, maxBatches):
 				facade.drainSubmittedTurnLateJsonl(maxLinesPerBatch, maxBatches);
 		}
 		final outcome = drain(safePolicy);
-		return new TuiAppServerReadinessInteraction(drainResult, outcome);
+		return TuiAppServerReadinessInteraction.drained(drainResult, outcome);
 	}
 
 	function handleAgentNavigationInput(input:TerminalInputEvent):Null<TuiAppServerPumpOutcome> {

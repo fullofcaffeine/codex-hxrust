@@ -48,6 +48,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessEnvVar;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerReadinessInteractionStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioSession;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunStatus;
@@ -169,6 +170,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testComposerSubmitLateJsonlDrainNoDataStop();
 		testComposerSubmitLateJsonlDrainResumesAfterNoData();
 		testComposerSubmitLateJsonlDrainReadinessEventResumes();
+		testComposerSubmitLateJsonlReadinessNoDataKeepsActiveTurn();
+		testComposerSubmitLateJsonlReadinessDuplicateAfterCompletionNoops();
 		testSubmittedTurnAcceptanceRejectsMissingStartedEvidence();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
@@ -2049,6 +2052,89 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("assistant> composer readiness delta", shell.transcriptAt(2).renderText(), "composer late jsonl readiness assistant row");
 		assertLineCloseReport(appServerTransport.close("composer_late_jsonl_readiness_done"), TuiAppServerJsonRpcLineTransportState.Closed,
 			"composer_late_jsonl_readiness_done", 1, 4, "composer late jsonl readiness close");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testComposerSubmitLateJsonlReadinessNoDataKeepsActiveTurn():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005626");
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(), new NoDataLateJsonlLineTransportAttacher()));
+		final facade = attachedFacadeWithTransport(shell, activeThread,
+			new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "composer late jsonl readiness no-data setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		pump.submitComposerInput(TerminalInputEvent.Text("composer readiness waits"), RequestId.fromInteger(993), TuiAppServerPumpPolicy.lossless());
+		final submit = pump.submitComposerInput(TerminalInputEvent.Submit, RequestId.fromInteger(275),
+			TuiAppServerPumpPolicy.withSubmittedTurnLateJsonlDrain(1, 3));
+		assertAcceptedSubmit(submit, "275", "composer readiness waits", "composer late jsonl readiness no-data submit");
+		assertSubmittedLateJsonlDrain(submit.lateJsonlDrainResult(), TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData, "late_jsonl_not_ready", 1, 0, 0, 0, 0,
+			0, 0, 0, TuiPromptSubmittedTurnLateJsonlPumpStatus.NoData, "late_jsonl_not_ready", TuiAppServerJsonRpcTransportStatus.NotReady,
+			"late_jsonl_not_ready", null, "", "", "", "", "composer late jsonl readiness no-data first stop");
+
+		final repeated = pump.handleReadinessEvent(TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3), TuiAppServerPumpPolicy.lossless());
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), repeated.statusText(), "composer late jsonl readiness no-data status");
+		assertStringEquals("drained", repeated.code(), "composer late jsonl readiness no-data code");
+		assertSubmittedLateJsonlDrain(repeated.lateJsonlDrainResult(), TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData, "late_jsonl_not_ready", 1, 0, 0, 0,
+			0, 0, 0, 0, TuiPromptSubmittedTurnLateJsonlPumpStatus.NoData, "late_jsonl_not_ready", TuiAppServerJsonRpcTransportStatus.NotReady,
+			"late_jsonl_not_ready", null, "", "", "", "", "composer late jsonl readiness repeated no-data");
+		assertStringEquals("turn-275", facade.activeTurnIdText(), "composer late jsonl readiness no-data active retained");
+		assertIntEquals(0, facade.completedTurnCount(), "composer late jsonl readiness no-data completed count");
+		assertIntEquals(2, shell.transcriptCount(), "composer late jsonl readiness no-data transcript count");
+		assertIntEquals(0, repeated.pumpOutcome().eventsDrained(), "composer late jsonl readiness no-data drained events");
+		assertLineCloseReport(appServerTransport.close("composer_late_jsonl_readiness_no_data_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"composer_late_jsonl_readiness_no_data_done", 1, 2, "composer late jsonl readiness no-data close");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testComposerSubmitLateJsonlReadinessDuplicateAfterCompletionNoops():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005627");
+		final turnId = turn("turn-276");
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-composer-ready-276"),
+				"composer duplicate readiness delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(), new NoDataLateJsonlLineTransportAttacher(lateLines)));
+		final facade = attachedFacadeWithTransport(shell, activeThread,
+			new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted));
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "composer late jsonl readiness duplicate setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		pump.submitComposerInput(TerminalInputEvent.Text("composer duplicate readiness"), RequestId.fromInteger(992), TuiAppServerPumpPolicy.lossless());
+		final submit = pump.submitComposerInput(TerminalInputEvent.Submit, RequestId.fromInteger(276),
+			TuiAppServerPumpPolicy.withSubmittedTurnLateJsonlDrain(1, 3));
+		assertAcceptedSubmit(submit, "276", "composer duplicate readiness", "composer late jsonl readiness duplicate submit");
+
+		final resumed = pump.handleReadinessEvent(TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3), TuiAppServerPumpPolicy.lossless());
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), resumed.statusText(), "composer late jsonl readiness duplicate resumed");
+		assertSubmittedLateJsonlDrain(resumed.lateJsonlDrainResult(), TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed, "completed", 2, 2, 2, 2, 2, 3, 1,
+			1, TuiPromptSubmittedTurnLateJsonlPumpStatus.Accepted, "accepted", TuiAppServerJsonRpcTransportStatus.Accepted, "accepted",
+			TuiPromptSubmittedTurnJsonlBatchStatus.Accepted, "accepted", activeThread.toString(), "turn-276", "composer duplicate readiness delta",
+			"composer late jsonl readiness duplicate completed drain");
+		assertStringEquals("", facade.activeTurnIdText(), "composer late jsonl readiness duplicate active cleared");
+		assertIntEquals(1, facade.completedTurnCount(), "composer late jsonl readiness duplicate completed once");
+		assertIntEquals(3, shell.transcriptCount(), "composer late jsonl readiness duplicate transcript once");
+
+		final duplicate = pump.handleReadinessEvent(TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3), TuiAppServerPumpPolicy.lossless());
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.NoPendingSubmittedTurn.text(), duplicate.statusText(),
+			"composer late jsonl readiness duplicate no-op status");
+		assertStringEquals("no_pending_submitted_turn", duplicate.code(), "composer late jsonl readiness duplicate no-op code");
+		assertTrue(!duplicate.hasLateJsonlDrainResult(), "composer late jsonl readiness duplicate no drain");
+		assertIntEquals(0, duplicate.pumpOutcome().eventsDrained(), "composer late jsonl readiness duplicate drained events");
+		assertStringEquals("", facade.activeTurnIdText(), "composer late jsonl readiness duplicate active still cleared");
+		assertIntEquals(1, facade.completedTurnCount(), "composer late jsonl readiness duplicate completed still once");
+		assertIntEquals(3, shell.transcriptCount(), "composer late jsonl readiness duplicate transcript still once");
+		assertStringEquals("assistant> composer duplicate readiness delta", shell.transcriptAt(2).renderText(),
+			"composer late jsonl readiness duplicate assistant row");
+		assertLineCloseReport(appServerTransport.close("composer_late_jsonl_readiness_duplicate_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"composer_late_jsonl_readiness_duplicate_done", 1, 4, "composer late jsonl readiness duplicate close");
 		backend.restore(TerminalRestoreReason.NormalExit);
 	}
 

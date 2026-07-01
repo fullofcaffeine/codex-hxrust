@@ -419,6 +419,17 @@ records exactly one completion, and clears `activeTurn`. This is deterministic
 scheduler/readiness modeling, not real async socket polling, Tokio tasks,
 provider streaming, model execution, tools, or persistence.
 
+`TUI-LIVE-78` adds typed repeated-readiness outcomes to that same pump seam.
+`TuiAppServerReadinessInteractionStatus.Drained` means the readiness event
+attempted the bounded late JSONL drain; if the transport still reports
+`no_data`, the submitted turn remains active and transcript/completion state is
+unchanged. `NoPendingSubmittedTurn` means a duplicate readiness event arrived
+after completion already cleared `activeTurn`; the pump returns a typed no-op
+without reading late JSONL again and without appending duplicate assistant rows
+or completion records. This is deterministic readiness coalescing, not real
+async socket polling, Tokio tasks, provider streaming, model execution, tools,
+or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",
