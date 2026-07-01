@@ -5,6 +5,7 @@ package codexhx.runtime.tui.appserver;
 **/
 enum abstract TuiPromptSubmittedTurnLateJsonlPumpStatus(String) to String {
 	final Accepted = "accepted";
+	final NoData = "no_data";
 	final LineReadRejected = "line_read_rejected";
 	final BatchRejected = "batch_rejected";
 

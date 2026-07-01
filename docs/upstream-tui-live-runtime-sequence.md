@@ -4778,6 +4778,27 @@ models interrupt ordering around the current drain loop; it does not own real
 async cancellation, provider streaming, socket readiness, Tokio reader/writer
 tasks, model calls, tool execution, process teardown, or persistence.
 
+### TUI-LIVE-75 Submitted Turn Drain Readiness-Aware No-Data Stop
+
+Status: TUI-LIVE-75 adds typed no-data/readiness evidence to the
+composer-triggered submitted-turn late JSONL drain. `TuiAppServerJsonRpcLateJsonlBatch`
+can now report `not_ready`; `TuiPromptSubmittedTurnLateJsonlPumpResult` maps it
+to `no_data`; and the bounded drain reports `TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData`
+instead of treating an empty wait as a disconnect or batch failure.
+
+The prompt-submit gate proves a composer prompt can be admitted through the
+same facade, prompt transport, persistent JSON-RPC transport, and event-pump
+path, then stop the late drain immediately with structured no-data evidence.
+The active submitted turn remains active, the transcript only contains the user
+row, and completion count stays unchanged. Existing completion, max-bound,
+prefix-applied rejection, line-disconnect, unsupported notification, and
+stale-after-interrupt paths remain covered by the same harness.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models a readiness/no-data boundary for the current drain loop; it does not own
+real async socket polling, Tokio readiness, provider streaming, model calls,
+tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

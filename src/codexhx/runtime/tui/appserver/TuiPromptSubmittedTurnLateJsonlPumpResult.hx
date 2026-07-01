@@ -51,8 +51,9 @@ class TuiPromptSubmittedTurnLateJsonlPumpResult {
 		final lineStatus = lines == null ? TuiAppServerJsonRpcTransportStatus.Rejected.text() : lines.statusText();
 		final lineCode = lines == null ? "missing_late_jsonl_batch" : lines.code();
 		final lineCount = lines == null ? 0 : lines.lineCount();
-		return new TuiPromptSubmittedTurnLateJsonlPumpResult(TuiPromptSubmittedTurnLateJsonlPumpStatus.LineReadRejected, lineCode, lineStatus, lineCode,
-			lineCount, "", "", "", "", "", "", "", 0, 0, 0, 0, 0);
+		final status = lines != null
+			&& lines.isNotReady() ? TuiPromptSubmittedTurnLateJsonlPumpStatus.NoData : TuiPromptSubmittedTurnLateJsonlPumpStatus.LineReadRejected;
+		return new TuiPromptSubmittedTurnLateJsonlPumpResult(status, lineCode, lineStatus, lineCode, lineCount, "", "", "", "", "", "", "", 0, 0, 0, 0, 0);
 	}
 
 	public static function fromBatch(lines:TuiAppServerJsonRpcLateJsonlBatch,

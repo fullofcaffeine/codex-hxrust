@@ -387,6 +387,16 @@ without applying assistant text or marking completion. This is still a
 synchronous deterministic interleave, not real async cancellation, socket
 readiness, provider streaming, model execution, tools, or persistence.
 
+`TUI-LIVE-75` makes that synchronous drain readiness-aware. Late JSONL batch
+reads can now report a typed `not_ready` transport status, which maps to
+submitted-turn pump/drain `no_data` outcomes instead of masquerading as a
+disconnect, batch rejection, or completed drain. The composer-submit harness
+proves a submitted prompt can stay active when the late-line drain has no data
+ready: no assistant row is appended, no completion is counted, and the drain
+result carries structured stop evidence. This is deterministic no-data modeling
+for the current synchronous harness path; it is not real async socket polling,
+Tokio readiness, provider streaming, model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

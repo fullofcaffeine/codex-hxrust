@@ -5,6 +5,7 @@ package codexhx.runtime.tui.appserver;
 **/
 enum abstract TuiPromptSubmittedTurnLateJsonlDrainStatus(String) to String {
 	final Completed = "completed";
+	final NoData = "no_data";
 	final MaxBatchesReached = "max_batches_reached";
 	final LineReadRejected = "line_read_rejected";
 	final BatchRejected = "batch_rejected";

@@ -7,6 +7,7 @@ enum abstract TuiAppServerJsonRpcTransportStatus(String) to String {
 	final Accepted = "accepted";
 	final Rejected = "rejected";
 	final Disconnected = "disconnected";
+	final NotReady = "not_ready";
 
 	public function text():String {
 		return this;

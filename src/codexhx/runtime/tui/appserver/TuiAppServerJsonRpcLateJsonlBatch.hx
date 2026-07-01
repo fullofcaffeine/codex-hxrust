@@ -27,8 +27,16 @@ class TuiAppServerJsonRpcLateJsonlBatch {
 		return new TuiAppServerJsonRpcLateJsonlBatch(TuiAppServerJsonRpcTransportStatus.Disconnected, code, lines);
 	}
 
+	public static function notReady(code:String):TuiAppServerJsonRpcLateJsonlBatch {
+		return new TuiAppServerJsonRpcLateJsonlBatch(TuiAppServerJsonRpcTransportStatus.NotReady, code, []);
+	}
+
 	public function isAccepted():Bool {
 		return status == TuiAppServerJsonRpcTransportStatus.Accepted;
+	}
+
+	public function isNotReady():Bool {
+		return status == TuiAppServerJsonRpcTransportStatus.NotReady;
 	}
 
 	public function statusText():String {

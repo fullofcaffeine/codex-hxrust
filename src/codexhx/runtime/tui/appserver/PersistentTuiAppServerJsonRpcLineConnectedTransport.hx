@@ -211,7 +211,7 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 				lastDelta = stopPump.deltaText();
 
 			if (!stopPump.acceptedPump()) {
-				final status = stopPump.status() == TuiPromptSubmittedTurnLateJsonlPumpStatus.LineReadRejected ? TuiPromptSubmittedTurnLateJsonlDrainStatus.LineReadRejected : TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected;
+				final status = lateJsonlDrainStopStatus(stopPump.status());
 				lastLateJsonlDrainResultValue = lateJsonlDrainResult(status, stopPump.code(), attemptedBatchCount, acceptedBatchCount, lineCount,
 					notificationCount, appliedNotificationCount, eventsQueued, assistantDeltaCount, completionCount, stopPump, lastThreadId, lastTurnId,
 					lastDelta);
@@ -315,6 +315,14 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 
 	function recordAttempt(lineOutcome:TuiAppServerJsonRpcLineOutcome, transportMaterialized:Bool):Void {
 		lastAttemptReportValue = TuiAppServerJsonRpcLineTransportAttemptReport.fromParts(connectReportValue, lineOutcome, null, transportMaterialized);
+	}
+
+	static function lateJsonlDrainStopStatus(status:TuiPromptSubmittedTurnLateJsonlPumpStatus):TuiPromptSubmittedTurnLateJsonlDrainStatus {
+		if (status == TuiPromptSubmittedTurnLateJsonlPumpStatus.NoData)
+			return TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData;
+		if (status == TuiPromptSubmittedTurnLateJsonlPumpStatus.LineReadRejected)
+			return TuiPromptSubmittedTurnLateJsonlDrainStatus.LineReadRejected;
+		return TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected;
 	}
 
 	static function lateJsonlDrainResult(status:TuiPromptSubmittedTurnLateJsonlDrainStatus, code:String, attemptedBatchCount:Int, acceptedBatchCount:Int,
