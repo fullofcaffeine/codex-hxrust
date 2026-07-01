@@ -60,6 +60,24 @@ class TuiPromptJsonRpcInboundLineDecoder {
 		return TuiPromptJsonRpcInboundLineDecodeOutcome.accepted(response, notifications, streamNotifications, []);
 	}
 
+	public function decodeStreamNotifications(lines:Array<String>):TuiPromptJsonRpcInboundLineDecodeOutcome {
+		failureCode = "";
+		if (lines == null || lines.length == 0)
+			return TuiPromptJsonRpcInboundLineDecodeOutcome.rejected("missing_inbound_lines");
+		final notifications:Array<TuiPromptJsonRpcNotification> = [];
+		final streamNotifications:Array<TuiPromptJsonRpcStreamNotification> = [];
+		for (index in 0...lines.length) {
+			final value = parseLine(lines[index]);
+			if (failed())
+				return rejected();
+			if (isResponse(value))
+				return TuiPromptJsonRpcInboundLineDecodeOutcome.rejected("unexpected_response_line");
+			if (!decodeStreamNotificationInto(value, notifications, streamNotifications))
+				return rejected();
+		}
+		return TuiPromptJsonRpcInboundLineDecodeOutcome.accepted(null, notifications, streamNotifications, []);
+	}
+
 	function parseLine(line:String):Value {
 		try {
 			final parsed = CodexJson.parse(line == null ? "" : line);

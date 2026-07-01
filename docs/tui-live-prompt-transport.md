@@ -291,6 +291,20 @@ through the TUI-LIVE-66 path. This remains deterministic and credential-free;
 it is not real provider streaming, socket ownership, Tokio task cancellation,
 model execution, tools, or persistence.
 
+`TUI-LIVE-68` connects that same submitted-turn stream delivery path to raw
+JSONL notification handoff. `TuiPromptJsonRpcInboundLineDecoder` now has a
+notification-only decode path for inbound stream lines that arrive after prompt
+admission, and `FakeTuiAppServerFacade.deliverSubmittedTurnJsonlStreamLines()`
+projects decoded `item/agentMessage/delta` notifications into
+`AssistantTurnDelta` before delegating to the submitted-turn delivery checks.
+The prompt-submit gate proves accepted late JSONL deltas render through the
+app-server pump while the submitted turn remains active, then complete later
+through TUI-LIVE-66. It also proves unknown-method JSONL, wrong-thread,
+wrong-turn, no-active, completed-turn, and stale-interrupted cases are rejected
+without transcript mutation. This remains deterministic and credential-free; it
+is not real provider streaming, socket ownership, Tokio task cancellation,
+model execution, tools, or persistence.
+
 ```json
 {
   "jsonrpc": "2.0",

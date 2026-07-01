@@ -4607,6 +4607,27 @@ TUI/app-server state transition for late assistant stream evidence; it does not
 own real provider streaming, socket sessions, Tokio reader/writer tasks, model
 calls, tool execution, process teardown, or persistence.
 
+### TUI-LIVE-68 Submitted Turn Late JSONL Stream Handoff
+
+Status: TUI-LIVE-68 connects the TUI-LIVE-67 turn-scoped stream delivery path to
+raw JSONL notification handoff. `TuiPromptJsonRpcInboundLineDecoder` now exposes
+a notification-only decode path for inbound stream lines that arrive after the
+submitted prompt has already been admitted. `FakeTuiAppServerFacade` decodes the
+late JSONL line, projects it through `TuiPromptJsonRpcNotificationProjector`,
+accepts only projected `AssistantTurnDelta(threadId, turnId, delta)` events,
+and delegates to `deliverSubmittedTurnAssistantDelta()` so the existing
+active-thread/active-turn checks remain the authority. The prompt-submit gate
+proves a later `item/agentMessage/delta` JSONL line renders an assistant row
+while the submitted turn stays active, then the delayed completion path clears
+the turn. It also proves wrong-thread, wrong-turn, no-active-turn,
+completed-turn duplicate, stale-after-Ctrl-C, and unknown-method JSONL inputs
+are rejected without transcript mutation.
+
+This is still deterministic, synchronous, and credential-free. It models the
+late JSONL notification handoff into the minimal live TUI shell; it does not own
+real provider streaming, socket sessions, Tokio reader/writer tasks, model
+calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

@@ -226,6 +226,23 @@ class FakeTuiAppServerFacade {
 		return TuiPromptSubmittedTurnStreamDeliveryResult.accepted(threadId, turnId, text, 1);
 	}
 
+	public function deliverSubmittedTurnJsonlStreamLines(lines:Array<String>):TuiPromptSubmittedTurnJsonlDeliveryResult {
+		final lineCount = lines == null ? 0 : lines.length;
+		final decoded = new TuiPromptJsonRpcInboundLineDecoder().decodeStreamNotifications(lines);
+		if (!decoded.isAccepted())
+			return TuiPromptSubmittedTurnJsonlDeliveryResult.rejected(TuiPromptSubmittedTurnJsonlDeliveryStatus.DecodeRejected, decoded.code(), lineCount, 0);
+		final notifications = decoded.streamNotifications();
+		if (notifications.length != 1) {
+			return TuiPromptSubmittedTurnJsonlDeliveryResult.rejected(TuiPromptSubmittedTurnJsonlDeliveryStatus.MultipleNotifications,
+				notifications.length == 0 ? "missing_stream_notification" : "multiple_stream_notifications", lineCount, notifications.length);
+		}
+		final events = TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(notifications, []);
+		if (events.length != 1)
+			return TuiPromptSubmittedTurnJsonlDeliveryResult.rejected(TuiPromptSubmittedTurnJsonlDeliveryStatus.UnsupportedNotification,
+				"unsupported_stream_notification", lineCount, notifications.length);
+		return deliverSubmittedTurnProjectedEvent(events[0], lineCount, notifications.length);
+	}
+
 	public function shutdownPromptTransport(code:String):TuiPromptTransportShutdownReport {
 		return promptTransport.shutdown(code);
 	}
@@ -460,6 +477,20 @@ class FakeTuiAppServerFacade {
 		if (!activeTurnMatches(turnId))
 			return TuiPromptSubmittedTurnStreamDeliveryStatus.WrongTurn;
 		return TuiPromptSubmittedTurnStreamDeliveryStatus.Accepted;
+	}
+
+	function deliverSubmittedTurnProjectedEvent(event:TuiAppServerEvent, lineCount:Int, notificationCount:Int):TuiPromptSubmittedTurnJsonlDeliveryResult {
+		return switch event {
+			case TuiAppServerEvent.AssistantTurnDelta(threadId, turnId, delta):
+				final delivered = deliverSubmittedTurnAssistantDelta(threadId, turnId, delta);
+				if (delivered.acceptedDelivery()) TuiPromptSubmittedTurnJsonlDeliveryResult.accepted(delivered, lineCount,
+					notificationCount); else
+					TuiPromptSubmittedTurnJsonlDeliveryResult.rejectedWithDelivery(TuiPromptSubmittedTurnJsonlDeliveryStatus.StreamDeliveryRejected,
+						delivered.statusText(), delivered, lineCount, notificationCount);
+			case _:
+				TuiPromptSubmittedTurnJsonlDeliveryResult.rejected(TuiPromptSubmittedTurnJsonlDeliveryStatus.UnsupportedNotification,
+					"unsupported_projected_event", lineCount, notificationCount);
+		}
 	}
 
 	function refreshAgentLabel(effects:Array<TuiAppServerShellEffect>):Void {
