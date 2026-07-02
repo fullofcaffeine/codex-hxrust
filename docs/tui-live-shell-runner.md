@@ -178,6 +178,8 @@ before surfacing stale-interrupted completion rejection evidence.
 rejection evidence after interruption.
 `TUI-LIVE-127` proves source-fed readiness can surface stale-interrupted
 completion rejection evidence after interruption.
+`TUI-LIVE-128` proves a deterministic app-server session readiness source can
+feed submitted-turn readiness through the live shell runner.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

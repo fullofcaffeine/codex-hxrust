@@ -6391,6 +6391,54 @@ current scheduler/drain loop; it does not own real async socket polling, Tokio
 readiness, provider streaming, model calls, tool execution, process teardown, or
 persistence.
 
+### TUI-LIVE-128 App-Server Session Readiness Source Boundary Feeds Live Shell Runner
+
+Status: TUI-LIVE-128 introduces `TuiAppServerSessionReadinessSource` as the
+deterministic app-server session-facing side of live-shell readiness. The
+live-shell runner still consumes readiness through `TuiLiveShellReadinessSource`,
+but that source can now delegate to a typed app-server session boundary instead
+of only holding a raw queued event list.
+
+The app-server session readiness source gate records the same submitted-turn
+readiness evidence as the queued/source-fed happy path: readiness event count,
+drained/no-pending counts, no-data count and retained active turn, latest
+late-JSONL drain status/code, line status/code, applied notification count,
+assistant-delta count, completion count, latest thread/turn/delta evidence,
+last started/completed turn IDs, cleared active turn ID, prompt transcript rows,
+final frame row, and zero remaining readiness source count after the runner
+drains the session-facing source.
+
+Existing source-fed stale-interrupted completion rejection, source-fed
+stale-interrupted stream rejection, source-fed prefix-then-stale-interrupted
+completion rejection, source-fed prefix-then-stale-interrupted stream rejection,
+source-fed prefix-then-line-read rejection, source-fed prefix-then-unsupported
+notification rejection, source-fed prefix-then-malformed JSON rejection,
+source-fed prefix-then-decode rejection, source-fed prefix-then-schema
+rejection, source-fed schema rejection, source-fed malformed-JSON rejection,
+source-fed decode rejection, source-fed unsupported-notification rejection,
+source-fed line-read rejection, source-fed prefix-applied rejection, source-fed
+max-batch readiness stop, source-fed duplicate post-completion no-op,
+source-fed no-data retry, source-fed readiness backpressure recovery,
+structured prefix evidence for schema/decode/malformed-JSON rejection, queued
+stale-interrupted completion readiness rejection, queued stale-interrupted
+readiness rejection, queued prefix-then-stale-interrupted completion rejection,
+queued prefix-then-stale-interrupted rejection, queued prefix-then-line-read
+rejection, queued prefix-then-unsupported notification rejection, queued
+prefix-then-malformed JSON rejection, queued prefix-then-decode rejection,
+queued prefix-then-schema rejection, queued schema rejection, queued
+malformed-JSON rejection, queued decode rejection, queued unsupported-notification
+rejection, queued line-read rejection, queued prefix-applied rejection, queued
+max-batch readiness stop, queued duplicate post-completion readiness no-op,
+queued no-data readiness retry, queued readiness backpressure recovery,
+pump-event routing, terminal setup/restore, text submit, line transport, agent
+navigation, resize, tick, Ctrl-C, q, and live-backend no-TTY paths remain
+covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models the typed boundary where a live app-server session will later publish
+readiness; it does not own real async socket polling, Tokio readiness, provider
+streaming, model calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

@@ -1,6 +1,7 @@
 package codexhx.runtime.tui.live;
 
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerSessionReadinessSource;
 
 /**
 	Deterministic source of app-server readiness events for the live shell loop.
@@ -12,10 +13,12 @@ import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
 **/
 class TuiLiveShellReadinessSource {
 	final events:Array<TuiAppServerReadinessEvent>;
+	final appServerSessionSource:TuiAppServerSessionReadinessSource;
 	var nextIndex:Int;
 
-	public function new(events:Array<TuiAppServerReadinessEvent>) {
+	public function new(events:Array<TuiAppServerReadinessEvent>, ?appServerSessionSource:TuiAppServerSessionReadinessSource) {
 		this.events = events == null ? [] : events.copy();
+		this.appServerSessionSource = appServerSessionSource;
 		this.nextIndex = 0;
 	}
 
@@ -27,16 +30,25 @@ class TuiLiveShellReadinessSource {
 		return new TuiLiveShellReadinessSource(events);
 	}
 
+	public static function fromAppServerSession(source:TuiAppServerSessionReadinessSource):TuiLiveShellReadinessSource {
+		return new TuiLiveShellReadinessSource([], source);
+	}
+
 	public function nextEvent():Null<TuiAppServerReadinessEvent> {
-		if (nextIndex >= events.length)
+		if (nextIndex < events.length) {
+			final event = events[nextIndex];
+			nextIndex = nextIndex + 1;
+			return event;
+		}
+		if (appServerSessionSource == null)
 			return null;
-		final event = events[nextIndex];
-		nextIndex = nextIndex + 1;
-		return event;
+		return appServerSessionSource.nextReadinessEvent();
 	}
 
 	public function remaining():Int {
-		final count = events.length - nextIndex;
-		return count < 0 ? 0 : count;
+		final eventCount = events.length - nextIndex;
+		final queuedCount = eventCount < 0 ? 0 : eventCount;
+		final sessionCount = appServerSessionSource == null ? 0 : appServerSessionSource.remaining();
+		return queuedCount + sessionCount;
 	}
 }
