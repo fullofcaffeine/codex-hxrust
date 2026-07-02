@@ -209,6 +209,8 @@ active submitted turn through no-data, then reject schema-invalid late JSONL
 without applying notifications or completing the turn.
 `TUI-LIVE-139` proves that app-server session readiness source can preserve an
 assistant prefix before surfacing schema rejection evidence.
+`TUI-LIVE-140` proves that app-server session readiness source can preserve an
+assistant prefix before surfacing unknown-method decode rejection evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
