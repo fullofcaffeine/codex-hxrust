@@ -38,6 +38,8 @@ class TuiLiveShellRunOutcome {
 	var latestReadinessStatusValue:TuiAppServerReadinessInteractionStatus;
 	var latestReadinessLateJsonlDrainStatusValue:String;
 	var latestReadinessLateJsonlDrainCodeValue:String;
+	var latestReadinessLateJsonlLineStatusValue:String;
+	var latestReadinessLateJsonlLineCodeValue:String;
 	var drawFramesValue:Int;
 	var terminalOperationsValue:Int;
 	var exitRequestedValue:Bool;
@@ -76,6 +78,8 @@ class TuiLiveShellRunOutcome {
 		this.latestReadinessStatusValue = TuiAppServerReadinessInteractionStatus.NoPendingSubmittedTurn;
 		this.latestReadinessLateJsonlDrainStatusValue = "";
 		this.latestReadinessLateJsonlDrainCodeValue = "";
+		this.latestReadinessLateJsonlLineStatusValue = "";
+		this.latestReadinessLateJsonlLineCodeValue = "";
 		this.drawFramesValue = 0;
 		this.terminalOperationsValue = 0;
 		this.exitRequestedValue = false;
@@ -166,6 +170,8 @@ class TuiLiveShellRunOutcome {
 			final drainResult = interaction.lateJsonlDrainResult();
 			latestReadinessLateJsonlDrainStatusValue = drainResult == null ? "" : drainResult.statusText();
 			latestReadinessLateJsonlDrainCodeValue = drainResult == null ? "" : drainResult.code();
+			latestReadinessLateJsonlLineStatusValue = drainResult == null ? "" : drainResult.stopLineStatusText();
+			latestReadinessLateJsonlLineCodeValue = drainResult == null ? "" : drainResult.stopLineCode();
 			if (drainResult != null && drainResult.status() == TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData)
 				appServerReadinessNoDataCountValue = appServerReadinessNoDataCountValue + 1;
 		}
@@ -320,6 +326,14 @@ class TuiLiveShellRunOutcome {
 
 	public function latestReadinessLateJsonlDrainCode():String {
 		return latestReadinessLateJsonlDrainCodeValue;
+	}
+
+	public function latestReadinessLateJsonlLineStatusText():String {
+		return latestReadinessLateJsonlLineStatusValue;
+	}
+
+	public function latestReadinessLateJsonlLineCode():String {
+		return latestReadinessLateJsonlLineCodeValue;
 	}
 
 	public function drawFrames():Int {
