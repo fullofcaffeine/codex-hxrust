@@ -4978,6 +4978,28 @@ models live-runner backpressure recovery around the current scheduler/drain
 loop; it does not own real async socket polling, Tokio readiness, provider
 streaming, model calls, tool execution, process teardown, or persistence.
 
+### TUI-LIVE-84 No-Data Readiness Retry Routes Through Live Shell Runner
+
+Status: TUI-LIVE-84 extends the live-shell runner readiness path with
+runner-owned no-data retry evidence. `TuiLiveShellRunOutcome` now records
+readiness no-data counts and the active submitted turn observed immediately
+after a no-data readiness stop, so a later successful readiness drain does not
+overwrite the first retry boundary evidence.
+
+The live-shell runner gate proves an initial `SubmittedTurnLateJsonlReady`
+event can stop with typed `no_data` / `late_jsonl_not_ready` evidence without
+clearing the active submitted turn, then a later runner-owned readiness event
+can drain assistant/completion JSONL through the same path, render the assistant
+row, and clear the completion exactly once. Existing readiness backpressure
+recovery, readiness routing, pump-event routing, terminal setup/restore, text
+submit, line transport, agent navigation, resize, tick, Ctrl-C, q, and
+live-backend no-TTY paths remain covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models live-runner no-data readiness retry around the current scheduler/drain
+loop; it does not own real async socket polling, Tokio readiness, provider
+streaming, model calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

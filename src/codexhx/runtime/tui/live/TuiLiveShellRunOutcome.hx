@@ -4,6 +4,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerReadinessInteraction;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessInteractionStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnLateJsonlDrainStatus;
 import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
 import codexhx.runtime.tui.terminal.TerminalExitReason;
 import codexhx.runtime.tui.terminal.TerminalFrame;
@@ -31,7 +32,9 @@ class TuiLiveShellRunOutcome {
 	var appServerReadinessDrainedValue:Int;
 	var appServerReadinessNoPendingValue:Int;
 	var appServerReadinessBackpressureCountValue:Int;
+	var appServerReadinessNoDataCountValue:Int;
 	var latestReadinessActiveTurnIdValue:String;
+	var latestNoDataReadinessActiveTurnIdValue:String;
 	var latestReadinessStatusValue:TuiAppServerReadinessInteractionStatus;
 	var latestReadinessLateJsonlDrainStatusValue:String;
 	var latestReadinessLateJsonlDrainCodeValue:String;
@@ -67,7 +70,9 @@ class TuiLiveShellRunOutcome {
 		this.appServerReadinessDrainedValue = 0;
 		this.appServerReadinessNoPendingValue = 0;
 		this.appServerReadinessBackpressureCountValue = 0;
+		this.appServerReadinessNoDataCountValue = 0;
 		this.latestReadinessActiveTurnIdValue = "";
+		this.latestNoDataReadinessActiveTurnIdValue = "";
 		this.latestReadinessStatusValue = TuiAppServerReadinessInteractionStatus.NoPendingSubmittedTurn;
 		this.latestReadinessLateJsonlDrainStatusValue = "";
 		this.latestReadinessLateJsonlDrainCodeValue = "";
@@ -161,6 +166,8 @@ class TuiLiveShellRunOutcome {
 			final drainResult = interaction.lateJsonlDrainResult();
 			latestReadinessLateJsonlDrainStatusValue = drainResult == null ? "" : drainResult.statusText();
 			latestReadinessLateJsonlDrainCodeValue = drainResult == null ? "" : drainResult.code();
+			if (drainResult != null && drainResult.status() == TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData)
+				appServerReadinessNoDataCountValue = appServerReadinessNoDataCountValue + 1;
 		}
 		if (interaction.pumpOutcome().backpressureApplied())
 			appServerReadinessBackpressureCountValue = appServerReadinessBackpressureCountValue + 1;
@@ -169,6 +176,8 @@ class TuiLiveShellRunOutcome {
 
 	public function recordReadinessActiveTurn(activeTurnId:String):Void {
 		latestReadinessActiveTurnIdValue = normalize(activeTurnId);
+		if (latestReadinessLateJsonlDrainStatusValue == TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData.text())
+			latestNoDataReadinessActiveTurnIdValue = latestReadinessActiveTurnIdValue;
 	}
 
 	public function recordTerminalOperations(operations:Array<TerminalOperation>):Void {
@@ -285,8 +294,16 @@ class TuiLiveShellRunOutcome {
 		return appServerReadinessBackpressureCountValue;
 	}
 
+	public function appServerReadinessNoDataCount():Int {
+		return appServerReadinessNoDataCountValue;
+	}
+
 	public function latestReadinessActiveTurnIdText():String {
 		return latestReadinessActiveTurnIdValue;
+	}
+
+	public function latestNoDataReadinessActiveTurnIdText():String {
+		return latestNoDataReadinessActiveTurnIdValue;
 	}
 
 	public function latestReadinessStatus():TuiAppServerReadinessInteractionStatus {
