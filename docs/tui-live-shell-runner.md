@@ -160,6 +160,8 @@ rejection evidence after a no-data readiness pass.
 evidence after a no-data readiness pass.
 `TUI-LIVE-118` proves source-fed readiness can surface schema rejection evidence
 after a no-data readiness pass.
+`TUI-LIVE-119` proves source-fed readiness can preserve an assistant prefix
+before surfacing schema rejection evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
