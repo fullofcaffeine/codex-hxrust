@@ -975,6 +975,12 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
 			"runner prefix-schema readiness late jsonl line status");
 		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner prefix-schema readiness late jsonl line code");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner prefix-schema readiness applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner prefix-schema readiness assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner prefix-schema readiness completion count evidence");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(), "runner prefix-schema readiness applied thread evidence");
+		assertStringEquals("turn-8", outcome.latestReadinessLateJsonlTurnIdText(), "runner prefix-schema readiness applied turn evidence");
+		assertStringEquals("runner prefix schema delta", outcome.latestReadinessLateJsonlDeltaText(), "runner prefix-schema readiness applied delta evidence");
 		assertStringEquals("turn-8", outcome.latestReadinessActiveTurnIdText(), "runner prefix-schema readiness active retained after rejection");
 		assertStringEquals("turn-8", outcome.lastStartedTurnIdText(), "runner prefix-schema readiness last started");
 		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner prefix-schema readiness no completion");

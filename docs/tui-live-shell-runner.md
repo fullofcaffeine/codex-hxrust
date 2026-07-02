@@ -133,7 +133,9 @@ prefix evidence when a later stream notification rejects with `BatchRejected` /
 prefix evidence to prefix-then-malformed-JSON readiness rejection with
 `BatchRejected` / `invalid_json_line`. `TUI-LIVE-106` extends that structured
 prefix evidence to prefix-then-decode-rejected readiness rejection with
-`BatchRejected` / `unknown_inbound_method`.
+`BatchRejected` / `unknown_inbound_method`. `TUI-LIVE-107` extends that
+structured prefix evidence to prefix-then-schema-rejected readiness rejection
+with `BatchRejected` / `missing_field`.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
