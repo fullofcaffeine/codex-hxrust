@@ -147,7 +147,9 @@ readiness event records `NoPendingSubmittedTurn` without reading extra late
 JSONL or mutating transcript/completion state. `TUI-LIVE-112` proves
 source-fed readiness can stop at the configured max-batch limit, retain the
 active submitted turn, leave completion unread, and preserve structured
-assistant-prefix evidence.
+assistant-prefix evidence. `TUI-LIVE-113` proves source-fed readiness can apply
+an assistant prefix, reject a later wrong-turn completion, retain the active
+submitted turn, and preserve the same structured prefix evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

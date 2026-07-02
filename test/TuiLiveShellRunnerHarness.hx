@@ -92,6 +92,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessMaxBatchStopRoutesThroughRunner();
 		testReadinessSourceMaxBatchStopRoutesThroughRunner();
 		testReadinessPrefixAppliedRejectionRoutesThroughRunner();
+		testReadinessSourcePrefixAppliedRejectionRoutesThroughRunner();
 		testReadinessLineReadRejectionRoutesThroughRunner();
 		testReadinessUnsupportedNotificationRejectionRoutesThroughRunner();
 		testReadinessDecodeRejectionRoutesThroughRunner();
@@ -1035,6 +1036,85 @@ class TuiLiveShellRunnerHarness {
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner prefix readiness outbound lines");
 		assertIntEquals(promptLines.length + lateLines.length, outcome.promptTransportInboundLineCount(),
 			"runner prefix readiness rejected completion was read");
+	}
+
+	static function testReadinessSourcePrefixAppliedRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(14), activeSession, activeThread, "sourceprefix");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-source-prefix-14"),
+				"runner source prefix rejection delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turn("turn-source-stale-14"))
+		];
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("p")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("f")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("x")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(72,
+				2)).withJsonRpcPromptTransport(promptTransport)
+			.withReadinessSource(TuiLiveShellReadinessSource.queued([TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner source prefix readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner source prefix readiness accepted prompts");
+		assertIntEquals(1, outcome.appServerReadinessEvents(), "runner source prefix readiness event count");
+		assertIntEquals(1, outcome.appServerReadinessDrained(), "runner source prefix readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner source prefix readiness no-pending count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(), "runner source prefix readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner source prefix readiness late jsonl drain status");
+		assertStringEquals(TuiPromptSubmittedTurnCompletionStatus.WrongTurn.text(), outcome.latestReadinessLateJsonlDrainCode(),
+			"runner source prefix readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner source prefix readiness line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner source prefix readiness line code");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner source prefix readiness applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner source prefix readiness assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner source prefix readiness completion count evidence");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(), "runner source prefix readiness applied thread evidence");
+		assertStringEquals("turn-source-stale-14", outcome.latestReadinessLateJsonlTurnIdText(), "runner source prefix readiness rejected turn evidence");
+		assertStringEquals("runner source prefix rejection delta", outcome.latestReadinessLateJsonlDeltaText(),
+			"runner source prefix readiness applied delta evidence");
+		assertStringEquals("turn-14", outcome.latestReadinessActiveTurnIdText(), "runner source prefix readiness active retained after rejection");
+		assertStringEquals("turn-14", outcome.lastStartedTurnIdText(), "runner source prefix readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner source prefix readiness no completion");
+		assertStringEquals("turn-14", outcome.activeTurnIdText(), "runner source prefix readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner source prefix readiness completed count");
+		assertIntEquals(3, shell.transcriptCount(), "runner source prefix readiness transcript count");
+		assertStringEquals("user> sourceprefix", shell.transcriptAt(1).renderText(), "runner source prefix readiness user row");
+		assertStringEquals("assistant> runner source prefix rejection delta", shell.transcriptAt(2).renderText(),
+			"runner source prefix readiness assistant row");
+		assertStringEquals("assistant> runner source prefix rejection delta", outcome.finalFrameLineAt(4), "runner source prefix readiness final frame");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner source prefix readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner source prefix readiness outbound lines");
+		assertIntEquals(promptLines.length + lateLines.length, outcome.promptTransportInboundLineCount(),
+			"runner source prefix readiness rejected completion was read");
 	}
 
 	static function testReadinessLineReadRejectionRoutesThroughRunner():Void {
