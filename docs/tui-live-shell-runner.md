@@ -107,6 +107,9 @@ that assistant row while keeping the submitted turn active and completion count
 unchanged. `TUI-LIVE-96` proves the prefix-preservation path also handles a
 later decode-invalid notification, recording `BatchRejected` /
 `unknown_inbound_method` while keeping the active turn and assistant prefix.
+`TUI-LIVE-97` proves the same prefix-preservation path for malformed JSONL,
+recording `BatchRejected` / `invalid_json_line` while preserving the active
+turn and assistant prefix.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
