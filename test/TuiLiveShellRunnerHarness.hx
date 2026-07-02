@@ -86,6 +86,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessBackpressureRecoveryRoutesThroughRunner();
 		testReadinessSourceBackpressureRecoveryRoutesThroughRunner();
 		testReadinessNoDataRetryRoutesThroughRunner();
+		testReadinessSourceNoDataRetryRoutesThroughRunner();
 		testDuplicatePostCompletionReadinessNoopsThroughRunner();
 		testReadinessMaxBatchStopRoutesThroughRunner();
 		testReadinessPrefixAppliedRejectionRoutesThroughRunner();
@@ -641,6 +642,73 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals("user> wait", shell.transcriptAt(1).renderText(), "runner no-data user row");
 		assertStringEquals("assistant> runner no data retry delta", shell.transcriptAt(2).renderText(), "runner no-data assistant row");
 		assertStringEquals("assistant> runner no data retry delta", outcome.finalFrameLineAt(4), "runner no-data final frame");
+	}
+
+	static function testReadinessSourceNoDataRetryRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(12), activeSession, activeThread, "sourcewait");
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-source-wait-12"),
+				"runner source no data retry delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("w")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("t")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(64, 3)).withJsonRpcPromptTransport(promptTransport).withReadinessSource(TuiLiveShellReadinessSource.queued([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)
+			]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner source no-data submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner source no-data accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner source no-data readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner source no-data readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner source no-data readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner source no-data readiness no-data count");
+		assertStringEquals("turn-12", outcome.latestNoDataReadinessActiveTurnIdText(), "runner source no-data active turn retained after first readiness");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner source no-data final drain status");
+		assertStringEquals("completed", outcome.latestReadinessLateJsonlDrainCode(), "runner source no-data final drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner source no-data line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner source no-data line code");
+		assertIntEquals(2, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner source no-data applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner source no-data assistant delta count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlCompletionCount(), "runner source no-data completion count");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(), "runner source no-data applied thread evidence");
+		assertStringEquals("turn-12", outcome.latestReadinessLateJsonlTurnIdText(), "runner source no-data applied turn evidence");
+		assertStringEquals("runner source no data retry delta", outcome.latestReadinessLateJsonlDeltaText(), "runner source no-data applied delta evidence");
+		assertStringEquals("turn-12", outcome.lastStartedTurnIdText(), "runner source no-data last started");
+		assertStringEquals("turn-12", outcome.lastCompletedTurnIdText(), "runner source no-data last completed");
+		assertStringEquals("", outcome.activeTurnIdText(), "runner source no-data active cleared");
+		assertIntEquals(1, outcome.completedTurns(), "runner source no-data completed exactly once");
+		assertStringEquals("user> sourcewait", shell.transcriptAt(1).renderText(), "runner source no-data user row");
+		assertStringEquals("assistant> runner source no data retry delta", shell.transcriptAt(2).renderText(), "runner source no-data assistant row");
+		assertStringEquals("assistant> runner source no data retry delta", outcome.finalFrameLineAt(4), "runner source no-data final frame");
 	}
 
 	static function testDuplicatePostCompletionReadinessNoopsThroughRunner():Void {

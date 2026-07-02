@@ -140,7 +140,9 @@ with `BatchRejected` / `missing_field`. `TUI-LIVE-108` adds
 for submitted-turn readiness events while preserving the existing explicit
 queued readiness path. `TUI-LIVE-109` proves the source-fed readiness path also
 records bounded readiness backpressure and recovers through the existing
-`DrainQueuedEvents` pump-event route.
+`DrainQueuedEvents` pump-event route. `TUI-LIVE-110` proves repeated source-fed
+readiness events preserve the active submitted turn after no-data, then complete
+on the later source event.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
