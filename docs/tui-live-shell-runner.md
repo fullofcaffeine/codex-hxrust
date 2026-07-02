@@ -162,6 +162,8 @@ evidence after a no-data readiness pass.
 after a no-data readiness pass.
 `TUI-LIVE-119` proves source-fed readiness can preserve an assistant prefix
 before surfacing schema rejection evidence.
+`TUI-LIVE-120` proves source-fed readiness can preserve an assistant prefix
+before surfacing unknown-method decode rejection evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
