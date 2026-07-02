@@ -120,6 +120,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessStaleInterruptedRejectionRoutesThroughRunner();
 		testReadinessSourceStaleInterruptedRejectionRoutesThroughRunner();
 		testReadinessStaleInterruptedCompletionRejectionRoutesThroughRunner();
+		testReadinessSourceStaleInterruptedCompletionRejectionRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
 		testLiveBackendNoTtyRunPath();
 		Sys.println("tui-live-shell-runner ok");
@@ -2944,6 +2945,77 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner stale completion readiness close recorded");
 		assertIntEquals(2, outcome.promptTransportOutboundLineCount(), "runner stale completion readiness outbound lines");
 		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner stale completion readiness inbound lines");
+	}
+
+	static function testReadinessSourceStaleInterruptedCompletionRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final turnId = turn("turn-12");
+		final lateLines = [turnCompletedLine(activeThread, turnId)];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("d")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("n")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.Key(TerminalKey.CtrlC),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(48, 3)).withJsonRpcPromptTransport(promptTransport).withReadinessSource(TuiLiveShellReadinessSource.queued([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 2),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 2)
+			]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner source stale completion readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner source stale completion readiness accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner source stale completion readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner source stale completion readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner source stale completion readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner source stale completion readiness no-data count");
+		assertStringEquals("turn-12", outcome.latestNoDataReadinessActiveTurnIdText(), "runner source stale completion readiness no-data active retained");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(),
+			"runner source stale completion readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner source stale completion readiness late jsonl drain status");
+		assertStringEquals(TuiPromptSubmittedTurnCompletionStatus.StaleInterruptedTurn.text(), outcome.latestReadinessLateJsonlDrainCode(),
+			"runner source stale completion readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner source stale completion readiness late jsonl line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner source stale completion readiness late jsonl line code");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlAppliedNotificationCount(),
+			"runner source stale completion readiness rejected completion applied count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner source stale completion readiness rejected assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner source stale completion readiness completion count evidence");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(),
+			"runner source stale completion readiness rejected thread evidence");
+		assertStringEquals("turn-12", outcome.latestReadinessLateJsonlTurnIdText(), "runner source stale completion readiness rejected turn evidence");
+		assertStringEquals("", outcome.latestReadinessLateJsonlDeltaText(), "runner source stale completion readiness no rejected delta evidence");
+		assertStringEquals("", outcome.latestReadinessActiveTurnIdText(), "runner source stale completion readiness active remains cleared after rejection");
+		assertStringEquals("turn-12", outcome.lastStartedTurnIdText(), "runner source stale completion readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner source stale completion readiness no completion");
+		assertStringEquals("turn-12", outcome.lastInterruptedTurnIdText(), "runner source stale completion readiness last interrupted");
+		assertStringEquals("", outcome.activeTurnIdText(), "runner source stale completion readiness active cleared by interrupt");
+		assertIntEquals(0, outcome.completedTurns(), "runner source stale completion readiness completed count");
+		assertIntEquals(1, outcome.interruptedTurns(), "runner source stale completion readiness interrupted count");
+		assertStringEquals("accepted", outcome.lastInterruptCode(), "runner source stale completion readiness interrupt code");
+		assertIntEquals(2, shell.transcriptCount(), "runner source stale completion readiness transcript count");
+		assertStringEquals("user> sourcedone", shell.transcriptAt(1).renderText(), "runner source stale completion readiness user row");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner source stale completion readiness close recorded");
+		assertIntEquals(2, outcome.promptTransportOutboundLineCount(), "runner source stale completion readiness outbound lines");
+		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner source stale completion readiness inbound lines");
 	}
 
 	static function testEscapeCtrlCAndQExit():Void {
