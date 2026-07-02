@@ -150,6 +150,8 @@ active submitted turn, leave completion unread, and preserve structured
 assistant-prefix evidence. `TUI-LIVE-113` proves source-fed readiness can apply
 an assistant prefix, reject a later wrong-turn completion, retain the active
 submitted turn, and preserve the same structured prefix evidence.
+`TUI-LIVE-114` proves source-fed readiness can surface line-read rejection
+evidence without applying late JSONL or mutating completion state.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
