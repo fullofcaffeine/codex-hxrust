@@ -121,7 +121,10 @@ with `BatchRejected` / `stale_interrupted_turn_delivery` while preserving the
 applied prefix and interrupted-turn state. `TUI-LIVE-101` proves the
 completion-side companion path, rejecting stale `turn/completed` with
 `BatchRejected` / `stale_interrupted_turn_completion` while preserving the
-applied prefix and interrupted-turn state.
+applied prefix and interrupted-turn state. `TUI-LIVE-102` exposes structured
+applied-prefix evidence from readiness drains through the runner outcome,
+including applied notification count, assistant delta count, completion count,
+latest thread/turn IDs, and applied delta text.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

@@ -656,6 +656,12 @@ class TuiLiveShellRunnerHarness {
 			"runner prefix readiness late jsonl drain status");
 		assertStringEquals(TuiPromptSubmittedTurnCompletionStatus.WrongTurn.text(), outcome.latestReadinessLateJsonlDrainCode(),
 			"runner prefix readiness late jsonl drain code");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner prefix readiness applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner prefix readiness assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner prefix readiness completion count evidence");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(), "runner prefix readiness applied thread evidence");
+		assertStringEquals("turn-stale-8", outcome.latestReadinessLateJsonlTurnIdText(), "runner prefix readiness rejected turn evidence");
+		assertStringEquals("runner prefix rejection delta", outcome.latestReadinessLateJsonlDeltaText(), "runner prefix readiness applied delta evidence");
 		assertStringEquals("turn-8", outcome.latestReadinessActiveTurnIdText(), "runner prefix readiness active retained after rejection");
 		assertStringEquals("turn-8", outcome.lastStartedTurnIdText(), "runner prefix readiness last started");
 		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner prefix readiness no completion");

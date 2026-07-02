@@ -40,6 +40,12 @@ class TuiLiveShellRunOutcome {
 	var latestReadinessLateJsonlDrainCodeValue:String;
 	var latestReadinessLateJsonlLineStatusValue:String;
 	var latestReadinessLateJsonlLineCodeValue:String;
+	var latestReadinessLateJsonlAppliedNotificationCountValue:Int;
+	var latestReadinessLateJsonlAssistantDeltaCountValue:Int;
+	var latestReadinessLateJsonlCompletionCountValue:Int;
+	var latestReadinessLateJsonlThreadIdValue:String;
+	var latestReadinessLateJsonlTurnIdValue:String;
+	var latestReadinessLateJsonlDeltaValue:String;
 	var drawFramesValue:Int;
 	var terminalOperationsValue:Int;
 	var exitRequestedValue:Bool;
@@ -80,6 +86,12 @@ class TuiLiveShellRunOutcome {
 		this.latestReadinessLateJsonlDrainCodeValue = "";
 		this.latestReadinessLateJsonlLineStatusValue = "";
 		this.latestReadinessLateJsonlLineCodeValue = "";
+		this.latestReadinessLateJsonlAppliedNotificationCountValue = 0;
+		this.latestReadinessLateJsonlAssistantDeltaCountValue = 0;
+		this.latestReadinessLateJsonlCompletionCountValue = 0;
+		this.latestReadinessLateJsonlThreadIdValue = "";
+		this.latestReadinessLateJsonlTurnIdValue = "";
+		this.latestReadinessLateJsonlDeltaValue = "";
 		this.drawFramesValue = 0;
 		this.terminalOperationsValue = 0;
 		this.exitRequestedValue = false;
@@ -172,6 +184,12 @@ class TuiLiveShellRunOutcome {
 			latestReadinessLateJsonlDrainCodeValue = drainResult == null ? "" : drainResult.code();
 			latestReadinessLateJsonlLineStatusValue = drainResult == null ? "" : drainResult.stopLineStatusText();
 			latestReadinessLateJsonlLineCodeValue = drainResult == null ? "" : drainResult.stopLineCode();
+			latestReadinessLateJsonlAppliedNotificationCountValue = drainResult == null ? 0 : drainResult.appliedNotificationCount();
+			latestReadinessLateJsonlAssistantDeltaCountValue = drainResult == null ? 0 : drainResult.assistantDeltaCount();
+			latestReadinessLateJsonlCompletionCountValue = drainResult == null ? 0 : drainResult.completionCount();
+			latestReadinessLateJsonlThreadIdValue = drainResult == null ? "" : drainResult.threadIdText();
+			latestReadinessLateJsonlTurnIdValue = drainResult == null ? "" : drainResult.turnIdText();
+			latestReadinessLateJsonlDeltaValue = drainResult == null ? "" : drainResult.deltaText();
 			if (drainResult != null && drainResult.status() == TuiPromptSubmittedTurnLateJsonlDrainStatus.NoData)
 				appServerReadinessNoDataCountValue = appServerReadinessNoDataCountValue + 1;
 		}
@@ -334,6 +352,30 @@ class TuiLiveShellRunOutcome {
 
 	public function latestReadinessLateJsonlLineCode():String {
 		return latestReadinessLateJsonlLineCodeValue;
+	}
+
+	public function latestReadinessLateJsonlAppliedNotificationCount():Int {
+		return latestReadinessLateJsonlAppliedNotificationCountValue;
+	}
+
+	public function latestReadinessLateJsonlAssistantDeltaCount():Int {
+		return latestReadinessLateJsonlAssistantDeltaCountValue;
+	}
+
+	public function latestReadinessLateJsonlCompletionCount():Int {
+		return latestReadinessLateJsonlCompletionCountValue;
+	}
+
+	public function latestReadinessLateJsonlThreadIdText():String {
+		return latestReadinessLateJsonlThreadIdValue;
+	}
+
+	public function latestReadinessLateJsonlTurnIdText():String {
+		return latestReadinessLateJsonlTurnIdValue;
+	}
+
+	public function latestReadinessLateJsonlDeltaText():String {
+		return latestReadinessLateJsonlDeltaValue;
 	}
 
 	public function drawFrames():Int {
