@@ -124,7 +124,9 @@ completion-side companion path, rejecting stale `turn/completed` with
 applied prefix and interrupted-turn state. `TUI-LIVE-102` exposes structured
 applied-prefix evidence from readiness drains through the runner outcome,
 including applied notification count, assistant delta count, completion count,
-latest thread/turn IDs, and applied delta text.
+latest thread/turn IDs, and applied delta text. `TUI-LIVE-103` proves the same
+structured prefix evidence survives prefix-then-line-read readiness rejection
+with `LineReadRejected` / `runner_late_jsonl_read_failed`.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
