@@ -138,7 +138,9 @@ structured prefix evidence to prefix-then-schema-rejected readiness rejection
 with `BatchRejected` / `missing_field`. `TUI-LIVE-108` adds
 `TuiLiveShellReadinessSource` so the runner can poll a typed readiness source
 for submitted-turn readiness events while preserving the existing explicit
-queued readiness path.
+queued readiness path. `TUI-LIVE-109` proves the source-fed readiness path also
+records bounded readiness backpressure and recovers through the existing
+`DrainQueuedEvents` pump-event route.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
