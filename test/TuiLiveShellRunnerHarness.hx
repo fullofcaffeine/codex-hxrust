@@ -94,6 +94,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessPrefixThenSchemaRejectionRoutesThroughRunner();
 		testReadinessPrefixThenDecodeRejectionRoutesThroughRunner();
 		testReadinessPrefixThenMalformedJsonRejectionRoutesThroughRunner();
+		testReadinessPrefixThenUnsupportedNotificationRejectionRoutesThroughRunner();
 		testReadinessStaleInterruptedRejectionRoutesThroughRunner();
 		testReadinessStaleInterruptedCompletionRejectionRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
@@ -1098,6 +1099,67 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner prefix-malformed readiness close recorded");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner prefix-malformed readiness outbound lines");
 		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner prefix-malformed readiness inbound lines");
+	}
+
+	static function testReadinessPrefixThenUnsupportedNotificationRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final turnId = turn("turn-6");
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-prefix-unsupported-6"),
+				"runner prefix unsupported delta").messageJson()
+				+ "\n",
+			TuiPromptThreadStatusChangedNotification.active(activeThread).messageJson() + "\n"
+		];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("p")),
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [], TuiLiveShellRunPolicy.bounded(34, 3)).withJsonRpcPromptTransport(promptTransport)
+			.withReadinessEvents([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)
+			]);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner prefix-unsupported readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner prefix-unsupported readiness accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner prefix-unsupported readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner prefix-unsupported readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner prefix-unsupported readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner prefix-unsupported readiness no-data count");
+		assertStringEquals("turn-6", outcome.latestNoDataReadinessActiveTurnIdText(), "runner prefix-unsupported readiness no-data active retained");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(),
+			"runner prefix-unsupported readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner prefix-unsupported readiness late jsonl drain status");
+		assertStringEquals("unsupported_stream_notification", outcome.latestReadinessLateJsonlDrainCode(),
+			"runner prefix-unsupported readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner prefix-unsupported readiness late jsonl line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner prefix-unsupported readiness late jsonl line code");
+		assertStringEquals("turn-6", outcome.latestReadinessActiveTurnIdText(), "runner prefix-unsupported readiness active retained after rejection");
+		assertStringEquals("turn-6", outcome.lastStartedTurnIdText(), "runner prefix-unsupported readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner prefix-unsupported readiness no completion");
+		assertStringEquals("turn-6", outcome.activeTurnIdText(), "runner prefix-unsupported readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner prefix-unsupported readiness completed count");
+		assertIntEquals(3, shell.transcriptCount(), "runner prefix-unsupported readiness transcript count");
+		assertStringEquals("user> oops", shell.transcriptAt(1).renderText(), "runner prefix-unsupported readiness user row");
+		assertStringEquals("assistant> runner prefix unsupported delta", shell.transcriptAt(2).renderText(),
+			"runner prefix-unsupported readiness assistant row");
+		assertStringEquals("assistant> runner prefix unsupported delta", outcome.finalFrameLineAt(4), "runner prefix-unsupported readiness final frame");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner prefix-unsupported readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner prefix-unsupported readiness outbound lines");
+		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner prefix-unsupported readiness inbound lines");
 	}
 
 	static function testReadinessStaleInterruptedRejectionRoutesThroughRunner():Void {

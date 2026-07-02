@@ -109,7 +109,10 @@ later decode-invalid notification, recording `BatchRejected` /
 `unknown_inbound_method` while keeping the active turn and assistant prefix.
 `TUI-LIVE-97` proves the same prefix-preservation path for malformed JSONL,
 recording `BatchRejected` / `invalid_json_line` while preserving the active
-turn and assistant prefix.
+turn and assistant prefix. `TUI-LIVE-98` proves the same prefix-preservation
+path for unsupported stream notifications, recording `BatchRejected` /
+`unsupported_stream_notification` while preserving the active turn and assistant
+prefix.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
