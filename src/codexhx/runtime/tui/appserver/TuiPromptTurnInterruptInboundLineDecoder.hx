@@ -51,7 +51,7 @@ class TuiPromptTurnInterruptInboundLineDecoder {
 		try {
 			final parsed = CodexJson.parse(line == null ? "" : line);
 			return parsed.value;
-		} catch (e:haxe.Exception) {
+		} catch (e:Dynamic) {
 			fail("invalid_json_line");
 			return JNull;
 		}
