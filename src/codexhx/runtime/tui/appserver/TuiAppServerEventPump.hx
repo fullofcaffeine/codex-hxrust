@@ -73,7 +73,7 @@ class TuiAppServerEventPump {
 
 	public function handleReadinessEvent(event:TuiAppServerReadinessEvent, policy:TuiAppServerPumpPolicy):TuiAppServerReadinessInteraction {
 		final safePolicy = policy == null ? TuiAppServerPumpPolicy.lossless() : policy;
-		if (!facade.hasPendingSubmittedTurn()) {
+		if (!facade.canDrainSubmittedTurnLateJsonl()) {
 			final outcome = drain(safePolicy);
 			return TuiAppServerReadinessInteraction.noPendingSubmittedTurn(outcome);
 		}

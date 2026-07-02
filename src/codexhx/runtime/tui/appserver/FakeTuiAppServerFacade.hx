@@ -90,6 +90,10 @@ class FakeTuiAppServerFacade {
 		return activeTurnValue != null;
 	}
 
+	public function canDrainSubmittedTurnLateJsonl():Bool {
+		return activeTurnValue != null || lastInterruptedTurnValue != null;
+	}
+
 	public function lastStartedTurnIdText():String {
 		return turnText(lastStartedTurnValue);
 	}
