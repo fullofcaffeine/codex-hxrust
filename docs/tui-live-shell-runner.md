@@ -192,6 +192,9 @@ configured max-batch limit, retain the active submitted turn, leave completion
 unread, and preserve structured assistant-prefix evidence.
 `TUI-LIVE-133` proves that app-server session readiness source can preserve an
 assistant prefix before surfacing wrong-turn completion rejection evidence.
+`TUI-LIVE-134` proves that app-server session readiness source can surface
+line-read rejection evidence without applying late JSONL or mutating completion
+state.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

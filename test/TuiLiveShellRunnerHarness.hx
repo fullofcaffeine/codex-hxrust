@@ -102,6 +102,7 @@ class TuiLiveShellRunnerHarness {
 		testAppServerSessionReadinessSourcePrefixAppliedRejectionRoutesThroughRunner();
 		testReadinessLineReadRejectionRoutesThroughRunner();
 		testReadinessSourceLineReadRejectionRoutesThroughRunner();
+		testAppServerSessionReadinessSourceLineReadRejectionRoutesThroughRunner();
 		testReadinessUnsupportedNotificationRejectionRoutesThroughRunner();
 		testReadinessSourceUnsupportedNotificationRejectionRoutesThroughRunner();
 		testReadinessDecodeRejectionRoutesThroughRunner();
@@ -1736,6 +1737,70 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner source line-read readiness close recorded");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner source line-read readiness outbound lines");
 		assertIntEquals(2, outcome.promptTransportInboundLineCount(), "runner source line-read readiness no late inbound lines");
+	}
+
+	static function testAppServerSessionReadinessSourceLineReadRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerRejectedLateJsonlLineTransportAttacher("runner_session_late_jsonl_read_failed")));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("n")),
+			TerminalEvent.Key(TerminalKey.Character("f")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("l")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final sessionReadinessSource = TuiAppServerSessionReadinessSource.queued([TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 2)]);
+		final readinessSource = TuiLiveShellReadinessSource.fromAppServerSession(sessionReadinessSource);
+		assertStringEquals("app_server_session", sessionReadinessSource.sourceKindText(), "runner app-server session line-read source kind");
+		assertIntEquals(1, readinessSource.remaining(), "runner app-server session line-read readiness source initial remaining");
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(68, 2)).withJsonRpcPromptTransport(promptTransport).withReadinessSource(readinessSource);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner app-server session line-read readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner app-server session line-read readiness accepted prompts");
+		assertIntEquals(1, outcome.appServerReadinessEvents(), "runner app-server session line-read readiness event count");
+		assertIntEquals(1, outcome.appServerReadinessDrained(), "runner app-server session line-read readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner app-server session line-read readiness no-pending count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(),
+			"runner app-server session line-read readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.LineReadRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner app-server session line-read readiness late jsonl drain status");
+		assertStringEquals("runner_session_late_jsonl_read_failed", outcome.latestReadinessLateJsonlDrainCode(),
+			"runner app-server session line-read readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner app-server session line-read readiness late jsonl line status");
+		assertStringEquals("runner_session_late_jsonl_read_failed", outcome.latestReadinessLateJsonlLineCode(),
+			"runner app-server session line-read readiness late jsonl line code");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlAppliedNotificationCount(),
+			"runner app-server session line-read readiness applied notification count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner app-server session line-read readiness assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner app-server session line-read readiness completion count evidence");
+		assertStringEquals("turn-13", outcome.latestReadinessActiveTurnIdText(),
+			"runner app-server session line-read readiness active retained after rejection");
+		assertStringEquals("turn-13", outcome.lastStartedTurnIdText(), "runner app-server session line-read readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner app-server session line-read readiness no completion");
+		assertStringEquals("turn-13", outcome.activeTurnIdText(), "runner app-server session line-read readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner app-server session line-read readiness completed count");
+		assertIntEquals(2, shell.transcriptCount(), "runner app-server session line-read readiness transcript count");
+		assertStringEquals("user> sessionfail", shell.transcriptAt(1).renderText(), "runner app-server session line-read readiness user row");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner app-server session line-read readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner app-server session line-read readiness outbound lines");
+		assertIntEquals(2, outcome.promptTransportInboundLineCount(), "runner app-server session line-read readiness no late inbound lines");
+		assertIntEquals(0, readinessSource.remaining(), "runner app-server session line-read readiness source consumed");
+		assertIntEquals(0, sessionReadinessSource.remaining(), "runner app-server session line-read session source consumed");
 	}
 
 	static function testReadinessUnsupportedNotificationRejectionRoutesThroughRunner():Void {
