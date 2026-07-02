@@ -115,7 +115,10 @@ path for unsupported stream notifications, recording `BatchRejected` /
 prefix. `TUI-LIVE-99` proves the same prefix-preservation path when a later
 late-JSONL read fails, recording `LineReadRejected` /
 `runner_late_jsonl_read_failed` while preserving the active turn and assistant
-prefix.
+prefix. `TUI-LIVE-100` proves a prefix can be applied before Ctrl-C interrupts
+the submitted turn, then a later readiness drain rejects a stale assistant delta
+with `BatchRejected` / `stale_interrupted_turn_delivery` while preserving the
+applied prefix and interrupted-turn state.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
