@@ -5048,6 +5048,30 @@ scheduler/drain loop; it does not own real async socket polling, Tokio
 readiness, provider streaming, model calls, tool execution, process teardown,
 or persistence.
 
+### TUI-LIVE-87 Prefix-Applied Readiness Rejection Routes Through Live Shell Runner
+
+Status: TUI-LIVE-87 extends the live-shell runner readiness path with
+runner-owned evidence for bounded late JSONL drains that apply an assistant
+prefix before rejecting a wrong-turn completion. The existing
+`SubmittedTurnLateJsonlReady` route now has harness coverage for a drain that
+accepts the assistant delta batch, reads a stale completion batch, records
+`TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected` / `wrong_turn`, and
+keeps the submitted turn active.
+
+The live-shell runner gate proves the assistant transcript row is preserved,
+the rejected completion does not clear `activeTurn`, completed-turn count stays
+at zero, and the persistent prompt transport reports the rejected completion
+line as read. Existing max-batch readiness stop, duplicate post-completion
+readiness no-op, no-data readiness retry, readiness backpressure recovery,
+readiness routing, pump-event routing, terminal setup/restore, text submit,
+line transport, agent navigation, resize, tick, Ctrl-C, q, and live-backend
+no-TTY paths remain covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models live-runner prefix-applied rejection around the current scheduler/drain
+loop; it does not own real async socket polling, Tokio readiness, provider
+streaming, model calls, tool execution, process teardown, or persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

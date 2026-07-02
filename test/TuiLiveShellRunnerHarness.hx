@@ -37,6 +37,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
+import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnCompletionStatus;
 import codexhx.runtime.tui.appserver.TuiPromptSubmittedTurnLateJsonlDrainStatus;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
@@ -83,6 +84,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessNoDataRetryRoutesThroughRunner();
 		testDuplicatePostCompletionReadinessNoopsThroughRunner();
 		testReadinessMaxBatchStopRoutesThroughRunner();
+		testReadinessPrefixAppliedRejectionRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
 		testLiveBackendNoTtyRunPath();
 		Sys.println("tui-live-shell-runner ok");
@@ -594,6 +596,66 @@ class TuiLiveShellRunnerHarness {
 		assertIntEquals(promptLines.length + 1, outcome.promptTransportInboundLineCount(), "runner max-batch readiness completion line remains unread");
 	}
 
+	static function testReadinessPrefixAppliedRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(8), activeSession, activeThread, "prefix");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-prefix-8"), "runner prefix rejection delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turn("turn-stale-8"))
+		];
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("p")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("f")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("x")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(30,
+				2)).withJsonRpcPromptTransport(promptTransport).withReadinessEvents([TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)]);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner prefix readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner prefix readiness accepted prompts");
+		assertIntEquals(1, outcome.appServerReadinessEvents(), "runner prefix readiness event count");
+		assertIntEquals(1, outcome.appServerReadinessDrained(), "runner prefix readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner prefix readiness no-pending count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(), "runner prefix readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner prefix readiness late jsonl drain status");
+		assertStringEquals(TuiPromptSubmittedTurnCompletionStatus.WrongTurn.text(), outcome.latestReadinessLateJsonlDrainCode(),
+			"runner prefix readiness late jsonl drain code");
+		assertStringEquals("turn-8", outcome.latestReadinessActiveTurnIdText(), "runner prefix readiness active retained after rejection");
+		assertStringEquals("turn-8", outcome.lastStartedTurnIdText(), "runner prefix readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner prefix readiness no completion");
+		assertStringEquals("turn-8", outcome.activeTurnIdText(), "runner prefix readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner prefix readiness completed count");
+		assertIntEquals(3, shell.transcriptCount(), "runner prefix readiness transcript count");
+		assertStringEquals("user> prefix", shell.transcriptAt(1).renderText(), "runner prefix readiness user row");
+		assertStringEquals("assistant> runner prefix rejection delta", shell.transcriptAt(2).renderText(), "runner prefix readiness assistant row");
+		assertStringEquals("assistant> runner prefix rejection delta", outcome.finalFrameLineAt(4), "runner prefix readiness final frame");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner prefix readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner prefix readiness outbound lines");
+		assertIntEquals(promptLines.length + lateLines.length, outcome.promptTransportInboundLineCount(),
+			"runner prefix readiness rejected completion was read");
+	}
+
 	static function testEscapeCtrlCAndQExit():Void {
 		final escapeBackend = new HeadlessTerminalBackend([TerminalEvent.Key(TerminalKey.Escape)]);
 		final escapeOutcome = TuiLiveShellRunner.run(request(ChatWidgetShellState.initial("pending"), escapeBackend, [], TuiLiveShellRunPolicy.bounded(4, 2)));
@@ -644,6 +706,13 @@ class TuiLiveShellRunnerHarness {
 		final parsed = ItemId.fromString(value);
 		if (parsed == null)
 			throw "invalid item id " + value;
+		return parsed;
+	}
+
+	static function turn(value:String):TurnId {
+		final parsed = TurnId.fromString(value);
+		if (parsed == null)
+			throw "invalid turn id " + value;
 		return parsed;
 	}
 
