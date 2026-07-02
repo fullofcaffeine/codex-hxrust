@@ -195,6 +195,9 @@ assistant prefix before surfacing wrong-turn completion rejection evidence.
 `TUI-LIVE-134` proves that app-server session readiness source can surface
 line-read rejection evidence without applying late JSONL or mutating completion
 state.
+`TUI-LIVE-135` proves that app-server session readiness source can reject
+unsupported late stream notifications without applying them or completing the
+turn.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
