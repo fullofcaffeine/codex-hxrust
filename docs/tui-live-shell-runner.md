@@ -166,6 +166,8 @@ before surfacing schema rejection evidence.
 before surfacing unknown-method decode rejection evidence.
 `TUI-LIVE-121` proves source-fed readiness can preserve an assistant prefix
 before surfacing malformed-JSON rejection evidence.
+`TUI-LIVE-122` proves source-fed readiness can preserve an assistant prefix
+before surfacing unsupported-notification rejection evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
