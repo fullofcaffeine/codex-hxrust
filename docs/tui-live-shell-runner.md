@@ -118,6 +118,9 @@ late-JSONL read fails, recording `LineReadRejected` /
 prefix. `TUI-LIVE-100` proves a prefix can be applied before Ctrl-C interrupts
 the submitted turn, then a later readiness drain rejects a stale assistant delta
 with `BatchRejected` / `stale_interrupted_turn_delivery` while preserving the
+applied prefix and interrupted-turn state. `TUI-LIVE-101` proves the
+completion-side companion path, rejecting stale `turn/completed` with
+`BatchRejected` / `stale_interrupted_turn_completion` while preserving the
 applied prefix and interrupted-turn state.
 
 For the user-runnable generated binary, see
