@@ -156,6 +156,8 @@ evidence without applying late JSONL or mutating completion state.
 rejection evidence while retaining the active submitted turn.
 `TUI-LIVE-116` proves source-fed readiness can surface unknown-method decode
 rejection evidence after a no-data readiness pass.
+`TUI-LIVE-117` proves source-fed readiness can surface malformed-JSON rejection
+evidence after a no-data readiness pass.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
