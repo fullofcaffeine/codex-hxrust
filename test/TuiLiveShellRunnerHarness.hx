@@ -88,6 +88,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessPrefixAppliedRejectionRoutesThroughRunner();
 		testReadinessLineReadRejectionRoutesThroughRunner();
 		testReadinessUnsupportedNotificationRejectionRoutesThroughRunner();
+		testReadinessDecodeRejectionRoutesThroughRunner();
 		testReadinessStaleInterruptedRejectionRoutesThroughRunner();
 		testReadinessStaleInterruptedCompletionRejectionRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
@@ -758,6 +759,57 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner unsupported readiness close recorded");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner unsupported readiness outbound lines");
 		assertIntEquals(promptLines.length + lateLines.length, outcome.promptTransportInboundLineCount(), "runner unsupported readiness inbound lines");
+	}
+
+	static function testReadinessDecodeRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final lateLines = ["{\"jsonrpc\":\"2.0\",\"method\":\"unknown/event\",\"params\":{}}\n"];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("d")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("d")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [], TuiLiveShellRunPolicy.bounded(32, 3)).withJsonRpcPromptTransport(promptTransport)
+			.withReadinessEvents([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 2),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 2)
+			]);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner decode readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner decode readiness accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner decode readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner decode readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner decode readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner decode readiness no-data count");
+		assertStringEquals("turn-8", outcome.latestNoDataReadinessActiveTurnIdText(), "runner decode readiness no-data active retained");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(), "runner decode readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner decode readiness late jsonl drain status");
+		assertStringEquals("unknown_inbound_method", outcome.latestReadinessLateJsonlDrainCode(), "runner decode readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner decode readiness late jsonl line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner decode readiness late jsonl line code");
+		assertStringEquals("turn-8", outcome.latestReadinessActiveTurnIdText(), "runner decode readiness active retained after rejection");
+		assertStringEquals("turn-8", outcome.lastStartedTurnIdText(), "runner decode readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner decode readiness no completion");
+		assertStringEquals("turn-8", outcome.activeTurnIdText(), "runner decode readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner decode readiness completed count");
+		assertIntEquals(2, shell.transcriptCount(), "runner decode readiness transcript count");
+		assertStringEquals("user> decode", shell.transcriptAt(1).renderText(), "runner decode readiness user row");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner decode readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner decode readiness outbound lines");
+		assertIntEquals(3, outcome.promptTransportInboundLineCount(), "runner decode readiness inbound lines");
 	}
 
 	static function testReadinessStaleInterruptedRejectionRoutesThroughRunner():Void {

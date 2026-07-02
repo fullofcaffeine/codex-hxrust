@@ -1,6 +1,6 @@
 # TUI Live Shell Runner
 
-**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`, `TUI-LIVE-65` / `codex-hxrust-o8lu`, `TUI-LIVE-81` / `codex-hxrust-xfyp`, `TUI-LIVE-82` / `codex-hxrust-u6ta`, `TUI-LIVE-83` / `codex-hxrust-73vh`, `TUI-LIVE-84` / `codex-hxrust-7mrb`, `TUI-LIVE-85` / `codex-hxrust-rce5`, `TUI-LIVE-86` / `codex-hxrust-f44b`, `TUI-LIVE-87` / `codex-hxrust-uuhi`, `TUI-LIVE-88` / `codex-hxrust-swjy`, `TUI-LIVE-89` / `codex-hxrust-wb6o`, `TUI-LIVE-90` / `codex-hxrust-ofn3`, `TUI-LIVE-91` / `codex-hxrust-28tx`
+**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`, `TUI-LIVE-65` / `codex-hxrust-o8lu`, `TUI-LIVE-81` / `codex-hxrust-xfyp`, `TUI-LIVE-82` / `codex-hxrust-u6ta`, `TUI-LIVE-83` / `codex-hxrust-73vh`, `TUI-LIVE-84` / `codex-hxrust-7mrb`, `TUI-LIVE-85` / `codex-hxrust-rce5`, `TUI-LIVE-86` / `codex-hxrust-f44b`, `TUI-LIVE-87` / `codex-hxrust-uuhi`, `TUI-LIVE-88` / `codex-hxrust-swjy`, `TUI-LIVE-89` / `codex-hxrust-wb6o`, `TUI-LIVE-90` / `codex-hxrust-ofn3`, `TUI-LIVE-91` / `codex-hxrust-28tx`, `TUI-LIVE-92` / `codex-hxrust-t7qt`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
 production terminal backend, redraw scheduler, ChatWidget shell state, fake
@@ -68,7 +68,7 @@ The runner harness now proves a `turn/start` response with scoped
 uses the persistent `turn/interrupt` envelope, and the accepted interrupt clears
 the turn without exiting the shell or incrementing completed-turn count.
 
-`TUI-LIVE-81` through `TUI-LIVE-91` move deterministic app-server scheduler triggers
+`TUI-LIVE-81` through `TUI-LIVE-92` move deterministic app-server scheduler triggers
 into the runner. `TuiLiveShellRunRequest` can carry queued
 `TuiAppServerPumpEvent` and `TuiAppServerReadinessEvent` values; the runner
 routes them through `TuiAppServerEventPump.handlePumpEvent()` and
@@ -93,7 +93,10 @@ preserving the interrupted-turn state. `TUI-LIVE-91` extends that same
 interrupted-turn classification to stale `turn/completed` notifications, so a
 late completion after Ctrl-C records `BatchRejected` /
 `stale_interrupted_turn_completion` without mutating completion state or the
-transcript.
+transcript. `TUI-LIVE-92` proves unknown-method decode rejection through the
+same readiness route: a no-data readiness event keeps the submitted turn active,
+and the later late-JSONL read records `BatchRejected` / `unknown_inbound_method`
+without mutating completion state or the transcript.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
