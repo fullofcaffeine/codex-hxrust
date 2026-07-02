@@ -180,6 +180,8 @@ rejection evidence after interruption.
 completion rejection evidence after interruption.
 `TUI-LIVE-128` proves a deterministic app-server session readiness source can
 feed submitted-turn readiness through the live shell runner.
+`TUI-LIVE-129` proves that app-server session readiness source can surface
+readiness-triggered backpressure recovery evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
