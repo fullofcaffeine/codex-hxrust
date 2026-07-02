@@ -131,7 +131,9 @@ proves the unsupported-notification companion path, preserving the structured
 prefix evidence when a later stream notification rejects with `BatchRejected` /
 `unsupported_stream_notification`. `TUI-LIVE-105` extends that structured
 prefix evidence to prefix-then-malformed-JSON readiness rejection with
-`BatchRejected` / `invalid_json_line`.
+`BatchRejected` / `invalid_json_line`. `TUI-LIVE-106` extends that structured
+prefix evidence to prefix-then-decode-rejected readiness rejection with
+`BatchRejected` / `unknown_inbound_method`.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
