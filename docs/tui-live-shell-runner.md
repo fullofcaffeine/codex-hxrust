@@ -129,7 +129,9 @@ structured prefix evidence survives prefix-then-line-read readiness rejection
 with `LineReadRejected` / `runner_late_jsonl_read_failed`. `TUI-LIVE-104`
 proves the unsupported-notification companion path, preserving the structured
 prefix evidence when a later stream notification rejects with `BatchRejected` /
-`unsupported_stream_notification`.
+`unsupported_stream_notification`. `TUI-LIVE-105` extends that structured
+prefix evidence to prefix-then-malformed-JSON readiness rejection with
+`BatchRejected` / `invalid_json_line`.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
