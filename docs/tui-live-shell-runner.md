@@ -182,6 +182,8 @@ completion rejection evidence after interruption.
 feed submitted-turn readiness through the live shell runner.
 `TUI-LIVE-129` proves that app-server session readiness source can surface
 readiness-triggered backpressure recovery evidence.
+`TUI-LIVE-130` proves that app-server session readiness source can preserve
+active submitted turns through no-data retry.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

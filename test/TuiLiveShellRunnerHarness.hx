@@ -90,6 +90,7 @@ class TuiLiveShellRunnerHarness {
 		testAppServerSessionReadinessSourceBackpressureRecoveryRoutesThroughRunner();
 		testReadinessNoDataRetryRoutesThroughRunner();
 		testReadinessSourceNoDataRetryRoutesThroughRunner();
+		testAppServerSessionReadinessSourceNoDataRetryRoutesThroughRunner();
 		testDuplicatePostCompletionReadinessNoopsThroughRunner();
 		testReadinessSourceDuplicatePostCompletionNoopsThroughRunner();
 		testReadinessMaxBatchStopRoutesThroughRunner();
@@ -891,6 +892,85 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals("user> sourcewait", shell.transcriptAt(1).renderText(), "runner source no-data user row");
 		assertStringEquals("assistant> runner source no data retry delta", shell.transcriptAt(2).renderText(), "runner source no-data assistant row");
 		assertStringEquals("assistant> runner source no data retry delta", outcome.finalFrameLineAt(4), "runner source no-data final frame");
+	}
+
+	static function testAppServerSessionReadinessSourceNoDataRetryRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(13), activeSession, activeThread, "sessionwait");
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-session-wait-13"),
+				"runner app-server session no data retry delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("n")),
+			TerminalEvent.Key(TerminalKey.Character("w")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("t")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final sessionReadinessSource = TuiAppServerSessionReadinessSource.queued([
+			TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+			TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)
+		]);
+		final readinessSource = TuiLiveShellReadinessSource.fromAppServerSession(sessionReadinessSource);
+		assertStringEquals("app_server_session", sessionReadinessSource.sourceKindText(), "runner app-server session no-data source kind");
+		assertIntEquals(2, readinessSource.remaining(), "runner app-server session no-data readiness source initial remaining");
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(72, 3)).withJsonRpcPromptTransport(promptTransport).withReadinessSource(readinessSource);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner app-server session no-data submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner app-server session no-data accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner app-server session no-data readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner app-server session no-data readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner app-server session no-data readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner app-server session no-data readiness no-data count");
+		assertStringEquals("turn-13", outcome.latestNoDataReadinessActiveTurnIdText(),
+			"runner app-server session no-data active turn retained after first readiness");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner app-server session no-data final drain status");
+		assertStringEquals("completed", outcome.latestReadinessLateJsonlDrainCode(), "runner app-server session no-data final drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner app-server session no-data line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner app-server session no-data line code");
+		assertIntEquals(2, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner app-server session no-data applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner app-server session no-data assistant delta count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlCompletionCount(), "runner app-server session no-data completion count");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(),
+			"runner app-server session no-data applied thread evidence");
+		assertStringEquals("turn-13", outcome.latestReadinessLateJsonlTurnIdText(), "runner app-server session no-data applied turn evidence");
+		assertStringEquals("runner app-server session no data retry delta", outcome.latestReadinessLateJsonlDeltaText(),
+			"runner app-server session no-data applied delta evidence");
+		assertStringEquals("turn-13", outcome.lastStartedTurnIdText(), "runner app-server session no-data last started");
+		assertStringEquals("turn-13", outcome.lastCompletedTurnIdText(), "runner app-server session no-data last completed");
+		assertStringEquals("", outcome.activeTurnIdText(), "runner app-server session no-data active cleared");
+		assertIntEquals(1, outcome.completedTurns(), "runner app-server session no-data completed exactly once");
+		assertStringEquals("user> sessionwait", shell.transcriptAt(1).renderText(), "runner app-server session no-data user row");
+		assertStringEquals("assistant> runner app-server session no data retry delta", shell.transcriptAt(2).renderText(),
+			"runner app-server session no-data assistant row");
+		assertStringEquals("assistant> runner app-server session no data retry delta", outcome.finalFrameLineAt(4),
+			"runner app-server session no-data final frame");
+		assertIntEquals(0, readinessSource.remaining(), "runner app-server session no-data readiness source consumed");
+		assertIntEquals(0, sessionReadinessSource.remaining(), "runner app-server session no-data session source consumed");
 	}
 
 	static function testDuplicatePostCompletionReadinessNoopsThroughRunner():Void {
