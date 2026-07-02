@@ -1,6 +1,6 @@
 # TUI Live Shell Runner
 
-**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`, `TUI-LIVE-65` / `codex-hxrust-o8lu`, `TUI-LIVE-81` / `codex-hxrust-xfyp`, `TUI-LIVE-82` / `codex-hxrust-u6ta`, `TUI-LIVE-83` / `codex-hxrust-73vh`, `TUI-LIVE-84` / `codex-hxrust-7mrb`
+**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`, `TUI-LIVE-65` / `codex-hxrust-o8lu`, `TUI-LIVE-81` / `codex-hxrust-xfyp`, `TUI-LIVE-82` / `codex-hxrust-u6ta`, `TUI-LIVE-83` / `codex-hxrust-73vh`, `TUI-LIVE-84` / `codex-hxrust-7mrb`, `TUI-LIVE-85` / `codex-hxrust-rce5`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
 production terminal backend, redraw scheduler, ChatWidget shell state, fake
@@ -68,7 +68,7 @@ The runner harness now proves a `turn/start` response with scoped
 uses the persistent `turn/interrupt` envelope, and the accepted interrupt clears
 the turn without exiting the shell or incrementing completed-turn count.
 
-`TUI-LIVE-81` through `TUI-LIVE-84` move deterministic app-server scheduler triggers
+`TUI-LIVE-81` through `TUI-LIVE-85` move deterministic app-server scheduler triggers
 into the runner. `TuiLiveShellRunRequest` can carry queued
 `TuiAppServerPumpEvent` and `TuiAppServerReadinessEvent` values; the runner
 routes them through `TuiAppServerEventPump.handlePumpEvent()` and
@@ -77,8 +77,10 @@ pump, backpressure, readiness, and late-JSONL drain evidence. This proves
 runner-owned pump/readiness routing for submitted-turn JSONL, including a
 bounded readiness-triggered backpressure pass followed by explicit
 `DrainQueuedEvents` recovery and a no-data readiness retry that preserves the
-active submitted turn until the later drain completes, without real async socket
-readiness, provider streaming, model calls, tools, or persistence.
+active submitted turn until the later drain completes, plus duplicate
+post-completion readiness coalescing through `NoPendingSubmittedTurn`, without
+real async socket readiness, provider streaming, model calls, tools, or
+persistence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

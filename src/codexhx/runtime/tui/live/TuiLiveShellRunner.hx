@@ -78,15 +78,17 @@ class TuiLiveShellRunner {
 	static function runLoop(request:TuiLiveShellRunRequest, pump:TuiAppServerEventPump, outcome:TuiLiveShellRunOutcome):Void {
 		var idleEvents = 0;
 		var nextRequestId = 2;
+		var submittedTurnReadinessOpened = false;
 		while (!request.scheduler.exitRequested()
 			&& outcome.iterations() < request.policy.maxIterations
 			&& idleEvents < request.policy.idleEventLimit) {
 			outcome.recordIteration();
-			if (request.facade.hasPendingSubmittedTurn()) {
+			if (request.facade.hasPendingSubmittedTurn() || submittedTurnReadinessOpened) {
 				final queuedReadinessEvent = request.shiftReadinessEvent();
 				if (queuedReadinessEvent != null) {
 					outcome.recordReadinessEvent();
 					recordReadiness(request, outcome, pump.handleReadinessEvent(queuedReadinessEvent, request.policy.appServerPolicy));
+					submittedTurnReadinessOpened = true;
 					if (request.scheduler.exitRequested())
 						break;
 				}
