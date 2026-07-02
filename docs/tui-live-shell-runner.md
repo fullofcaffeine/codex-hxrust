@@ -126,7 +126,10 @@ applied-prefix evidence from readiness drains through the runner outcome,
 including applied notification count, assistant delta count, completion count,
 latest thread/turn IDs, and applied delta text. `TUI-LIVE-103` proves the same
 structured prefix evidence survives prefix-then-line-read readiness rejection
-with `LineReadRejected` / `runner_late_jsonl_read_failed`.
+with `LineReadRejected` / `runner_late_jsonl_read_failed`. `TUI-LIVE-104`
+proves the unsupported-notification companion path, preserving the structured
+prefix evidence when a later stream notification rejects with `BatchRejected` /
+`unsupported_stream_notification`.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

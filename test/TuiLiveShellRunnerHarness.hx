@@ -1156,6 +1156,14 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
 			"runner prefix-unsupported readiness late jsonl line status");
 		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner prefix-unsupported readiness late jsonl line code");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner prefix-unsupported readiness applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner prefix-unsupported readiness assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner prefix-unsupported readiness completion count evidence");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(),
+			"runner prefix-unsupported readiness applied thread evidence");
+		assertStringEquals("turn-6", outcome.latestReadinessLateJsonlTurnIdText(), "runner prefix-unsupported readiness applied turn evidence");
+		assertStringEquals("runner prefix unsupported delta", outcome.latestReadinessLateJsonlDeltaText(),
+			"runner prefix-unsupported readiness applied delta evidence");
 		assertStringEquals("turn-6", outcome.latestReadinessActiveTurnIdText(), "runner prefix-unsupported readiness active retained after rejection");
 		assertStringEquals("turn-6", outcome.lastStartedTurnIdText(), "runner prefix-unsupported readiness last started");
 		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner prefix-unsupported readiness no completion");
