@@ -5734,6 +5734,38 @@ models source-fed no-data readiness retry around the current scheduler/drain
 loop; it does not own real async socket polling, Tokio readiness, provider
 streaming, model calls, tool execution, process teardown, or persistence.
 
+### TUI-LIVE-111 Readiness Source Duplicate Post-Completion No-Ops Through Live Shell Runner
+
+Status: TUI-LIVE-111 extends the runner-owned `TuiLiveShellReadinessSource`
+coverage to duplicate post-completion readiness no-ops. The live-shell runner
+gate proves repeated source-fed `SubmittedTurnLateJsonlReady` events can first
+hit no-data, then complete the submitted turn, and then route a later duplicate
+source-fed readiness event as `NoPendingSubmittedTurn` without reading an extra
+late JSONL line or mutating transcript/completion state.
+
+The source-fed duplicate no-op gate records readiness event count,
+drained/no-pending/no-data counts, latest `NoPendingSubmittedTurn` status,
+latest no-data active turn ID, retained late-JSONL completion drain status/code,
+retained applied notification/assistant/completion counts, retained applied
+thread/turn IDs and assistant delta text, prompt transport inbound-line count,
+transcript count, active-turn clearing, and completed-turn count through
+`TuiLiveShellRunOutcome`.
+
+Existing request-prequeued readiness routing, source-fed completion routing,
+source-fed no-data retry, source-fed readiness backpressure recovery, structured
+prefix evidence for schema/decode/malformed-JSON/unsupported/line-read
+rejection, stale-interrupted readiness rejection, queued duplicate
+post-completion readiness no-op, max-batch readiness stop, queued no-data
+readiness retry, queued readiness backpressure recovery, pump-event routing,
+terminal setup/restore, text submit, line transport, agent navigation, resize,
+tick, Ctrl-C, q, and live-backend no-TTY paths remain covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models source-fed duplicate post-completion readiness no-op behavior around the
+current scheduler/drain loop; it does not own real async socket polling, Tokio
+readiness, provider streaming, model calls, tool execution, process teardown, or
+persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

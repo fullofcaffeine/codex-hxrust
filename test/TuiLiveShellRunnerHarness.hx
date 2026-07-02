@@ -88,6 +88,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessNoDataRetryRoutesThroughRunner();
 		testReadinessSourceNoDataRetryRoutesThroughRunner();
 		testDuplicatePostCompletionReadinessNoopsThroughRunner();
+		testReadinessSourceDuplicatePostCompletionNoopsThroughRunner();
 		testReadinessMaxBatchStopRoutesThroughRunner();
 		testReadinessPrefixAppliedRejectionRoutesThroughRunner();
 		testReadinessLineReadRejectionRoutesThroughRunner();
@@ -765,6 +766,82 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner duplicate readiness close recorded");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner duplicate readiness outbound lines");
 		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner duplicate readiness duplicate did not read extra late line");
+	}
+
+	static function testReadinessSourceDuplicatePostCompletionNoopsThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(13), activeSession, activeThread, "sourceagain");
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-source-again-13"),
+				"runner source duplicate readiness delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turnId),
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-source-again-extra-13"),
+				"runner source duplicate should not read").messageJson()
+				+ "\n"];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("g")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("n")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(72, 3)).withJsonRpcPromptTransport(promptTransport).withReadinessSource(TuiLiveShellReadinessSource.queued([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)
+			]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner source duplicate readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner source duplicate readiness accepted prompts");
+		assertIntEquals(3, outcome.appServerReadinessEvents(), "runner source duplicate readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner source duplicate readiness drained count");
+		assertIntEquals(1, outcome.appServerReadinessNoPending(), "runner source duplicate readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner source duplicate readiness no-data count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.NoPendingSubmittedTurn.text(), outcome.latestReadinessStatusText(),
+			"runner source duplicate readiness latest status");
+		assertStringEquals("turn-13", outcome.latestNoDataReadinessActiveTurnIdText(), "runner source duplicate no-data active retained");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner source duplicate final drain status retained");
+		assertStringEquals("completed", outcome.latestReadinessLateJsonlDrainCode(), "runner source duplicate final drain code retained");
+		assertIntEquals(2, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner source duplicate applied notification count retained");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner source duplicate assistant delta count retained");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlCompletionCount(), "runner source duplicate completion count retained");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(), "runner source duplicate applied thread evidence");
+		assertStringEquals("turn-13", outcome.latestReadinessLateJsonlTurnIdText(), "runner source duplicate applied turn evidence");
+		assertStringEquals("runner source duplicate readiness delta", outcome.latestReadinessLateJsonlDeltaText(),
+			"runner source duplicate applied delta evidence");
+		assertStringEquals("turn-13", outcome.lastStartedTurnIdText(), "runner source duplicate readiness last started");
+		assertStringEquals("turn-13", outcome.lastCompletedTurnIdText(), "runner source duplicate readiness last completed");
+		assertStringEquals("", outcome.activeTurnIdText(), "runner source duplicate readiness active cleared");
+		assertIntEquals(1, outcome.completedTurns(), "runner source duplicate readiness completed exactly once");
+		assertIntEquals(3, shell.transcriptCount(), "runner source duplicate readiness transcript count");
+		assertStringEquals("user> sourceagain", shell.transcriptAt(1).renderText(), "runner source duplicate readiness user row");
+		assertStringEquals("assistant> runner source duplicate readiness delta", shell.transcriptAt(2).renderText(),
+			"runner source duplicate readiness assistant row");
+		assertStringEquals("assistant> runner source duplicate readiness delta", outcome.finalFrameLineAt(4), "runner source duplicate readiness final frame");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner source duplicate readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner source duplicate readiness outbound lines");
+		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner source duplicate readiness duplicate did not read extra late line");
 	}
 
 	static function testReadinessMaxBatchStopRoutesThroughRunner():Void {

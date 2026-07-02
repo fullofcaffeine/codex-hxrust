@@ -142,7 +142,9 @@ queued readiness path. `TUI-LIVE-109` proves the source-fed readiness path also
 records bounded readiness backpressure and recovers through the existing
 `DrainQueuedEvents` pump-event route. `TUI-LIVE-110` proves repeated source-fed
 readiness events preserve the active submitted turn after no-data, then complete
-on the later source event.
+on the later source event. `TUI-LIVE-111` proves a later source-fed duplicate
+readiness event records `NoPendingSubmittedTurn` without reading extra late
+JSONL or mutating transcript/completion state.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
