@@ -112,6 +112,9 @@ recording `BatchRejected` / `invalid_json_line` while preserving the active
 turn and assistant prefix. `TUI-LIVE-98` proves the same prefix-preservation
 path for unsupported stream notifications, recording `BatchRejected` /
 `unsupported_stream_notification` while preserving the active turn and assistant
+prefix. `TUI-LIVE-99` proves the same prefix-preservation path when a later
+late-JSONL read fails, recording `LineReadRejected` /
+`runner_late_jsonl_read_failed` while preserving the active turn and assistant
 prefix.
 
 For the user-runnable generated binary, see

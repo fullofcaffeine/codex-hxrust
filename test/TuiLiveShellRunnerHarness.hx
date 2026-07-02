@@ -95,6 +95,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessPrefixThenDecodeRejectionRoutesThroughRunner();
 		testReadinessPrefixThenMalformedJsonRejectionRoutesThroughRunner();
 		testReadinessPrefixThenUnsupportedNotificationRejectionRoutesThroughRunner();
+		testReadinessPrefixThenLineReadRejectionRoutesThroughRunner();
 		testReadinessStaleInterruptedRejectionRoutesThroughRunner();
 		testReadinessStaleInterruptedCompletionRejectionRoutesThroughRunner();
 		testEscapeCtrlCAndQExit();
@@ -1162,6 +1163,65 @@ class TuiLiveShellRunnerHarness {
 		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner prefix-unsupported readiness inbound lines");
 	}
 
+	static function testReadinessPrefixThenLineReadRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final turnId = turn("turn-6");
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-prefix-line-read-6"),
+				"runner prefix line-read delta").messageJson()
+				+ "\n"];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataThenRejectedLateJsonlLineTransportAttacher(lateLines, "runner_late_jsonl_read_failed")));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("f")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("l")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [], TuiLiveShellRunPolicy.bounded(34, 3)).withJsonRpcPromptTransport(promptTransport)
+			.withReadinessEvents([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)
+			]);
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner prefix-line-read readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner prefix-line-read readiness accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner prefix-line-read readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner prefix-line-read readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner prefix-line-read readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner prefix-line-read readiness no-data count");
+		assertStringEquals("turn-6", outcome.latestNoDataReadinessActiveTurnIdText(), "runner prefix-line-read readiness no-data active retained");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(),
+			"runner prefix-line-read readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.LineReadRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner prefix-line-read readiness late jsonl drain status");
+		assertStringEquals("runner_late_jsonl_read_failed", outcome.latestReadinessLateJsonlDrainCode(),
+			"runner prefix-line-read readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner prefix-line-read readiness late jsonl line status");
+		assertStringEquals("runner_late_jsonl_read_failed", outcome.latestReadinessLateJsonlLineCode(),
+			"runner prefix-line-read readiness late jsonl line code");
+		assertStringEquals("turn-6", outcome.latestReadinessActiveTurnIdText(), "runner prefix-line-read readiness active retained after rejection");
+		assertStringEquals("turn-6", outcome.lastStartedTurnIdText(), "runner prefix-line-read readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner prefix-line-read readiness no completion");
+		assertStringEquals("turn-6", outcome.activeTurnIdText(), "runner prefix-line-read readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner prefix-line-read readiness completed count");
+		assertIntEquals(3, shell.transcriptCount(), "runner prefix-line-read readiness transcript count");
+		assertStringEquals("user> fail", shell.transcriptAt(1).renderText(), "runner prefix-line-read readiness user row");
+		assertStringEquals("assistant> runner prefix line-read delta", shell.transcriptAt(2).renderText(), "runner prefix-line-read readiness assistant row");
+		assertStringEquals("assistant> runner prefix line-read delta", outcome.finalFrameLineAt(4), "runner prefix-line-read readiness final frame");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner prefix-line-read readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner prefix-line-read readiness outbound lines");
+		assertIntEquals(3, outcome.promptTransportInboundLineCount(), "runner prefix-line-read readiness inbound lines");
+	}
+
 	static function testReadinessStaleInterruptedRejectionRoutesThroughRunner():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000110001");
@@ -1502,6 +1562,27 @@ class RunnerRejectedLateJsonlLineTransportAttacher implements TuiAppServerJsonRp
 	}
 }
 
+class RunnerNoDataThenRejectedLateJsonlLineTransportAttacher implements TuiAppServerJsonRpcLineTransportAttacher {
+	final transport:RunnerNoDataThenRejectedLateJsonlLineTransport;
+
+	public function new(lateLines:Array<String>, readRejectCode:String) {
+		this.transport = new RunnerNoDataThenRejectedLateJsonlLineTransport(lateLines, readRejectCode);
+	}
+
+	public function attach(outcome:TuiAppServerJsonRpcLineOpenOutcome):TuiAppServerJsonRpcLineTransportAttachment {
+		final concrete = outcome == null ? TuiAppServerJsonRpcLineOpenOutcome.refused(null) : outcome;
+		if (!concrete.isOpened())
+			return TuiAppServerJsonRpcLineTransportAttachment.refused(concrete);
+		return TuiAppServerJsonRpcLineTransportAttachment.ready(concrete);
+	}
+
+	public function transportFor(attachment:TuiAppServerJsonRpcLineTransportAttachment):Null<TuiAppServerJsonRpcLineTransport> {
+		if (attachment == null || !attachment.isReady())
+			return null;
+		return transport;
+	}
+}
+
 class RunnerRejectedLateJsonlLineTransport implements TuiAppServerJsonRpcLineTransport {
 	var state:TuiAppServerJsonRpcLineTransportState;
 	var outboundLinesValue:Int;
@@ -1542,6 +1623,89 @@ class RunnerRejectedLateJsonlLineTransport implements TuiAppServerJsonRpcLineTra
 		if (!isOpen())
 			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
 		return TuiAppServerJsonRpcLateJsonlBatch.disconnected(readRejectCodeValue, []);
+	}
+
+	public function isOpen():Bool {
+		return state == TuiAppServerJsonRpcLineTransportState.Open;
+	}
+
+	public function stateText():String {
+		return state.text();
+	}
+
+	public function close(code:String):TuiAppServerJsonRpcLineCloseReport {
+		state = TuiAppServerJsonRpcLineTransportState.Closed;
+		return TuiAppServerJsonRpcLineCloseReport.closed(code, outboundLinesValue, inboundLinesValue);
+	}
+
+	public function outboundLineCount():Int {
+		return outboundLinesValue;
+	}
+
+	public function inboundLineCount():Int {
+		return inboundLinesValue;
+	}
+}
+
+class RunnerNoDataThenRejectedLateJsonlLineTransport implements TuiAppServerJsonRpcLineTransport {
+	var state:TuiAppServerJsonRpcLineTransportState;
+	var outboundLinesValue:Int;
+	var inboundLinesValue:Int;
+	final lateLinesValue:Array<String>;
+	final readRejectCodeValue:String;
+	var lateLineIndex:Int;
+	var notReadyReadCount:Int;
+
+	public function new(lateLines:Array<String>, readRejectCode:String) {
+		this.state = TuiAppServerJsonRpcLineTransportState.Open;
+		this.outboundLinesValue = 0;
+		this.inboundLinesValue = 0;
+		this.lateLinesValue = lateLines == null ? [] : lateLines.copy();
+		this.readRejectCodeValue = readRejectCode == null || readRejectCode.length == 0 ? "runner_late_jsonl_read_failed" : readRejectCode;
+		this.lateLineIndex = 0;
+		this.notReadyReadCount = 0;
+	}
+
+	public function sendPromptLine(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope, outboundLine:String):TuiAppServerJsonRpcLineOutcome {
+		if (!isOpen())
+			return TuiAppServerJsonRpcLineOutcome.disconnected("line_transport_closed", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (request == null)
+			return TuiAppServerJsonRpcLineOutcome.rejected("missing_request", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (envelope == null)
+			return TuiAppServerJsonRpcLineOutcome.rejected("missing_envelope", [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+		if (outboundLine != request.messageJson() + "\n")
+			return TuiAppServerJsonRpcLineOutcome.rejected("mismatched_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		outboundLinesValue = outboundLinesValue + 1;
+		final response = TuiPromptJsonRpcResponse.turnStart(request, TuiPromptTurnStartResponse.fromEnvelope(envelope));
+		final turnStarted = TuiPromptJsonRpcNotification.turnStarted(envelope, response.result);
+		final inbound = [response.messageJson() + "\n", turnStarted.messageJson() + "\n"];
+		inboundLinesValue = inboundLinesValue + inbound.length;
+		return TuiAppServerJsonRpcLineOutcome.accepted(response, [turnStarted], [TuiPromptJsonRpcStreamNotification.Turn(turnStarted)], [], inbound,
+			TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
+	}
+
+	public function sendInterruptLine(_request:TuiPromptTurnInterruptRequest, _envelope:TuiPromptTurnInterruptEnvelope,
+			_outboundLine:String):TuiPromptTurnInterruptLineOutcome {
+		return TuiPromptTurnInterruptLineOutcome.rejected("runner_rejected_read_transport_interrupt_unsupported");
+	}
+
+	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
+		if (!isOpen())
+			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
+		if (notReadyReadCount == 0) {
+			notReadyReadCount = notReadyReadCount + 1;
+			return TuiAppServerJsonRpcLateJsonlBatch.notReady("late_jsonl_not_ready");
+		}
+		if (lateLineIndex >= lateLinesValue.length)
+			return TuiAppServerJsonRpcLateJsonlBatch.disconnected(readRejectCodeValue, []);
+		final limit = maxLines <= 0 ? 0 : maxLines;
+		final lines:Array<String> = [];
+		while (lines.length < limit && lateLineIndex < lateLinesValue.length) {
+			lines.push(lateLinesValue[lateLineIndex]);
+			lateLineIndex = lateLineIndex + 1;
+		}
+		inboundLinesValue = inboundLinesValue + lines.length;
+		return TuiAppServerJsonRpcLateJsonlBatch.accepted(lines);
 	}
 
 	public function isOpen():Bool {
