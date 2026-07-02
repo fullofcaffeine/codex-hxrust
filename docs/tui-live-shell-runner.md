@@ -204,6 +204,9 @@ without applying notifications or completing the turn.
 `TUI-LIVE-137` proves that app-server session readiness source can preserve an
 active submitted turn through no-data, then reject malformed late JSONL without
 applying notifications or completing the turn.
+`TUI-LIVE-138` proves that app-server session readiness source can preserve an
+active submitted turn through no-data, then reject schema-invalid late JSONL
+without applying notifications or completing the turn.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
