@@ -170,6 +170,8 @@ before surfacing malformed-JSON rejection evidence.
 before surfacing unsupported-notification rejection evidence.
 `TUI-LIVE-123` proves source-fed readiness can preserve an assistant prefix
 before surfacing line-read rejection evidence.
+`TUI-LIVE-124` proves source-fed readiness can preserve an assistant prefix
+before surfacing stale-interrupted stream rejection evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
