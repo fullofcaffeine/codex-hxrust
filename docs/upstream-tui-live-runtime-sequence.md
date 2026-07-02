@@ -6073,6 +6073,46 @@ scheduler/drain loop; it does not own real async socket polling, Tokio
 readiness, provider streaming, model calls, tool execution, process teardown, or
 persistence.
 
+### TUI-LIVE-121 Readiness Source Prefix-Then-Malformed JSON Rejection Routes Through Live Shell Runner
+
+Status: TUI-LIVE-121 extends the runner-owned `TuiLiveShellReadinessSource`
+coverage to prefix-then-malformed JSON rejection. The live-shell runner gate
+proves source-fed `SubmittedTurnLateJsonlReady` events can first preserve the
+active submitted turn through no-data, then apply an assistant prefix before a
+malformed `turn/completed` late JSONL line surfaces `BatchRejected` /
+`invalid_json_line`.
+
+The source-fed prefix-then-malformed-JSON gate records readiness event count,
+drained/no-pending counts, no-data count and retained active turn, latest
+`Drained` status, latest late-JSONL drain status/code, line status/code, applied
+notification count, assistant delta count, completion count, latest
+thread/turn/delta evidence, retained active turn ID, prompt transport
+inbound-line count, transcript count, final-frame assistant row, and
+completed-turn count through `TuiLiveShellRunOutcome`.
+
+Existing source-fed prefix-then-decode rejection, source-fed prefix-then-schema
+rejection, source-fed schema rejection, source-fed malformed-JSON rejection,
+source-fed decode rejection, source-fed unsupported-notification rejection,
+source-fed line-read rejection, source-fed prefix-applied rejection,
+source-fed max-batch readiness stop, source-fed duplicate post-completion
+no-op, source-fed no-data retry, source-fed readiness backpressure recovery,
+structured prefix evidence for schema/decode/malformed-JSON rejection,
+stale-interrupted readiness rejection, queued prefix-then-malformed JSON
+rejection, queued prefix-then-decode rejection, queued prefix-then-schema
+rejection, queued schema rejection, queued malformed-JSON rejection, queued
+decode rejection, queued unsupported-notification rejection, queued line-read
+rejection, queued prefix-applied rejection, queued max-batch readiness stop,
+queued duplicate post-completion readiness no-op, queued no-data readiness
+retry, queued readiness backpressure recovery, pump-event routing, terminal
+setup/restore, text submit, line transport, agent navigation, resize, tick,
+Ctrl-C, q, and live-backend no-TTY paths remain covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models source-fed prefix-then-malformed JSON rejection behavior around the
+current scheduler/drain loop; it does not own real async socket polling, Tokio
+readiness, provider streaming, model calls, tool execution, process teardown, or
+persistence.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

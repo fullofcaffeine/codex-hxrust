@@ -108,6 +108,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessPrefixThenDecodeRejectionRoutesThroughRunner();
 		testReadinessSourcePrefixThenDecodeRejectionRoutesThroughRunner();
 		testReadinessPrefixThenMalformedJsonRejectionRoutesThroughRunner();
+		testReadinessSourcePrefixThenMalformedJsonRejectionRoutesThroughRunner();
 		testReadinessPrefixThenUnsupportedNotificationRejectionRoutesThroughRunner();
 		testReadinessPrefixThenLineReadRejectionRoutesThroughRunner();
 		testReadinessPrefixThenStaleInterruptedRejectionRoutesThroughRunner();
@@ -2050,6 +2051,91 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner prefix-malformed readiness close recorded");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner prefix-malformed readiness outbound lines");
 		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner prefix-malformed readiness inbound lines");
+	}
+
+	static function testReadinessSourcePrefixThenMalformedJsonRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final turnId = turn("turn-21");
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-source-prefix-malformed-21"),
+				"runner source prefix malformed delta").messageJson()
+				+ "\n",
+			"{\"jsonrpc\":\"2.0\",\"method\":\"turn/completed\",\"params\":\n"
+		];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("p")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("f")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("x")),
+			TerminalEvent.Key(TerminalKey.Character("m")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("l")),
+			TerminalEvent.Key(TerminalKey.Character("f")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("m")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(104, 3)).withJsonRpcPromptTransport(promptTransport).withReadinessSource(TuiLiveShellReadinessSource.queued([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)
+			]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner source prefix-malformed readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner source prefix-malformed readiness accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner source prefix-malformed readiness event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner source prefix-malformed readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner source prefix-malformed readiness no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner source prefix-malformed readiness no-data count");
+		assertStringEquals("turn-21", outcome.latestNoDataReadinessActiveTurnIdText(), "runner source prefix-malformed readiness no-data active retained");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(),
+			"runner source prefix-malformed readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner source prefix-malformed readiness late jsonl drain status");
+		assertStringEquals("invalid_json_line", outcome.latestReadinessLateJsonlDrainCode(), "runner source prefix-malformed readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner source prefix-malformed readiness late jsonl line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner source prefix-malformed readiness late jsonl line code");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner source prefix-malformed readiness applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner source prefix-malformed readiness assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner source prefix-malformed readiness completion count evidence");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(),
+			"runner source prefix-malformed readiness applied thread evidence");
+		assertStringEquals("turn-21", outcome.latestReadinessLateJsonlTurnIdText(), "runner source prefix-malformed readiness applied turn evidence");
+		assertStringEquals("runner source prefix malformed delta", outcome.latestReadinessLateJsonlDeltaText(),
+			"runner source prefix-malformed readiness applied delta evidence");
+		assertStringEquals("turn-21", outcome.latestReadinessActiveTurnIdText(), "runner source prefix-malformed readiness active retained after rejection");
+		assertStringEquals("turn-21", outcome.lastStartedTurnIdText(), "runner source prefix-malformed readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner source prefix-malformed readiness no completion");
+		assertStringEquals("turn-21", outcome.activeTurnIdText(), "runner source prefix-malformed readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner source prefix-malformed readiness completed count");
+		assertIntEquals(3, shell.transcriptCount(), "runner source prefix-malformed readiness transcript count");
+		assertStringEquals("user> sourceprefixmalform", shell.transcriptAt(1).renderText(), "runner source prefix-malformed readiness user row");
+		assertStringEquals("assistant> runner source prefix malformed delta", shell.transcriptAt(2).renderText(),
+			"runner source prefix-malformed readiness assistant row");
+		assertStringEquals("assistant> runner source prefix malformed delta", outcome.finalFrameLineAt(4),
+			"runner source prefix-malformed readiness final frame");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner source prefix-malformed readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner source prefix-malformed readiness outbound lines");
+		assertIntEquals(4, outcome.promptTransportInboundLineCount(), "runner source prefix-malformed readiness inbound lines");
 	}
 
 	static function testReadinessPrefixThenUnsupportedNotificationRejectionRoutesThroughRunner():Void {
