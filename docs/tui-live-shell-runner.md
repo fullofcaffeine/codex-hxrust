@@ -104,7 +104,9 @@ same route, recording `BatchRejected` / `missing_field` while preserving the
 active submitted turn and transcript. `TUI-LIVE-95` proves the same rejection
 can happen after a valid assistant prefix has already been applied, preserving
 that assistant row while keeping the submitted turn active and completion count
-unchanged.
+unchanged. `TUI-LIVE-96` proves the prefix-preservation path also handles a
+later decode-invalid notification, recording `BatchRejected` /
+`unknown_inbound_method` while keeping the active turn and assistant prefix.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
