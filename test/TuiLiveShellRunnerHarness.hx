@@ -96,6 +96,7 @@ class TuiLiveShellRunnerHarness {
 		testReadinessLineReadRejectionRoutesThroughRunner();
 		testReadinessSourceLineReadRejectionRoutesThroughRunner();
 		testReadinessUnsupportedNotificationRejectionRoutesThroughRunner();
+		testReadinessSourceUnsupportedNotificationRejectionRoutesThroughRunner();
 		testReadinessDecodeRejectionRoutesThroughRunner();
 		testReadinessMalformedJsonRejectionRoutesThroughRunner();
 		testReadinessSchemaRejectionRoutesThroughRunner();
@@ -1272,6 +1273,72 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner unsupported readiness close recorded");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner unsupported readiness outbound lines");
 		assertIntEquals(promptLines.length + lateLines.length, outcome.promptTransportInboundLineCount(), "runner unsupported readiness inbound lines");
+	}
+
+	static function testReadinessSourceUnsupportedNotificationRejectionRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(12), activeSession, activeThread, "sourceoops");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final lateLines = [
+			TuiPromptThreadStatusChangedNotification.active(activeThread).messageJson() + "\n"
+		];
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("p")),
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(64,
+				2)).withJsonRpcPromptTransport(promptTransport)
+			.withReadinessSource(TuiLiveShellReadinessSource.queued([TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 2)]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner source unsupported readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner source unsupported readiness accepted prompts");
+		assertIntEquals(1, outcome.appServerReadinessEvents(), "runner source unsupported readiness event count");
+		assertIntEquals(1, outcome.appServerReadinessDrained(), "runner source unsupported readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner source unsupported readiness no-pending count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(),
+			"runner source unsupported readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner source unsupported readiness late jsonl drain status");
+		assertStringEquals("unsupported_stream_notification", outcome.latestReadinessLateJsonlDrainCode(),
+			"runner source unsupported readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner source unsupported readiness late jsonl line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner source unsupported readiness late jsonl line code");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner source unsupported readiness applied notification count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner source unsupported readiness assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner source unsupported readiness completion count evidence");
+		assertStringEquals("turn-12", outcome.latestReadinessActiveTurnIdText(), "runner source unsupported readiness active retained after rejection");
+		assertStringEquals("turn-12", outcome.lastStartedTurnIdText(), "runner source unsupported readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner source unsupported readiness no completion");
+		assertStringEquals("turn-12", outcome.activeTurnIdText(), "runner source unsupported readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner source unsupported readiness completed count");
+		assertIntEquals(2, shell.transcriptCount(), "runner source unsupported readiness transcript count");
+		assertStringEquals("user> sourceoops", shell.transcriptAt(1).renderText(), "runner source unsupported readiness user row");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner source unsupported readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner source unsupported readiness outbound lines");
+		assertIntEquals(promptLines.length + lateLines.length, outcome.promptTransportInboundLineCount(), "runner source unsupported readiness inbound lines");
 	}
 
 	static function testReadinessDecodeRejectionRoutesThroughRunner():Void {
