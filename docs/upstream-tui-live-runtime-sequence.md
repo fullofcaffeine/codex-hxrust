@@ -6205,7 +6205,7 @@ coverage to prefix-then-stale-interrupted stream rejection. The live-shell
 runner gate proves source-fed `SubmittedTurnLateJsonlReady` events can first
 preserve the active submitted turn through no-data, then apply an assistant
 prefix, accept Ctrl-C interruption, and reject a later stale assistant delta with
-`BatchRejected` / `stale_interrupted_turn`.
+`BatchRejected` / `stale_interrupted_turn_delivery`.
 
 The source-fed prefix-then-stale-interrupted gate records readiness event count,
 drained/no-pending counts, no-data count and retained active turn, latest
@@ -6243,6 +6243,54 @@ models source-fed prefix-then-stale-interrupted rejection behavior around the
 current scheduler/drain loop; it does not own real async socket polling, Tokio
 readiness, provider streaming, model calls, tool execution, process teardown, or
 persistence.
+
+### TUI-LIVE-125 Readiness Source Prefix-Then-Stale-Interrupted Completion Rejection Routes Through Live Shell Runner
+
+Status: TUI-LIVE-125 extends the runner-owned `TuiLiveShellReadinessSource`
+coverage to prefix-then-stale-interrupted completion rejection. The live-shell
+runner gate proves source-fed `SubmittedTurnLateJsonlReady` events can first
+preserve the active submitted turn through no-data, then apply an assistant
+prefix, accept Ctrl-C interruption, and reject a later stale `turn/completed`
+line with `BatchRejected` / `stale_interrupted_turn_completion`.
+
+The source-fed prefix-then-stale-interrupted-completion gate records readiness
+event count, drained/no-pending counts, no-data count and retained active turn,
+latest `Drained` status, latest late-JSONL drain status/code, line status/code,
+zero applied notification and completion count evidence, latest thread/turn
+evidence for the stale completion, empty rejected-delta evidence, retained
+cleared active turn ID, last interrupted turn ID, interrupt code, prompt
+transport inbound/outbound-line counts, transcript count, final-frame assistant
+prefix row, interrupted-turn count, and completed-turn count through
+`TuiLiveShellRunOutcome`.
+
+Existing source-fed prefix-then-stale-interrupted stream rejection, source-fed
+prefix-then-line-read rejection, source-fed prefix-then-unsupported notification
+rejection, source-fed prefix-then-malformed JSON rejection, source-fed
+prefix-then-decode rejection, source-fed prefix-then-schema rejection,
+source-fed schema rejection, source-fed malformed-JSON rejection, source-fed
+decode rejection, source-fed unsupported-notification rejection, source-fed
+line-read rejection, source-fed prefix-applied rejection, source-fed max-batch
+readiness stop, source-fed duplicate post-completion no-op, source-fed no-data
+retry, source-fed readiness backpressure recovery, structured prefix evidence
+for schema/decode/malformed-JSON rejection, stale-interrupted readiness
+rejection, queued prefix-then-stale-interrupted completion rejection, queued
+prefix-then-stale-interrupted rejection, queued prefix-then-line-read rejection,
+queued prefix-then-unsupported notification rejection, queued
+prefix-then-malformed JSON rejection, queued prefix-then-decode rejection,
+queued prefix-then-schema rejection, queued schema rejection, queued
+malformed-JSON rejection, queued decode rejection, queued unsupported-notification
+rejection, queued line-read rejection, queued prefix-applied rejection, queued
+max-batch readiness stop, queued duplicate post-completion readiness no-op,
+queued no-data readiness retry, queued readiness backpressure recovery,
+pump-event routing, terminal setup/restore, text submit, line transport, agent
+navigation, resize, tick, Ctrl-C, q, and live-backend no-TTY paths remain
+covered.
+
+This is still deterministic, synchronous, bounded, and credential-free. It
+models source-fed prefix-then-stale-interrupted completion rejection behavior
+around the current scheduler/drain loop; it does not own real async socket
+polling, Tokio readiness, provider streaming, model calls, tool execution,
+process teardown, or persistence.
 
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
