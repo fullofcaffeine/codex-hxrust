@@ -144,7 +144,10 @@ records bounded readiness backpressure and recovers through the existing
 readiness events preserve the active submitted turn after no-data, then complete
 on the later source event. `TUI-LIVE-111` proves a later source-fed duplicate
 readiness event records `NoPendingSubmittedTurn` without reading extra late
-JSONL or mutating transcript/completion state.
+JSONL or mutating transcript/completion state. `TUI-LIVE-112` proves
+source-fed readiness can stop at the configured max-batch limit, retain the
+active submitted turn, leave completion unread, and preserve structured
+assistant-prefix evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

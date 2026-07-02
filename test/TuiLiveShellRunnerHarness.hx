@@ -90,6 +90,7 @@ class TuiLiveShellRunnerHarness {
 		testDuplicatePostCompletionReadinessNoopsThroughRunner();
 		testReadinessSourceDuplicatePostCompletionNoopsThroughRunner();
 		testReadinessMaxBatchStopRoutesThroughRunner();
+		testReadinessSourceMaxBatchStopRoutesThroughRunner();
 		testReadinessPrefixAppliedRejectionRoutesThroughRunner();
 		testReadinessLineReadRejectionRoutesThroughRunner();
 		testReadinessUnsupportedNotificationRejectionRoutesThroughRunner();
@@ -896,6 +897,78 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner max-batch readiness close recorded");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner max-batch readiness outbound lines");
 		assertIntEquals(promptLines.length + 1, outcome.promptTransportInboundLineCount(), "runner max-batch readiness completion line remains unread");
+	}
+
+	static function testReadinessSourceMaxBatchStopRoutesThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(11), activeSession, activeThread, "sourcemax");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-source-max-11"), "runner source max batch delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final inbound = promptLines.copy();
+		for (line in lateLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("m")),
+			TerminalEvent.Key(TerminalKey.Character("a")),
+			TerminalEvent.Key(TerminalKey.Character("x")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(56,
+				2)).withJsonRpcPromptTransport(promptTransport)
+			.withReadinessSource(TuiLiveShellReadinessSource.queued([TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 1)]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner source max-batch readiness submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner source max-batch readiness accepted prompts");
+		assertIntEquals(1, outcome.appServerReadinessEvents(), "runner source max-batch readiness event count");
+		assertIntEquals(1, outcome.appServerReadinessDrained(), "runner source max-batch readiness drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner source max-batch readiness no-pending count");
+		assertStringEquals(TuiAppServerReadinessInteractionStatus.Drained.text(), outcome.latestReadinessStatusText(),
+			"runner source max-batch readiness status");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.MaxBatchesReached.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner source max-batch readiness late jsonl drain status");
+		assertStringEquals("max_batches_reached", outcome.latestReadinessLateJsonlDrainCode(), "runner source max-batch readiness late jsonl drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner source max-batch readiness line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner source max-batch readiness line code");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner source max-batch applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner source max-batch assistant delta count");
+		assertIntEquals(0, outcome.latestReadinessLateJsonlCompletionCount(), "runner source max-batch completion count");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(), "runner source max-batch applied thread evidence");
+		assertStringEquals("turn-11", outcome.latestReadinessLateJsonlTurnIdText(), "runner source max-batch applied turn evidence");
+		assertStringEquals("runner source max batch delta", outcome.latestReadinessLateJsonlDeltaText(), "runner source max-batch applied delta evidence");
+		assertStringEquals("turn-11", outcome.latestReadinessActiveTurnIdText(), "runner source max-batch readiness active retained after readiness");
+		assertStringEquals("turn-11", outcome.lastStartedTurnIdText(), "runner source max-batch readiness last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "runner source max-batch readiness no completion");
+		assertStringEquals("turn-11", outcome.activeTurnIdText(), "runner source max-batch readiness active retained");
+		assertIntEquals(0, outcome.completedTurns(), "runner source max-batch readiness completed count");
+		assertIntEquals(3, shell.transcriptCount(), "runner source max-batch readiness transcript count");
+		assertStringEquals("user> sourcemax", shell.transcriptAt(1).renderText(), "runner source max-batch readiness user row");
+		assertStringEquals("assistant> runner source max batch delta", shell.transcriptAt(2).renderText(), "runner source max-batch readiness assistant row");
+		assertStringEquals("assistant> runner source max batch delta", outcome.finalFrameLineAt(4), "runner source max-batch readiness final frame");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "runner source max-batch readiness close recorded");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "runner source max-batch readiness outbound lines");
+		assertIntEquals(promptLines.length + 1, outcome.promptTransportInboundLineCount(), "runner source max-batch readiness completion line remains unread");
 	}
 
 	static function testReadinessPrefixAppliedRejectionRoutesThroughRunner():Void {
