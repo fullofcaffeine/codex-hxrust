@@ -135,7 +135,10 @@ prefix evidence to prefix-then-malformed-JSON readiness rejection with
 prefix evidence to prefix-then-decode-rejected readiness rejection with
 `BatchRejected` / `unknown_inbound_method`. `TUI-LIVE-107` extends that
 structured prefix evidence to prefix-then-schema-rejected readiness rejection
-with `BatchRejected` / `missing_field`.
+with `BatchRejected` / `missing_field`. `TUI-LIVE-108` adds
+`TuiLiveShellReadinessSource` so the runner can poll a typed readiness source
+for submitted-turn readiness events while preserving the existing explicit
+queued readiness path.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

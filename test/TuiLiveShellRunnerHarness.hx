@@ -61,6 +61,7 @@ import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.live.TuiLiveShellRunOutcome;
 import codexhx.runtime.tui.live.TuiLiveShellRunPolicy;
 import codexhx.runtime.tui.live.TuiLiveShellRunRequest;
+import codexhx.runtime.tui.live.TuiLiveShellReadinessSource;
 import codexhx.runtime.tui.live.TuiLiveShellRunner;
 import codexhx.runtime.tui.terminal.HeadlessTerminalBackend;
 import codexhx.runtime.tui.terminal.LiveTerminalBackend;
@@ -81,6 +82,7 @@ class TuiLiveShellRunnerHarness {
 		testAgentNavigationInputRoutesActiveThread();
 		testPumpEventRoutesThroughRunner();
 		testReadinessEventRoutesThroughRunner();
+		testReadinessSourceFeedsSubmittedTurnReadinessThroughRunner();
 		testReadinessBackpressureRecoveryRoutesThroughRunner();
 		testReadinessNoDataRetryRoutesThroughRunner();
 		testDuplicatePostCompletionReadinessNoopsThroughRunner();
@@ -392,6 +394,68 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals("user> ready", shell.transcriptAt(1).renderText(), "runner readiness user row");
 		assertStringEquals("assistant> runner readiness delta", shell.transcriptAt(2).renderText(), "runner readiness assistant row");
 		assertStringEquals("assistant> runner readiness delta", outcome.finalFrameLineAt(4), "runner readiness final frame");
+	}
+
+	static function testReadinessSourceFeedsSubmittedTurnReadinessThroughRunner():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000110001");
+		final activeSession = session("00000000-0000-0000-0000-000000119999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(8), activeSession, activeThread, "source");
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final lateLines = [
+			new TuiPromptAgentMessageDeltaNotification(activeThread, turnId, item("item-runner-source-8"), "runner readiness source delta").messageJson()
+				+ "\n",
+			turnCompletedLine(activeThread, turnId)
+		];
+		final appServerTransport = new PersistentTuiAppServerJsonRpcLineConnectedTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([])),
+			new DryRunTuiAppServerJsonRpcLineConnector(new DryRunTuiAppServerJsonRpcLineNativeOpener(),
+				new RunnerNoDataLateJsonlLineTransportAttacher(lateLines)));
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("s")),
+			TerminalEvent.Key(TerminalKey.Character("o")),
+			TerminalEvent.Key(TerminalKey.Character("u")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(36, 3)).withJsonRpcPromptTransport(promptTransport).withReadinessSource(TuiLiveShellReadinessSource.queued([
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3),
+				TuiAppServerReadinessEvent.SubmittedTurnLateJsonlReady(1, 3)
+			]));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+
+		assertIntEquals(1, outcome.submittedPrompts(), "runner readiness source submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "runner readiness source accepted prompts");
+		assertIntEquals(2, outcome.appServerReadinessEvents(), "runner readiness source event count");
+		assertIntEquals(2, outcome.appServerReadinessDrained(), "runner readiness source drained count");
+		assertIntEquals(0, outcome.appServerReadinessNoPending(), "runner readiness source no-pending count");
+		assertIntEquals(1, outcome.appServerReadinessNoDataCount(), "runner readiness source no-data count");
+		assertStringEquals("turn-8", outcome.latestNoDataReadinessActiveTurnIdText(), "runner readiness source no-data active retained");
+		assertStringEquals(TuiPromptSubmittedTurnLateJsonlDrainStatus.Completed.text(), outcome.latestReadinessLateJsonlDrainStatusText(),
+			"runner readiness source final drain status");
+		assertStringEquals("completed", outcome.latestReadinessLateJsonlDrainCode(), "runner readiness source final drain code");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Accepted.text(), outcome.latestReadinessLateJsonlLineStatusText(),
+			"runner readiness source line status");
+		assertStringEquals("accepted", outcome.latestReadinessLateJsonlLineCode(), "runner readiness source line code");
+		assertIntEquals(2, outcome.latestReadinessLateJsonlAppliedNotificationCount(), "runner readiness source applied notification count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlAssistantDeltaCount(), "runner readiness source assistant delta count");
+		assertIntEquals(1, outcome.latestReadinessLateJsonlCompletionCount(), "runner readiness source completion count");
+		assertStringEquals(activeThread.toString(), outcome.latestReadinessLateJsonlThreadIdText(), "runner readiness source applied thread evidence");
+		assertStringEquals("turn-8", outcome.latestReadinessLateJsonlTurnIdText(), "runner readiness source applied turn evidence");
+		assertStringEquals("runner readiness source delta", outcome.latestReadinessLateJsonlDeltaText(), "runner readiness source applied delta evidence");
+		assertStringEquals("turn-8", outcome.lastStartedTurnIdText(), "runner readiness source last started");
+		assertStringEquals("turn-8", outcome.lastCompletedTurnIdText(), "runner readiness source last completed");
+		assertStringEquals("", outcome.activeTurnIdText(), "runner readiness source active cleared");
+		assertIntEquals(1, outcome.completedTurns(), "runner readiness source completed exactly once");
+		assertStringEquals("user> source", shell.transcriptAt(1).renderText(), "runner readiness source user row");
+		assertStringEquals("assistant> runner readiness source delta", shell.transcriptAt(2).renderText(), "runner readiness source assistant row");
+		assertStringEquals("assistant> runner readiness source delta", outcome.finalFrameLineAt(4), "runner readiness source final frame");
 	}
 
 	static function testReadinessBackpressureRecoveryRoutesThroughRunner():Void {

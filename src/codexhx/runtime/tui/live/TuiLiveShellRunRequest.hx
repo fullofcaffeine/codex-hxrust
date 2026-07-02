@@ -38,6 +38,7 @@ class TuiLiveShellRunRequest {
 	public var initialEvents:Array<TuiAppServerEvent>;
 	public var pumpEvents:Array<TuiAppServerPumpEvent>;
 	public var readinessEvents:Array<TuiAppServerReadinessEvent>;
+	public var readinessSource:TuiLiveShellReadinessSource;
 
 	public function new(backend:TerminalBackend, setup:TerminalSetup, sessionId:SessionId, primaryThreadId:ThreadId, modelLabel:String) {
 		this.backend = backend;
@@ -52,6 +53,7 @@ class TuiLiveShellRunRequest {
 		this.initialEvents = [];
 		this.pumpEvents = [];
 		this.readinessEvents = [];
+		this.readinessSource = TuiLiveShellReadinessSource.empty();
 	}
 
 	public function withShell(shell:ChatWidgetShellState):TuiLiveShellRunRequest {
@@ -117,6 +119,11 @@ class TuiLiveShellRunRequest {
 		return this;
 	}
 
+	public function withReadinessSource(source:TuiLiveShellReadinessSource):TuiLiveShellRunRequest {
+		this.readinessSource = source == null ? TuiLiveShellReadinessSource.empty() : source;
+		return this;
+	}
+
 	public function shiftPumpEvent():Null<TuiAppServerPumpEvent> {
 		if (pumpEvents.length == 0)
 			return null;
@@ -124,9 +131,11 @@ class TuiLiveShellRunRequest {
 	}
 
 	public function shiftReadinessEvent():Null<TuiAppServerReadinessEvent> {
-		if (readinessEvents.length == 0)
+		if (readinessEvents.length > 0)
+			return readinessEvents.shift();
+		if (readinessSource == null)
 			return null;
-		return readinessEvents.shift();
+		return readinessSource.nextEvent();
 	}
 
 	static function normalize(value:String, fallback:String):String {
