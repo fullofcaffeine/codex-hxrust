@@ -198,6 +198,9 @@ state.
 `TUI-LIVE-135` proves that app-server session readiness source can reject
 unsupported late stream notifications without applying them or completing the
 turn.
+`TUI-LIVE-136` proves that app-server session readiness source can preserve an
+active submitted turn through no-data, then reject unknown-method late JSONL
+without applying notifications or completing the turn.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
