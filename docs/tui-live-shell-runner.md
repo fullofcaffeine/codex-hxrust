@@ -184,6 +184,14 @@ feed submitted-turn readiness through the live shell runner.
 readiness-triggered backpressure recovery evidence.
 `TUI-LIVE-130` proves that app-server session readiness source can preserve
 active submitted turns through no-data retry.
+`TUI-LIVE-131` proves that app-server session readiness source can report a
+duplicate post-completion `NoPendingSubmittedTurn` no-op without extra late
+JSONL reads or transcript/completion mutation.
+`TUI-LIVE-132` proves that app-server session readiness source can stop at the
+configured max-batch limit, retain the active submitted turn, leave completion
+unread, and preserve structured assistant-prefix evidence.
+`TUI-LIVE-133` proves that app-server session readiness source can preserve an
+assistant prefix before surfacing wrong-turn completion rejection evidence.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
