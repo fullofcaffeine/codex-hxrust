@@ -50,7 +50,7 @@ haxe hxml/tui-live-shell-demo.hxml
 cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked
 ```
 
-`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. This is a live path dependency: edits in `../haxe.rust/src`, `../haxe.rust/std`, or its vendored Reflaxe tree are reflected immediately by this repo's `haxe`/haxe.rust builds, even before the haxe.rust change is committed.
+`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. It mirrors haxe.rust's source layout, including `../haxe.rust/std/rust/_std`, so upstream-colliding std overrides are visible before Haxe typing starts. This is a live path dependency: edits in `../haxe.rust/src`, `../haxe.rust/std`, `../haxe.rust/std/rust/_std`, or its vendored Reflaxe tree are reflected immediately by this repo's `haxe`/haxe.rust builds, even before the haxe.rust change is committed.
 
 `reference/haxe-rust.pin.json` is reproducibility metadata, not what local scoped builds use to choose compiler files. Update the pin only after a haxe.rust change has been committed, pushed, and validated as the known-good compiler revision for codex-hxrust. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.
 

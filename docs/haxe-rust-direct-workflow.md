@@ -18,10 +18,10 @@ Update the pin only when the haxe.rust change is committed and should become thi
 Use lix scoped libraries for day-to-day local Haxe builds in this repo:
 
 - `.haxerc` pins Haxe `4.3.7` and enables scoped library resolution.
-- `haxe_libraries/reflaxe.rust.hxml` points `-lib reflaxe.rust` at `../haxe.rust/src` and `../haxe.rust/std`.
+- `haxe_libraries/reflaxe.rust.hxml` points `-lib reflaxe.rust` at `../haxe.rust/src`, `../haxe.rust/std`, and `../haxe.rust/std/rust/_std`.
 - `haxe_libraries/reflaxe.hxml` points `-lib reflaxe` at `../haxe.rust/vendor/reflaxe/src`.
 
-This avoids global `haxelib dev` drift while keeping `../haxe.rust` as the authoritative compiler checkout. Do not treat lix as a substitute for haxelib release validation: haxe.rust package/dev-haxelib smoke gates still need to pass for compiler changes because published consumers resolve through haxelib.
+This avoids global `haxelib dev` drift while keeping `../haxe.rust` as the authoritative compiler checkout. The `_std` path is required for source-checkout builds because Haxe can type upstream-colliding std modules before target macros run. Do not treat lix as a substitute for release validation: haxe.rust package smoke gates still need to pass for compiler changes because published consumers resolve through the generated package layout.
 
 Because these paths resolve directly to the sibling checkout, local compiler experiments can be tested in this repo before they are committed upstream. Once the haxe.rust fix is committed and pushed, run `scripts/update-haxe-rust-pin.sh <haxe-rust-sha>` from this repo to update `reference/haxe-rust.pin.json` and `src/codexhx/HaxeRustPin.hx` after generated Cargo gates pass.
 
@@ -44,7 +44,7 @@ When codex-hxrust exposes a compiler limitation:
 
 Current actionable codex-hxrust compiler-gap Beads:
 
-- `codex-hxrust-rat.5` maps to haxe.rust CallStack milestone history (`haxe.rust-oo3.60`, `haxe.rust-oo3.61`, `haxe.rust-oo3.66`) and is resolved by the pinned haxe.rust dev-haxelib std ownership fix.
+- `codex-hxrust-rat.5` maps to haxe.rust CallStack milestone history (`haxe.rust-oo3.60`, `haxe.rust-oo3.61`, `haxe.rust-oo3.66`) and is resolved by the pinned haxe.rust std ownership/source-layout fix.
 - `codex-hxrust-rat.6` maps to haxe.rust Cargo handoff regression `haxe.rust-oo3.67` and is resolved by the pinned Cargo failure propagation fix.
 - `codex-hxrust-rat.7` maps to haxe.rust nullable scalar regression coverage `haxe.rust-oo3.68` and is resolved by the pinned `nullable_scalar_charcode` snapshot.
 - `codex-hxrust-rat.8` maps to haxe.rust generic enum regression `haxe.rust-oo3.69` and is resolved by the pinned `generic_enum_payload` snapshot.

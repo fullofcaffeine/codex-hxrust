@@ -19,7 +19,7 @@ Source: `reference/haxe-rust.pin.json`
 
 The current checkout is the compiler/runtime backend for the experiment, not source owned by `codex-hxrust`. Compiler fixes are made directly in `../haxe.rust`; this repo records the pin and pressure-test mapping.
 
-The pin is reproducibility metadata, not the local dependency resolver. Day-to-day Haxe builds use scoped library hxml files under `haxe_libraries/`, and `haxe_libraries/reflaxe.rust.hxml` points directly at `../haxe.rust/src` and `../haxe.rust/std`. Local edits in `../haxe.rust` are therefore visible immediately to codex-hxrust gates; no pin update is required just to test an uncommitted compiler change.
+The pin is reproducibility metadata, not the local dependency resolver. Day-to-day Haxe builds use scoped library hxml files under `haxe_libraries/`, and `haxe_libraries/reflaxe.rust.hxml` points directly at `../haxe.rust/src`, `../haxe.rust/std`, and `../haxe.rust/std/rust/_std`. The `_std` path mirrors Reflaxe source-checkout stdPaths so upstream-colliding std overrides are visible before Haxe typing starts. Local edits in `../haxe.rust` are therefore visible immediately to codex-hxrust gates; no pin update is required just to test an uncommitted compiler change.
 
 Current local patch record: `reference/haxe-rust-local-patches.v1.json`.
 

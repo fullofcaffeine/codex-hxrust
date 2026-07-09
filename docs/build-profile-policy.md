@@ -34,7 +34,11 @@ Performance stance:
 
 ## Scaffold Caveat
 
-The temporary G1 `Main` is intentionally a no-op. Earlier trace/print smoke output pulled in the generated CallStack helper, which currently references a root `Exception` type when this project builds outside the haxe.rust example tree. `HXCX-1.5` owns clean doctor JSON output and should either use a known-good haxe.rust output path or document/file the upstream compiler fix.
+The temporary G1 `Main` started as a no-op while codex-hxrust was still proving the compiler path.
+The earlier bare-root `Exception` failure was a source-checkout std-path issue: local builds must
+include haxe.rust's `std/rust/_std` before Haxe typing starts. `haxe_libraries/reflaxe.rust.hxml`
+now mirrors that Reflaxe source layout, so trace/print smoke output is no longer blocked by that
+old CallStack/Exception shape.
 
 ## Commands
 
