@@ -1,15 +1,18 @@
 # Reflaxe.Rust sibling checkout configuration.
 #
 # This mirrors the haxe.rust repo-local lix setup while keeping haxe.rust as
-# the authoritative sibling repository. It is for deterministic local builds;
-# haxelib/package smoke gates still protect released consumer behavior.
+# the authoritative sibling repository. Source-checkout builds must include
+# haxe.rust's stdPaths before Haxe starts typing; published packages receive
+# the equivalent .cross.hx files from Reflaxe build.
 
 -cp ${SCOPE_DIR}/../haxe.rust/src/
 -cp ${SCOPE_DIR}/../haxe.rust/std/
+-cp ${SCOPE_DIR}/../haxe.rust/std/rust/_std/
 
 -lib reflaxe
 
 -D reflaxe.rust=1.0.0
 -D rust_nested_modules
+--macro nullSafety("reflaxe.rust")
 --macro reflaxe.rust.CompilerBootstrap.Start()
 --macro reflaxe.rust.CompilerInit.Start()
