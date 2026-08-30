@@ -87,3 +87,40 @@ Use upstream tests in this order:
 Do not claim a codexhx slice is complete merely because upstream tests pass somewhere else. A slice is complete when its codexhx-owned gates pass and the relevant upstream contract/oracle evidence is recorded.
 
 For broad replacement claims, upstream test parity is necessary but not sufficient. The slice also needs Haxe-authored generated-Rust gates, schema/fixture parity, fail-closed host-boundary tests where applicable, and documented residual gaps.
+
+## Production Milestone Admission
+
+A production milestone must replace or complete one upstream-owned production boundary. It must name one observable public workflow.
+
+Record these facts before implementation:
+
+- the exact upstream commit, modules, and public test or workflow.
+- the codexhx production owner.
+- the fake or missing boundary that the work replaces.
+- the interpreter and generated-Rust observer.
+- the generated-output quality checks.
+- every production boundary that remains fake or absent.
+
+An input permutation is a regression case by default. Keep repeated decoder, rejection, retry, and ordering cases in data-driven fixtures.
+
+Do not create a production module or roadmap milestone for each case. Promote a case only when it completes a production boundary.
+
+## Generated Rust Quality
+
+Production-shaped generated-Rust gates must include:
+
+- `cargo check --locked`.
+- `cargo test --locked`.
+- `cargo fmt --check`.
+- Clippy with warnings denied.
+- focused review of each changed generated module.
+
+Record the exact haxe.rust commit that produced the output. A mutable sibling path or skipped CI job is not pin evidence.
+
+## Compiler Blockers
+
+If a vertical tracer exposes a generic compiler error, stop the tracer. Create or claim one haxe.rust issue and add a generic failing fixture.
+
+After the compiler pull request merges, run the original tracer against that exact merged commit. Update the consumer pin in a separate change.
+
+See [the haxe.rust pull-request workflow](haxe-rust-direct-workflow.md) for the complete lifecycle.

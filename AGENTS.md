@@ -21,33 +21,97 @@ The `../haxe.rust` checkout is part of the work surface for this project. Do **n
 
 Local codex-hxrust builds use the live sibling checkout through `haxe_libraries/reflaxe.rust.hxml`, which adds `../haxe.rust/src`, `../haxe.rust/std`, and `../haxe.rust/std/rust/_std` to the Haxe classpath. The `_std` path must be present before Haxe typing starts so source-checkout builds see haxe.rust's upstream-colliding std overrides. That means edits in `../haxe.rust` are reflected immediately in this repo's Haxe/haxe.rust gates. The pin does not select files for local scoped builds; it records the committed known-good compiler revision for reproducibility.
 
-haxe.rust CI health is a hard prerequisite for codex-hxrust feature work. Before continuing Codex port implementation after any reported or suspected haxe.rust CI failure, stop codex-hxrust feature work, inspect the failing haxe.rust CI run, fix haxe.rust in `../haxe.rust`, commit and push that fix there, and verify haxe.rust CI is passing or has an explicitly documented equivalent green validation. Do not keep stacking codex-hxrust gates on top of a known-broken compiler backend.
+haxe.rust CI health is a hard prerequisite for Codex feature work. If haxe.rust CI is red, stop the affected consumer work.
 
-Work directly in `../haxe.rust` when fixing compiler/runtime limitations. Before making any change there, read `../haxe.rust/AGENTS.md` in full and follow that repository's current instructions, including its test expectations, commit-message conventions, push/landing rules, and any local branch or release discipline. Do not assume codex-hxrust conventions apply inside haxe.rust unless that repo's instructions say so.
+Fix a compiler baseline error through the haxe.rust pull-request process. Do not add consumer gates on top of a known-broken compiler backend.
 
-`bd` issue tracking is repository-local. This repository's local Beads backend is embedded Dolt, but the repo-level sharing contract is JSONL in Git (`.beads/config.yaml` sets `no-db: true`, `no-daemon: true`, `no-auto-flush: true`, and `auto-start-daemon: false`). Treat `.beads/issues.jsonl` and `.beads/interactions.jsonl` as the authoritative tracked issue ledger, and treat `.beads/embeddeddolt/` plus `.beads/*.db` as ignored local runtime state. If haxe.rust has an active `.beads` setup and its `AGENTS.md` asks for Beads, run `bd` from `../haxe.rust` when claiming or closing haxe.rust work and follow that repo's local Beads mode. Do not run this repo's `bd` and assume it scopes into haxe.rust. If haxe.rust Beads are unavailable, unclear, or not useful for the current compiler pressure note, track the follow-up from codex-hxrust Beads/docs instead and keep the haxe.rust source change itself governed by haxe.rust's local instructions.
+Treat the shared `../haxe.rust` checkout as a reference and tracker checkout. Do not use it as an implementation branch.
 
-The compiler must remain a general Haxe-to-Rust backend: never add Codex-specific code, fixtures, paths, naming, or assumptions to haxe.rust. Codex-specific pressure fixtures belong in this repo; haxe.rust fixes need generic minimal repros and generic tests.
+The current checkout contains local `main` history that is not on `origin/main`. Preserve that history and every existing worktree, branch, and pull request.
 
-Before changing `../haxe.rust`, verify it is up to date with its remote `origin` by fetching and rebasing or otherwise reconciling remote changes without overwriting unrelated local work. After making a haxe.rust fix, commit and push it directly in that repository; do not leave compiler/runtime improvements stranded locally while codex-hxrust has already adapted to them.
+Do not reset, rebase, fast-forward, clean, or otherwise reconcile the shared checkout during ordinary consumer work. The repository owner must decide its disposition separately.
 
-When the Codex port exposes a haxe.rust limitation:
+Before work starts on a compiler limitation, read `../haxe.rust/AGENTS.md` in full. That file owns compiler tests, Beads operations, commit rules, and merge rules.
 
-1. Reduce the limitation to the smallest Haxe/haxe.rust fixture or failing example.
-2. Re-read or confirm `../haxe.rust/AGENTS.md` is current for this session, then fix or improve haxe.rust in `../haxe.rust`, respecting its Beads milestones, commit conventions, and contract-first test policy.
-3. Commit and push the haxe.rust change directly in that repository.
-4. Run the relevant haxe.rust validation plus this repo's generated Cargo/fixture gates.
-5. Update `reference/haxe-rust.pin.json` only after the committed haxe.rust revision should become codex-hxrust's known-good compiler pin and the gated checks pass.
-6. Commit and push the codex-hxrust pin/docs/fixture updates.
-7. Record local patches, upstream gaps, and follow-up work in Beads and `reference/haxe-rust-local-patches.v1.json` or an audit note.
+`bd` issue tracking is repository-local. Run haxe.rust Beads commands only from the owner-designated canonical tracker checkout.
 
-Do not change the pin just to try an uncommitted local haxe.rust edit. Test against the live sibling checkout first; pin only after the compiler change is landed and meant to be reproducible for the project.
+Do not run `bd` from a disposable haxe.rust feature or integration worktree. Do not use this repository's Beads database for a haxe.rust task.
 
-Treat haxe.rust fixes as first-class compiler contributions, not one-off local hacks hidden inside `codex-hxrust`.
+The compiler must remain a general Haxe-to-Rust backend. Never add Codex-specific code, fixtures, paths, names, schemas, or recognition rules to haxe.rust.
+
+Codex-specific pressure fixtures belong in this repository. A haxe.rust fix needs a small framework-neutral fixture and a generic acceptance test.
+
+### Admit And Own A Compiler Gap
+
+When the Codex port exposes a possible compiler limitation:
+
+1. Record the exact consumer commit, compiler commit, profile, command, expected result, actual result, and upstream Codex anchor.
+2. Decide whether the error belongs to application design, a native boundary, or generic compiler behavior.
+3. Keep application and native-boundary errors in codex-hxrust.
+4. Search haxe.rust Beads, issues, pull requests, branches, worktrees, and shared-library coordination history for an existing owner.
+5. If another owner has active work, stop and coordinate with that owner.
+6. Claim or create one haxe.rust task for a confirmed generic blocker.
+7. Add the smallest generic failing fixture before the compiler fix.
+
+If no generic fixture reproduces the error, reclassify the error. Do not create Codex-specific compiler behavior.
+
+### Create The Compiler Worktree
+
+Fetch haxe.rust `origin` without rebasing the shared checkout. Create an owned feature worktree from the exact fetched `origin/main` commit.
+
+Use a branch such as `fix/<haxe-rust-issue-id>-<generic-gap-slug>`. Use a separate path under an owned haxe.rust worktree directory.
+
+Before the first edit, record the base commit. Make sure that the worktree is clean and that `HEAD` equals fetched `origin/main`.
+
+Stop if the branch or path already exists. Do not reuse or remove an unknown worktree.
+
+Implement the generic fix at the lowest correct owner. Use compiler lowering before a native facade, and use runtime support only for runtime semantics.
+
+Run the focused fixture and the current haxe.rust gates from `../haxe.rust/AGENTS.md`. Inspect the changed generated Rust.
+
+The feature worktree can provide early consumer evidence. That evidence is diagnostic until the compiler pull request merges.
+
+Use a supported compiler-root override for cross-repository evidence. Do not redirect builds with a symlink or a generated-Rust edit.
+
+If no supported override exists, create it in codex-hxrust before compiler pin admission. The hard-coded shared sibling path is not clean integration evidence.
+
+### Review, Merge, And Readmit The Compiler
+
+Commit and push only the owned haxe.rust feature branch. Never push compiler work directly to `main`.
+
+Open a haxe.rust pull request against refreshed `main`. Record the task, base commit, generic fixture, generated output, tests, consumer failure, and public owner.
+
+Do not stack new work on an existing pull request without the current owner's approval. Require the haxe.rust review and CI policy before merge.
+
+After merge, record the exact commit that landed on `origin/main`. A pull-request head commit is not sufficient after a squash or rebase merge.
+
+Create a clean detached integration worktree at that merged commit. Make sure that the checkout is clean and that the commit is reachable from `origin/main`.
+
+Run the original consumer tracer against that exact integration checkout. Run the affected interpreter, generated-Rust, formatting, Clippy, and generated-module review gates.
+
+Update `reference/haxe-rust.pin.json` in a separate codex-hxrust change. The candidate must equal the clean compiler checkout `HEAD` that produced the evidence.
+
+The merged commit must be reachable from fetched haxe.rust `origin/main`. Consumer CI must check out that exact pin and make sure that `HEAD` matches it.
+
+Only then does the compiler commit become the known-good consumer baseline. Record the compiler pull request and consumer evidence with the pin update.
+
+Remove only owned clean worktrees and branches after both repositories land their changes. Never clear unknown stashes or prune unknown worktrees.
+
+Treat haxe.rust fixes as first-class compiler contributions. Do not hide them as local consumer patches.
+
+The full consumer workflow is [docs/haxe-rust-direct-workflow.md](docs/haxe-rust-direct-workflow.md). The historical filename remains for stable references.
 
 ## External Reference Checkouts
 
 `../codex` is the mainstream Codex reference checkout. Use it to inspect upstream directory structure, protocol schemas, runtime behavior, tests, and fixtures while keeping this port upstream-first.
+
+The current `../codex` checkout can contain an owned feature branch or local artifacts. Do not reset, rebase, clean, commit, or push it from this project.
+
+Before a new architecture baseline is admitted, create a clean read-only worktree. Use an exact fetched OpenAI `origin/main` commit.
+
+Record that commit in the consumer issue and pin.
+
+Use the clean worktree for new module and public-test anchors. Treat an older or dirty checkout only as historical reference evidence.
 
 Treat `../codex` as the constant oracle for architecture and behavior, not just an occasional fixture source. Before adding or extending a parity slice, inspect the relevant upstream Rust modules/tests and record the anchors in the issue, docs, harness comments, or commit context when they materially shape behavior. For TUI resume/replay work, start from upstream modules such as `codex-rs/tui/src/resume_picker.rs`, `codex-rs/tui/src/app_server_session.rs`, `codex-rs/tui/src/app/thread_routing.rs`, `codex-rs/tui/src/chatwidget/replay.rs`, `codex-rs/tui/src/chatwidget/session_flow.rs`, and the matching app-server `thread_resume`/`thread_fork` processors before inventing local structure.
 
@@ -60,6 +124,18 @@ Do not edit, commit, or push changes in `../codex` or Cafex/Cafetera repositorie
 ## Work Selection Priority
 
 The project goal is a full Haxe-to-Rust Codex port, not a headless-only replacement. This includes upstream app-server protocol, runtime, tool/state systems, and the interactive TUI. Headless/core gates are early validation gates because they are deterministic and credential-free; do not describe them as the final scope.
+
+A production milestone must name the upstream owning modules and the production boundary that it adds or replaces. It must also name one public observer.
+
+The acceptance evidence must include interpreter behavior, generated-Rust behavior, generated-output quality, and every fake or missing boundary that remains.
+
+An input permutation or rejection combination is a regression case by default. Keep it as fixture data unless it completes a production boundary.
+
+Do not create one production module, long harness section, roadmap milestone, and Bead for each permutation. Consolidate repeated cases into data-driven regression fixtures.
+
+If the ready item only extends an existing fake or deterministic boundary, dependency-gate it. Select the missing upstream-shaped production seam first.
+
+`TUI-LIVE-141` is currently such a permutation. Keep it blocked until the production app-server session seam and first vertical TUI tracer are complete.
 
 Keep Beads ordered so mainstream/raw Codex parity work is ready before Cafex adapter expansion. Use priorities and dependencies to make `bd ready` reflect the intended sequence: upstream/raw Codex protocol, runtime, app-server, tool, and state parity slices should outrank later Cafex/Cafetera adapter tasks.
 
@@ -164,14 +240,15 @@ When documenting plans, say "idiomatic portable output" or "idiomatic metal outp
 1. **File issues for remaining work** - Create issues for anything that needs follow-up
 2. **Run quality gates** (if code changed) - Tests, linters, builds
 3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
+4. **PUSH THIS REPOSITORY TO REMOTE** - This is MANDATORY:
    ```bash
    git pull --rebase
    git diff -- .beads/issues.jsonl  # should be empty after commit
    git push
    git status  # MUST show "up to date with origin"
    ```
-5. **Clean up** - Clear stashes, prune remote branches
+   Run these commands only on the current owned codex-hxrust branch. Do not apply them to sibling repositories or another owner's worktree.
+5. **Clean up owned resources** - Remove only this task's clean worktrees, branches, and stashes. Fetch with pruning for stale remote-tracking refs.
 6. **Verify** - All changes committed AND pushed
 7. **Hand off** - Provide context for next session
 
@@ -180,3 +257,5 @@ When documenting plans, say "idiomatic portable output" or "idiomatic metal outp
 - NEVER stop before pushing - that leaves work stranded locally
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
+- Do not clear all stashes, prune unknown worktrees, or remove another owner's branch.
+- Do not use this workflow to push haxe.rust or any other sibling repository.

@@ -4,6 +4,12 @@
 **Date:** 2026-06-12
 **Scope:** mainstream upstream Codex first; Cafex/Cafetera adapters remain dependency-gated.
 
+**Status:** Historical execution and regression evidence. This file no longer defines the next production milestone.
+
+Future milestones must replace a production boundary and end in an upstream-shaped observer. Repeated decoder and readiness cases belong in data-driven fixtures.
+
+See [the cross-repository direction review](decision-records/2026-08-29-cross-repo-direction-oracle.md) for the current work order.
+
 ## Purpose
 
 The app-server protocol subset is now broad enough to stop treating codexhx as a headless-only experiment. The full target is still whole Codex: app-server, runtime, tools, state, and the interactive TUI. This document sequences the next upstream/raw Codex work so the first live-runtime slices are deterministic, testable, and useful haxe.rust pressure tests without pulling Cafex fork behavior into the core.

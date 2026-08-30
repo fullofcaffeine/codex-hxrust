@@ -1,62 +1,186 @@
-# haxe.rust Direct Work Workflow
+# haxe.rust Pull-Request Workflow
 
-**Date:** 2026-06-10  
-**Decision:** Keep `../haxe.rust` as the authoritative compiler repository and use `codex-hxrust` as a production pressure-test consumer.
+**Date:** 2026-08-29
+**Decision:** Develop compiler changes in isolated haxe.rust worktrees and land them through pull requests.
 
-## Repository Rule
+The filename is historical. Direct work on the shared haxe.rust `main` checkout is no longer permitted.
 
-`haxe.rust` stays at `../haxe.rust`. Do not move, copy, vendor, or submodule it into this repo unless a later reproducibility decision explicitly changes that.
+## Why This Workflow Exists
 
-`reference/haxe-rust.pin.json` records the known-good compiler commit for this experiment. It is not an upstream merge queue. When compiler work is needed, work directly in `../haxe.rust`, commit and push there, then update the pin here after validation.
+codex-hxrust has two linked goals. It ports upstream Codex, and it proves that haxe.rust can support a production Rust application.
 
-The pin is not the local dependency resolver. Day-to-day Haxe builds consume the current files in the sibling checkout through scoped library hxml files. Therefore an uncommitted edit in `../haxe.rust` is immediately visible to codex-hxrust gates, and no codex-hxrust file needs to change just to test that compiler edit.
+A compiler error must become a generic haxe.rust improvement. A consumer workaround does not prove that the compiler improved.
 
-Update the pin only when the haxe.rust change is committed and should become this repo's reproducible known-good compiler revision. A pin update should mean "codex-hxrust is now known to pass against this haxe.rust commit," not "I need local builds to see my latest compiler edits."
+The old workflow used the live sibling checkout for implementation and tests. It could test compiler commit Y and record pin X.
 
-## Local Dependency Resolution
+The current sibling also contains local `main` history that is not on `origin/main`. New compiler work must not inherit or overwrite that history.
 
-Use lix scoped libraries for day-to-day local Haxe builds in this repo:
+The new workflow gives each repository one clear responsibility:
 
-- `.haxerc` pins Haxe `4.3.7` and enables scoped library resolution.
-- `haxe_libraries/reflaxe.rust.hxml` points `-lib reflaxe.rust` at `../haxe.rust/src`, `../haxe.rust/std`, and `../haxe.rust/std/rust/_std`.
-- `haxe_libraries/reflaxe.hxml` points `-lib reflaxe` at `../haxe.rust/vendor/reflaxe/src`.
+- codex-hxrust records the product failure and the final acceptance tracer.
+- haxe.rust owns the generic fixture, fix, review, CI, and merged commit.
+- the consumer pin records only the exact merged compiler commit that passed the original tracer.
 
-This avoids global `haxelib dev` drift while keeping `../haxe.rust` as the authoritative compiler checkout. The `_std` path is required for source-checkout builds because Haxe can type upstream-colliding std modules before target macros run. Do not treat lix as a substitute for release validation: haxe.rust package smoke gates still need to pass for compiler changes because published consumers resolve through the generated package layout.
+## Repository Roles
 
-Because these paths resolve directly to the sibling checkout, local compiler experiments can be tested in this repo before they are committed upstream. Once the haxe.rust fix is committed and pushed, run `scripts/update-haxe-rust-pin.sh <haxe-rust-sha>` from this repo to update `reference/haxe-rust.pin.json` and `src/codexhx/HaxeRustPin.hx` after generated Cargo gates pass.
+Keep haxe.rust outside this repository. Do not copy, vendor, or add it as a submodule during ordinary development.
 
-## Compiler Generality Rule
+`reference/haxe-rust.pin.json` records the known-good compiler commit. The pin does not select local compiler files.
 
-haxe.rust must remain a general Haxe-to-Rust compiler/runtime backend. Do not add Codex-specific code, source paths, DTO assumptions, fixture names, or behavior to haxe.rust.
+Local builds still use the paths in `haxe_libraries/reflaxe.rust.hxml`. These paths make the shared sibling useful for quick diagnostics.
 
-When codex-hxrust exposes a compiler limitation:
+A live sibling result is not reproducible admission evidence unless its exact clean commit matches the candidate pin.
 
-1. Create or update a codex-hxrust pressure-test Bead under `HXCX-7`.
-2. Create or update the corresponding haxe.rust Bead with a generic title and generic acceptance criteria.
-3. Add the smallest generic haxe.rust fixture that reproduces the problem.
-4. Fix the compiler/runtime root cause in haxe.rust.
-5. Run haxe.rust gates, commit, and push haxe.rust.
-6. Update `reference/haxe-rust.pin.json` only after the committed haxe.rust revision is the intended known-good consumer revision, run codex-hxrust gates, commit, and push codex-hxrust.
+`../haxe.rust/AGENTS.md` owns compiler commands, Beads behavior, tests, commits, reviews, merges, and releases. Read it before each compiler task.
 
-## Imported Beads
+## Phase 1: Record And Classify The Failure
 
-`reference/haxe-rust-beads-import.v1.json` is the curated mirror of the haxe.rust Beads ledger. It imports every haxe.rust issue as compact reference metadata, while only Codex-relevant compiler pressure gaps become actionable codex-hxrust Beads.
+Record these facts in the codex-hxrust Bead:
 
-Current actionable codex-hxrust compiler-gap Beads:
+- the exact codex-hxrust commit.
+- the exact compiler commit and dirty state.
+- the selected profile.
+- the failing command and fixture.
+- the expected and actual results.
+- the upstream Codex source or test anchor.
+- the production observer that the error blocks.
 
-- `codex-hxrust-rat.5` maps to haxe.rust CallStack milestone history (`haxe.rust-oo3.60`, `haxe.rust-oo3.61`, `haxe.rust-oo3.66`) and is resolved by the pinned haxe.rust std ownership/source-layout fix.
-- `codex-hxrust-rat.6` maps to haxe.rust Cargo handoff regression `haxe.rust-oo3.67` and is resolved by the pinned Cargo failure propagation fix.
-- `codex-hxrust-rat.7` maps to haxe.rust nullable scalar regression coverage `haxe.rust-oo3.68` and is resolved by the pinned `nullable_scalar_charcode` snapshot.
-- `codex-hxrust-rat.8` maps to haxe.rust generic enum regression `haxe.rust-oo3.69` and is resolved by the pinned `generic_enum_payload` snapshot.
-- `codex-hxrust-rat.9` maps to haxe.rust enum reuse regression `haxe.rust-oo3.71` and is resolved by the pinned `enum_reuse_helper_calls` snapshot.
-- HXCX-3.1 mock model stream parsing exposed haxe.rust try/catch tail-return regression `haxe.rust-oo3.72`; the pinned `try_catch_tail_nonvoid` snapshot resolves it and lets codex-hxrust use direct `try/catch` returns without a local shape workaround.
-- HXCX-3.3 one-turn state-machine work exposed haxe.rust interface-null comparison regression `haxe.rust-wg5`; the pinned `interface_null_compare` snapshot resolves non-null interface handle comparisons against `null`.
-- HXCX-3.3 also exposed haxe.rust nullable interface value regression `haxe.rust-bm6`; the generic nullable trait-object representation/lowering landed in haxe.rust `b3e38c31` and is now tracked as resolved upstream.
+Then classify the error:
 
-The HXCX-7.1 pressure-gap rollup lives in `docs/haxe-rust-pressure-gap-ledger.md` and `reference/haxe-rust-pressure-gaps.v1.json`; it is checked by `harness/check-haxe-rust-pressure-gaps.sh`.
+- Keep Codex policy and application-design errors in codex-hxrust.
+- Keep real host capabilities behind typed native or metal boundaries.
+- Send a reusable Haxe-to-Rust lowering or runtime error to haxe.rust.
 
-## Validation Expectations
+If the error cannot use a generic fixture, stop the compiler task. Reclassify the error before implementation.
 
-haxe.rust work follows `../haxe.rust/AGENTS.md`: contract-first tests, root-cause compiler/runtime fixes, no temporary workarounds, and `thinking:*` labels on active Beads.
+## Phase 2: Find The Existing Owner
 
-codex-hxrust pin updates must run the affected fixture gates plus `scripts/check-generated-cargo.sh` before commit.
+Use the haxe.rust canonical tracker checkout for Beads operations. Do not run `bd` from a disposable worktree.
+
+Inspect the current haxe.rust issues, pull requests, branches, worktrees, and shared-library coordination record.
+
+If active work already owns the same behavior, contact that owner. Do not modify or supersede the active branch.
+
+For a new blocker, create or claim one generic haxe.rust task. Use the codex-hxrust Bead only as discovery context.
+
+## Phase 3: Create An Isolated Compiler Worktree
+
+Fetch haxe.rust `origin` without changing the shared checkout. Create the feature worktree from fetched `origin/main`.
+
+Use these naming shapes:
+
+```text
+branch:   fix/<haxe-rust-issue-id>-<generic-gap-slug>
+worktree: ../haxe-rust-worktrees/<haxe-rust-issue-id>-<generic-gap-slug>
+```
+
+Use the worktree-creation rules in `../haxe.rust/AGENTS.md`. Its hook and Beads rules take priority over this guide.
+
+Before the first edit:
+
+1. Record the fetched `origin/main` commit.
+2. Make sure that the feature worktree is clean.
+3. Make sure that feature `HEAD` equals the recorded base commit.
+4. Make sure that `origin` is the expected haxe.rust repository.
+5. Make sure that the branch and path are owned by this task.
+
+If any check fails, stop. Do not reset, clean, rebase, or remove an unknown checkout.
+
+## Phase 4: Prove And Fix The Generic Error
+
+Add the smallest generic failing fixture before the fix. Remove all Codex paths, names, schemas, and assumptions.
+
+Implement the fix at the lowest correct owner:
+
+1. Use typed compiler analysis or lowering when compile-time facts are sufficient.
+2. Use a narrow typed native facade for real Rust ownership or resource limits.
+3. Use haxe.rust runtime support only for runtime semantics.
+
+Run the current focused and broader gates from `../haxe.rust/AGENTS.md`. Inspect the changed generated Rust.
+
+Run the original codex-hxrust tracer against the feature worktree for early feedback. This result is diagnostic before merge.
+
+Use a repository-supported compiler-root override for this cross-repository run. Do not use a symlink or edit generated Rust.
+
+If no override exists, create that consumer support first. Do not admit a pin through the hard-coded shared path.
+
+## Phase 5: Review And Merge haxe.rust
+
+Commit and push only the owned feature branch. Never push the compiler fix directly to `main`.
+
+Open a pull request against refreshed haxe.rust `main`. Include these facts:
+
+- the haxe.rust task and blocked consumer Bead.
+- the exact base commit.
+- the generic failing fixture.
+- the generated Rust before and after the fix.
+- the focused and broader validation results.
+- the original consumer error.
+- the public branch owner and reviewer.
+- the intentionally deferred scope.
+
+Do not stack on an existing pull request without its current owner's approval. Stop if required review or CI is incomplete.
+
+After merge, record the commit that landed on `origin/main`. Do not assume that the pull-request head is the merged commit.
+
+## Phase 6: Readmit The Compiler Into codex-hxrust
+
+Create a clean detached integration worktree at the exact merged compiler commit. Do not change the divergent shared checkout.
+
+Make sure that the integration worktree meets these conditions:
+
+- its status is clean.
+- its `origin` is the expected repository.
+- its `HEAD` equals the merged commit.
+- the merged commit is reachable from fetched `origin/main`.
+
+Run the original consumer tracer against this worktree. Then run the affected consumer gates.
+
+Production-shaped evidence must include:
+
+- the Haxe interpreter result.
+- generated portable and metal results when both profiles apply.
+- `cargo check --locked`.
+- `cargo test --locked`.
+- `cargo fmt --check`.
+- Clippy with warnings denied.
+- focused review of the changed generated modules.
+
+Update the consumer pin in a separate codex-hxrust change. The pin candidate must equal the integration worktree `HEAD`.
+
+Record the merged compiler pull request, compiler commit, consumer commit, profiles, commands, and evidence paths.
+
+Consumer CI must check out the exact pin and compare its `HEAD` with the pin. A skipped generated-Rust job is not admission evidence.
+
+## Stop Conditions
+
+Stop the workflow for any of these conditions:
+
+- another owner has an active task, pull request, branch, or worktree.
+- the remote is unexpected.
+- the fetch fails.
+- the clean base has red required CI without an owned baseline task.
+- no generic fixture reproduces the consumer error.
+- the fixture contains Codex-specific behavior.
+- the fix requires a consumer workaround.
+- generated Rust adds a warning, format error, or output-quality regression.
+- the compiler pull request is not merged.
+- the original consumer tracer fails against the merged commit.
+- the candidate pin differs from the compiler commit used by the gates.
+- Beads export changes include unrelated work.
+
+## Cleanup
+
+Remove only clean worktrees and branches that this task owns. Wait until the compiler and consumer changes are merged.
+
+Do not clear unknown stashes. Do not prune unknown worktrees. Do not erase local history from the shared checkout.
+
+## Current Baseline Exception
+
+The shared haxe.rust checkout was 67 commits ahead of fetched `origin/main` during the 2026-08-29 review.
+
+This policy does not decide the disposition of those commits. It also does not decide the two older stacked pull requests.
+
+Preserve those resources until their current owner records a separate decision. New work must start from fetched `origin/main` in a new worktree.
+
+See [the cross-repository Oracle disposition](decision-records/2026-08-29-cross-repo-direction-oracle.md) for the review evidence and deferred owner decisions.
