@@ -80,14 +80,18 @@ It is not for copied source trees. If a later task needs a source snapshot for o
 
 Do not vendor upstream Codex or Cafex. They are product/reference repositories, not dependencies of the Haxe compiler build. `../codex` and `../fullofcaffeine` are read-only from this project; inspect them for structure, schemas, tests, and fixtures, but make no edits there.
 
-Do not vendor haxe.rust. Use the sibling repository at `../haxe.rust` as the authoritative compiler worktree and record known-good commits in `reference/haxe-rust.pin.json`. Revisit vendoring only if a later reproducibility decision explicitly requires one of:
+Do not vendor haxe.rust.
+Use `../haxe.rust` for inspection and coordination.
+Develop compiler changes in isolated worktrees from fetched `origin/main`.
+Record known-good merged commits in `reference/haxe-rust.pin.json`.
+Revisit vendoring only if a later reproducibility decision explicitly requires one of:
 
 - external pinned checkout
 - git submodule
 - git subtree/vendor copy
 - package/release artifact
 
-The current preference is direct sibling-repo work plus known-good pins. A subtree/vendor copy should be the last choice because it makes compiler evolution noisier and risks Codex-specific coupling.
+The current preference is isolated compiler worktrees, reviewed haxe.rust pull requests, and exact known-good pins. A copied tree increases merge work and risks Codex-specific coupling.
 
 ## Generated Output Policy
 

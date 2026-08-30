@@ -19,26 +19,24 @@ local_path="$(jq -r '.localPath' "$PIN_FILE")"
 remote_expected="$(jq -r '.remote' "$PIN_FILE")"
 branch="$(jq -r '.branch' "$PIN_FILE")"
 
-hxrust_dir="$(cd "$ROOT" && cd "$local_path" && pwd)"
-
-if [[ ! -d "${hxrust_dir}/.git" ]]; then
-  echo "haxe.rust checkout is missing or is not a git repository: ${hxrust_dir}" >&2
-  exit 1
+identity_args=(--pin "$PIN_FILE")
+if [[ -n "${HAXE_RUST_ROOT:-}" ]]; then
+	identity_args+=(--root "$HAXE_RUST_ROOT")
 fi
-
 if [[ "$DO_FETCH" == "1" ]]; then
-  git -C "$hxrust_dir" fetch origin "$branch"
+	identity_args+=(--fetch)
 fi
+identity="$("${ROOT}/scripts/haxe-rust-identity.sh" "${identity_args[@]}")"
 
-upstream_ref="origin/${branch}"
-if ! git -C "$hxrust_dir" rev-parse --verify --quiet "$upstream_ref" >/dev/null; then
-  upstream_ref="$branch"
-fi
+hxrust_dir="$(printf '%s\n' "$identity" | jq -er '.root')"
+upstream_ref="$(printf '%s\n' "$identity" | jq -er '.upstreamRef')"
 
 local_branch="$(git -C "$hxrust_dir" branch --show-current || true)"
 local_commit="$(git -C "$hxrust_dir" rev-parse HEAD)"
 remote_actual="$(git -C "$hxrust_dir" config --get remote.origin.url || true)"
 dirty_count="$(git -C "$hxrust_dir" status --porcelain | wc -l | tr -d ' ')"
+head_matches_pin="$(printf '%s\n' "$identity" | jq -r '.headMatchesPin')"
+pin_reachable="$(printf '%s\n' "$identity" | jq -r '.targetReachableFromUpstream')"
 
 commit_count="$(git -C "$hxrust_dir" rev-list --count "${pin_commit}..${upstream_ref}" || echo 0)"
 commits="$(git -C "$hxrust_dir" log --oneline "${pin_commit}..${upstream_ref}" || true)"
@@ -77,6 +75,8 @@ echo "branch: ${branch}"
 echo "local_branch: ${local_branch}"
 echo "local_commit: ${local_commit}"
 echo "dirty_entries: ${dirty_count}"
+echo "head_matches_pin: ${head_matches_pin}"
+echo "pin_reachable_from_upstream: ${pin_reachable}"
 echo "upstream_ref: ${upstream_ref}"
 echo "commits_since_pin: ${commit_count}"
 echo

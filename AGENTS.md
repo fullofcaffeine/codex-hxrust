@@ -19,7 +19,10 @@ This repo uses modern Beads with an embedded Dolt backend for local `bd` command
 
 The `../haxe.rust` checkout is part of the work surface for this project. Do **not** copy, move, vendor, or submodule it into this repo by default; keep it as a sibling compiler repository and record the known-good consumer commit in `reference/haxe-rust.pin.json`.
 
-Local codex-hxrust builds use the live sibling checkout through `haxe_libraries/reflaxe.rust.hxml`, which adds `../haxe.rust/src`, `../haxe.rust/std`, and `../haxe.rust/std/rust/_std` to the Haxe classpath. The `_std` path must be present before Haxe typing starts so source-checkout builds see haxe.rust's upstream-colliding std overrides. That means edits in `../haxe.rust` are reflected immediately in this repo's Haxe/haxe.rust gates. The pin does not select files for local scoped builds; it records the committed known-good compiler revision for reproducibility.
+Reproducible gates select one compiler checkout through `HAXE_RUST_ROOT` and `scripts/run-haxe-rust.sh`.
+The runner supplies `src`, `std`, `std/rust/_std`, and vendored Reflaxe paths from that checkout.
+It records the actual compiler commit and dirty-file count in generated evidence.
+The legacy scoped library file still points to `../haxe.rust`, but it is not pin-admission evidence.
 
 haxe.rust CI health is a hard prerequisite for Codex feature work. If haxe.rust CI is red, stop the affected consumer work.
 
@@ -103,9 +106,11 @@ The full consumer workflow is [docs/haxe-rust-direct-workflow.md](docs/haxe-rust
 
 ## External Reference Checkouts
 
-`../codex` is the mainstream Codex reference checkout. Use it to inspect upstream directory structure, protocol schemas, runtime behavior, tests, and fixtures while keeping this port upstream-first.
+`../codex-upstream-reference` is the clean mainstream Codex baseline.
+Its detached `HEAD` must match `reference/upstream-codex.pin.json`.
+Use it for new architecture, protocol, runtime, test, and fixture anchors.
 
-The current `../codex` checkout can contain an owned feature branch or local artifacts. Do not reset, rebase, clean, commit, or push it from this project.
+The optional `../codex` checkout can contain an owned feature branch or local artifacts. Treat it only as historical reference evidence. Do not reset, rebase, clean, commit, or push it from this project.
 
 Before a new architecture baseline is admitted, create a clean read-only worktree. Use an exact fetched OpenAI `origin/main` commit.
 

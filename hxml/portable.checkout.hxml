@@ -1,0 +1,8 @@
+-cp src
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/portable
+-D rust_crate=codex_hxrust_portable
+-D rust_cargo_subcommand=check
+-D rustfmt
+-D rust_deny_warnings
+-main Main

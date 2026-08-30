@@ -61,7 +61,7 @@ haxe hxml/tui-live-shell-demo.hxml
 cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked
 ```
 
-`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. It mirrors haxe.rust's source layout, including `../haxe.rust/std/rust/_std`, so upstream-colliding std overrides are visible before Haxe typing starts. This is a live path dependency: edits in `../haxe.rust/src`, `../haxe.rust/std`, `../haxe.rust/std/rust/_std`, or its vendored Reflaxe tree are reflected immediately by this repo's `haxe`/haxe.rust builds, even before the haxe.rust change is committed.
+Set `HAXE_RUST_ROOT` to select a compiler checkout for a reproducible generated build. `scripts/run-haxe-rust.sh` supplies every compiler path from that checkout and reports its exact Git identity. `haxe_libraries/reflaxe.rust.hxml` remains available for legacy commands that use the shared `../haxe.rust` checkout.
 
 `reference/haxe-rust.pin.json` is reproducibility metadata, not what local scoped builds use to choose compiler files. Update the pin only after a haxe.rust change has been committed, pushed, and validated as the known-good compiler revision for codex-hxrust. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.
 
@@ -90,7 +90,7 @@ npm run public:precommit
 
 The package is marked `private` to prevent accidental npm publication. GitHub repository visibility is managed separately from npm publishing.
 
-GitHub CI always runs the public formatter and gitleaks workflows. The generated haxe.rust Cargo smoke job needs access to the sibling `../haxe.rust` repository; on public GitHub Actions it runs when `HAXE_RUST_CHECKOUT_TOKEN` is configured, and otherwise emits a skip notice. Local publishing readiness still requires `npm run test:generated-cargo`.
+GitHub CI always runs the public formatter and gitleaks workflows. The generated haxe.rust job checks out the exact pin. The job fails if its repository token is unavailable. Local publishing readiness also requires `npm run test:generated-cargo`.
 
 ## Repository Status
 
@@ -125,7 +125,8 @@ Expected sibling directories:
 
 | Path | Role |
 | --- | --- |
-| `../codex` | Mainstream upstream Codex source of truth |
+| `../codex-upstream-reference` | Clean detached mainstream Codex baseline from the recorded pin |
+| `../codex` | Optional developer checkout; it can contain unrelated work |
 | `../fullofcaffeine/deps/codex` and related `../fullofcaffeine` paths | Cafex/Cafetera references used later for adapter parity |
 | `../haxe.rust` | External haxe.rust compiler/runtime checkout |
 
@@ -138,20 +139,22 @@ Recorded pins:
 | `reference/haxe-rust.pin.json` | haxe.rust backend pin |
 | `reference/haxe-rust-local-patches.v1.json` | Historical local haxe.rust patch ledger; currently records the resolved CallStack workaround |
 
-Do not vendor whole source trees into this repo unless a later Bead explicitly changes the policy. `../codex` and `../fullofcaffeine` are read-only references for this project; inspect them freely, but make changes only in this repository or, for generic compiler work, in `../haxe.rust`.
+Do not vendor whole source trees into this repo unless a later Bead explicitly changes the policy. Treat Codex and Cafex checkouts as read-only references.
 
 ## haxe.rust Improvement Workflow
 
-The `../haxe.rust` checkout is part of the work surface. When the Codex port exposes a limitation:
+The haxe.rust repository is part of the work surface. When the Codex port exposes a limitation:
 
 1. Reduce it to a small haxe.rust fixture or failing example.
-2. Fix it in `../haxe.rust` in an upstreamable way.
-3. Run haxe.rust validation plus this repo's gates against the live sibling checkout.
-4. Commit and push the haxe.rust fix in `../haxe.rust`.
-5. Update `reference/haxe-rust.pin.json` only after the committed haxe.rust revision is the intended known-good consumer revision and the gates pass.
-6. Record patches, gaps, and follow-up work in Beads and `reference/`.
+2. Read the current haxe.rust instructions and coordinate from its main checkout.
+3. Create an isolated worktree from fetched `origin/main`.
+4. Fix the generic compiler problem and add a small generic regression test.
+5. Commit, push, and land the change through a reviewed haxe.rust pull request.
+6. Test the merged commit from a clean integration worktree.
+7. Update the pin only after the original codex-hxrust tracer and generated Cargo gates pass.
+8. Record patches, gaps, and follow-up work in Beads and `reference/`.
 
-Do not update the pin merely to test local compiler edits. The direct scoped-library path already makes those edits visible to codex-hxrust builds.
+Do not update the pin to test local compiler edits. Set `HAXE_RUST_ROOT` to the feature worktree for that test.
 
 Current known haxe.rust pressure points are tracked under the `HXCX-7.x` Beads epic.
 

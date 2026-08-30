@@ -19,7 +19,12 @@ Source: `reference/haxe-rust.pin.json`
 
 The sibling repository owns the compiler and runtime backend. codex-hxrust records the admitted pin and the pressure-test mapping.
 
-The pin is reproducibility metadata, not the local dependency resolver. Day-to-day Haxe builds use scoped library hxml files under `haxe_libraries/`, and `haxe_libraries/reflaxe.rust.hxml` points directly at `../haxe.rust/src`, `../haxe.rust/std`, and `../haxe.rust/std/rust/_std`. The `_std` path mirrors Reflaxe source-checkout stdPaths so upstream-colliding std overrides are visible before Haxe typing starts. Local edits in `../haxe.rust` are therefore visible immediately to codex-hxrust gates; no pin update is required just to test an uncommitted compiler change.
+The pin records the admitted compiler commit.
+Set `HAXE_RUST_ROOT` to select the checkout for a generated build.
+`scripts/run-haxe-rust.sh` supplies all source, standard-library, and Reflaxe paths from that checkout.
+It also reports the actual commit and dirty-file count.
+
+The scoped library file remains available for legacy local commands. Reproducibility gates and pin admission do not use its fixed sibling paths.
 
 Current local patch record: `reference/haxe-rust-local-patches.v1.json`.
 
@@ -37,8 +42,8 @@ Latest audit note: `reference/haxe-rust-audit-2026-06-10.md`.
 ## Recommended Flow
 
 1. Keep `reference/haxe-rust.pin.json` as the pin of record.
-2. In G1, the scaffold doctor must read the pin and report whether `../haxe.rust` matches, is ahead, or is dirty, without implying that the pin selects local build files.
-3. Generated builds use scoped path references to `../haxe.rust` during local development.
+2. The doctor reports the admitted pin and the actual compiler identity that produced it.
+3. Generated gates use `HAXE_RUST_ROOT` and `scripts/run-haxe-rust.sh`.
 4. Develop generic compiler fixes in isolated haxe.rust worktrees from fetched `origin/main`.
 5. Land each compiler fix through a reviewed haxe.rust pull request.
 6. Test the exact merged commit through a clean integration worktree.
@@ -91,7 +96,7 @@ Then run these product checks:
 2. The portable haxe.rust build for codex-hxrust passes.
 3. The metal build for affected native-boundary modules passes.
 4. Generated Cargo checks and tests use `--locked`.
-5. Generated Rust passes rustfmt and warning-denying Clippy.
+5. Generated Rust passes rustfmt and haxe.rust's curated Clippy contract.
 6. A reviewer inspects the affected generated modules.
 7. Affected upstream DTO, runtime, TUI, and adapter fixtures pass.
 
@@ -105,7 +110,7 @@ scripts/update-haxe-rust-pin.sh <candidate-sha>
 
 The updater runs `scripts/check-generated-cargo.sh` before editing the pin and resyncs the Haxe doctor mirror at `src/codexhx/HaxeRustPin.hx`.
 
-The current updater does not enforce all identity checks yet. Do not use it for a new pin until the pin-admission hardening task is complete.
+The updater enforces the identity checks before it starts the generated Cargo gate.
 
 See [the haxe.rust pull-request workflow](haxe-rust-direct-workflow.md) for the complete consumer lifecycle.
 

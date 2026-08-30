@@ -16,7 +16,7 @@ permissions:
 env:
   NODE_VERSION: "20"
   HAXE_VERSION: "4.3.7"
-  HAXE_RUST_REPOSITORY: fullofcaffeine/haxe.rust
+  HAXE_RUST_REPOSITORY: fullofcaffeine/reflaxe.rust
 
 jobs:
   public-readiness:
@@ -77,8 +77,14 @@ jobs:
       - name: Skip note when haxe.rust token is unavailable
         if: env.HAXE_RUST_CHECKOUT_TOKEN == ''
         run: |
-          echo "::notice::Skipping generated Rust smoke because HAXE_RUST_CHECKOUT_TOKEN is not configured for the private haxe.rust sibling."
-          echo "::notice::Local public-readiness still requires npm run test:generated-cargo before publishing."
+          echo "::error::HAXE_RUST_CHECKOUT_TOKEN is required for exact compiler-pin admission."
+          exit 1
+
+      - name: Read haxe.rust pin
+        if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
+        id: haxe-rust-pin
+        working-directory: codex-hxrust
+        run: echo "commit=$(jq -er '.commit' reference/haxe-rust.pin.json)" >> "$GITHUB_OUTPUT"
 
       - name: Checkout haxe.rust sibling
         if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
@@ -86,6 +92,8 @@ jobs:
         with:
           repository: ${{ env.HAXE_RUST_REPOSITORY }}
           path: haxe.rust
+          ref: ${{ steps.haxe-rust-pin.outputs.commit }}
+          fetch-depth: 0
           token: ${{ env.HAXE_RUST_CHECKOUT_TOKEN }}
 
       - name: Setup Node.js
@@ -120,4 +128,11 @@ jobs:
       - name: Check haxe.rust generated Cargo gates
         if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
         working-directory: codex-hxrust
+        env:
+          HAXE_RUST_ROOT: ../haxe.rust
+          HAXE_RUST_TARGET_COMMIT: ${{ steps.haxe-rust-pin.outputs.commit }}
+          HAXE_RUST_FETCH: "1"
+          HAXE_RUST_REQUIRE_CLEAN: "1"
+          HAXE_RUST_REQUIRE_HEAD: "1"
+          HAXE_RUST_REQUIRE_REACHABLE: "1"
         run: npm run test:generated-cargo

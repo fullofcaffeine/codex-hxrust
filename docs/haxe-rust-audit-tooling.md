@@ -3,7 +3,9 @@
 **Date:** 2026-06-10  
 **Bead:** `HXCX-1.6` / `codex-hxrust-wx3.6`  
 **Source refs:** `codex-hxrust-port-plan.md`, `../haxe.rust/docs/workflow.md`  
-**Decision:** Work directly in the sibling `../haxe.rust` compiler repo, then use scriptable pin audit/update commands before accepting that compiler commit as the codex-hxrust known-good pin.
+**Decision:** Inspect and coordinate from `../haxe.rust`.
+Develop each compiler fix in an isolated worktree and land it through a haxe.rust pull request.
+Admit only an exact, clean merged commit as the codex-hxrust pin.
 
 ## Commands
 
@@ -19,6 +21,16 @@ Skip network fetch and report from the local remote-tracking branch:
 scripts/audit-haxe-rust.sh --no-fetch
 ```
 
+Select a compiler checkout explicitly for a generated build:
+
+```bash
+HAXE_RUST_ROOT=../haxe-rust-integration-<sha> \
+  scripts/run-haxe-rust.sh hxml/portable.checkout.hxml
+```
+
+The runner reports the checkout commit, dirty-file count, remote, and pin match.
+It supplies all compiler class paths from that selected checkout.
+
 Update the codex-hxrust known-good pin only through the gated updater:
 
 ```bash
@@ -33,7 +45,10 @@ scripts/sync-haxe-rust-pin-hx.sh
 
 ## Pin Surfaces
 
-`reference/haxe-rust.pin.json` is the codex-hxrust known-good consumer pin. The source of truth for compiler code and compiler Beads is `../haxe.rust`. `src/codexhx/HaxeRustPin.hx` is a scaffold mirror used by doctor output so generated binaries can report the compiler/runtime pin without parsing local files.
+`reference/haxe-rust.pin.json` is the codex-hxrust known-good consumer pin.
+The haxe.rust repository owns compiler code and compiler Beads.
+`src/codexhx/HaxeRustPin.hx` is a scaffold mirror used by doctor output.
+The generated doctor also reports the compiler commit that produced the binary.
 
 When the pin changes, update both by running `update-haxe-rust-pin.sh`; do not hand-edit only one side.
 
@@ -52,13 +67,17 @@ The affected-area classifier is conservative. Unknown changes should be treated 
 
 ## Update Gate
 
-`update-haxe-rust-pin.sh` verifies that the candidate SHA exists in `../haxe.rust`, then runs:
+`update-haxe-rust-pin.sh` rejects a checkout with the wrong remote, local changes, or a different `HEAD`. It also requires the candidate to exist on fetched `origin/main`. It then runs:
 
 ```bash
 scripts/check-generated-cargo.sh
 ```
 
-Only after the locked generated Cargo gate passes does it update `reference/haxe-rust.pin.json` and regenerate `HaxeRustPin.hx`.
+The gate regenerates both profiles from the selected checkout.
+It denies Rust compiler warnings and requires locked Cargo checks, tests, and formatting.
+Clippy denies the correctness and suspicious groups.
+
+Only after this gate passes does the updater change the pin and regenerate `HaxeRustPin.hx`.
 
 ## Future Fixture Routing
 

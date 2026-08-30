@@ -24,3 +24,6 @@ and .haxeRust.commit == $haxe_rust_commit
 and .haxeRust.packageName == "reflaxe.rust"
 and .haxeRust.packageVersion == "1.0.0"
 and .haxeRust.localPatches == "reference/haxe-rust-local-patches.v1.json"
+and .haxeRust.checkout.commit == $haxe_rust_checkout_commit
+and .haxeRust.checkout.dirtyEntries == $haxe_rust_dirty_entries
+and .haxeRust.checkout.matchesPin == $haxe_rust_matches_pin
