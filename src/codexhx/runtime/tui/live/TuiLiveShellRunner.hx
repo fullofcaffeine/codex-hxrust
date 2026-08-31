@@ -64,8 +64,13 @@ class TuiLiveShellRunner {
 	}
 
 	static function attachSession(request:TuiLiveShellRunRequest):Void {
-		final attachRequest = RequestId.fromInteger(1);
-		request.session.bootstrap(attachRequest, request.sessionId, request.primaryThreadId, request.modelLabel);
+		if (request.startupRequest == null) {
+			request.session.bootstrap(RequestId.fromInteger(1), request.sessionId, request.primaryThreadId, request.modelLabel);
+		} else {
+			final startup = request.session.open(request.startupRequest);
+			if (startup == null || !startup.isAccepted())
+				throw startup == null ? "missing_startup_outcome" : startup.code();
+		}
 		request.scheduler.handle(TerminalSchedulerEvent.DrawRequested);
 	}
 

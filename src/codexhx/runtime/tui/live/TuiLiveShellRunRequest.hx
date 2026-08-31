@@ -13,6 +13,10 @@ import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerSession;
 import codexhx.runtime.tui.appserver.TransportTuiAppServerSession;
+import codexhx.runtime.tui.appserver.AdoptedTuiAppServerStartupTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerStartupRequest;
+import codexhx.runtime.tui.appserver.TuiAppServerStartupTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerThreadOpenMode;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.terminal.TerminalBackend;
 import codexhx.runtime.tui.terminal.TerminalRedrawScheduler;
@@ -40,6 +44,7 @@ class TuiLiveShellRunRequest {
 	public var pumpEvents:Array<TuiAppServerPumpEvent>;
 	public var readinessEvents:Array<TuiAppServerReadinessEvent>;
 	public var readinessSource:TuiLiveShellReadinessSource;
+	public var startupRequest:Null<TuiAppServerStartupRequest>;
 
 	public function new(backend:TerminalBackend, setup:TerminalSetup, sessionId:SessionId, primaryThreadId:ThreadId, modelLabel:String) {
 		this.backend = backend;
@@ -48,7 +53,8 @@ class TuiLiveShellRunRequest {
 		this.primaryThreadId = primaryThreadId;
 		this.modelLabel = normalize(modelLabel, "gpt-live");
 		this.shell = ChatWidgetShellState.initial("pending");
-		this.session = new TransportTuiAppServerSession(this.shell);
+		this.session = adoptedSession(this.shell, null);
+		this.startupRequest = startup(TuiAppServerThreadOpenMode.Start, null);
 		this.scheduler = new TerminalRedrawScheduler(setup.size);
 		this.policy = TuiLiveShellRunPolicy.bounded(64, 4);
 		this.initialEvents = [];
@@ -59,18 +65,25 @@ class TuiLiveShellRunRequest {
 
 	public function withShell(shell:ChatWidgetShellState):TuiLiveShellRunRequest {
 		this.shell = shell == null ? ChatWidgetShellState.initial("pending") : shell;
-		this.session = new TransportTuiAppServerSession(this.shell);
+		this.session = adoptedSession(this.shell, null);
 		return this;
 	}
 
 	public function withSession(session:TuiAppServerSession):TuiLiveShellRunRequest {
 		this.session = session == null ? new TransportTuiAppServerSession(this.shell) : session;
 		this.shell = this.session.shell();
+		this.startupRequest = null;
+		return this;
+	}
+
+	public function withStartupTransport(transport:TuiAppServerStartupTransport, request:TuiAppServerStartupRequest):TuiLiveShellRunRequest {
+		this.startupRequest = request;
+		this.session = new TransportTuiAppServerSession(this.shell, null, transport);
 		return this;
 	}
 
 	public function withJsonRpcPromptTransport(promptTransport:JsonRpcTuiPromptTransport):TuiLiveShellRunRequest {
-		this.session = new TransportTuiAppServerSession(this.shell, promptTransport);
+		this.session = adoptedSession(this.shell, promptTransport);
 		return this;
 	}
 
@@ -144,5 +157,20 @@ class TuiLiveShellRunRequest {
 		if (value == null || value.length == 0)
 			return fallback;
 		return value;
+	}
+
+	function adoptedSession(shell:ChatWidgetShellState, promptTransport:Null<JsonRpcTuiPromptTransport>):TuiAppServerSession {
+		return new TransportTuiAppServerSession(shell, promptTransport, new AdoptedTuiAppServerStartupTransport(sessionId, primaryThreadId));
+	}
+
+	function startup(mode:TuiAppServerThreadOpenMode, resumeThreadId:Null<ThreadId>):TuiAppServerStartupRequest {
+		return new TuiAppServerStartupRequest({
+			requestId: codexhx.protocol.RequestId.fromInteger(1),
+			mode: mode,
+			resumeThreadId: resumeThreadId,
+			modelLabel: modelLabel,
+			clientName: "codex-hxrust-tui",
+			clientVersion: "0.0.0"
+		});
 	}
 }

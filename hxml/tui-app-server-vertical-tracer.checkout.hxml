@@ -1,0 +1,9 @@
+-cp src
+-cp test
+-D reflaxe_rust_profile=metal
+-D rust_deny_warnings
+-D rustfmt
+-D rust_output=generated/tui-app-server-vertical-tracer
+-D rust_crate=codex_hxrust_tui_app_server_vertical_tracer
+-D rust_cargo_subcommand=check
+-main TuiAppServerVerticalTracerHarness

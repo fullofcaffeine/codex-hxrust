@@ -19,6 +19,7 @@ import haxe.json.Value;
 **/
 interface TuiAppServerSession {
 	function shell():ChatWidgetShellState;
+	function open(request:TuiAppServerStartupRequest):TuiAppServerStartupOutcome;
 	function activeSession():Null<SessionId>;
 	function activeThread():Null<ThreadId>;
 	function primaryThread():Null<ThreadId>;

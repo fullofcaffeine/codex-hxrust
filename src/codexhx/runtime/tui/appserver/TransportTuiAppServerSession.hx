@@ -28,6 +28,7 @@ class TransportTuiAppServerSession implements TuiAppServerSession {
 	final shellValue:ChatWidgetShellState;
 	final agentNavigationValue:AgentNavigationState;
 	final promptTransport:TuiPromptTransport;
+	final startupTransport:Null<TuiAppServerStartupTransport>;
 	// StringMap forces string keys; only this session converts RequestId at the map boundary.
 	final pending:StringMap<TuiAppServerPendingRequest>;
 	final queue:Array<TuiAppServerEvent>;
@@ -45,10 +46,11 @@ class TransportTuiAppServerSession implements TuiAppServerSession {
 	var latestPromptGeneration:Int;
 	var lastPromptLifecycleValue:TuiPromptPendingRequestLifecycle;
 
-	public function new(shell:ChatWidgetShellState, ?promptTransport:TuiPromptTransport) {
+	public function new(shell:ChatWidgetShellState, ?promptTransport:TuiPromptTransport, ?startupTransport:TuiAppServerStartupTransport) {
 		this.shellValue = shell == null ? ChatWidgetShellState.initial("model pending") : shell;
 		this.agentNavigationValue = new AgentNavigationState();
 		this.promptTransport = promptTransport == null ? new JsonRpcTuiPromptTransport() : promptTransport;
+		this.startupTransport = startupTransport;
 		this.pending = new StringMap<TuiAppServerPendingRequest>();
 		this.queue = [];
 		this.activeSessionValue = null;
@@ -68,6 +70,20 @@ class TransportTuiAppServerSession implements TuiAppServerSession {
 
 	public function shell():ChatWidgetShellState {
 		return shellValue;
+	}
+
+	public function open(request:TuiAppServerStartupRequest):TuiAppServerStartupOutcome {
+		if (startupTransport == null)
+			return TuiAppServerStartupOutcome.rejected("startup_transport_unavailable");
+		final outcome = startupTransport.open(request);
+		if (outcome == null || !outcome.isAccepted())
+			return outcome == null ? TuiAppServerStartupOutcome.rejected("missing_startup_outcome") : outcome;
+		final sessionId = outcome.sessionId();
+		final threadId = outcome.threadId();
+		if (sessionId == null || threadId == null)
+			return TuiAppServerStartupOutcome.rejected("missing_startup_identity");
+		bootstrap(request.requestId, sessionId, threadId, outcome.modelLabel());
+		return outcome;
 	}
 
 	public function bootstrap(requestId:RequestId, sessionId:SessionId, primaryThreadId:ThreadId, modelLabel:String):Array<TuiAppServerShellEffect> {
