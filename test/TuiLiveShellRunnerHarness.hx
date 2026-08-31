@@ -34,6 +34,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessInteractionStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerSessionReadinessSource;
+import codexhx.runtime.tui.appserver.TuiAppServerSession;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
@@ -189,7 +190,7 @@ class TuiLiveShellRunnerHarness {
 			TerminalEvent.NoEvent
 		]);
 		final facade = new FakeTuiAppServerFacade(shell, new RunnerLongRunningPromptTransport());
-		final outcome = TuiLiveShellRunner.run(request(shell, backend, [], TuiLiveShellRunPolicy.bounded(16, 2)).withFacade(facade));
+		final outcome = TuiLiveShellRunner.run(request(shell, backend, [], TuiLiveShellRunPolicy.bounded(16, 2)).withSession(facade));
 
 		assertIntEquals(1, outcome.submittedPrompts(), "interrupt submitted prompts");
 		assertIntEquals(1, outcome.acceptedPrompts(), "interrupt accepted prompts");
@@ -4576,7 +4577,7 @@ class RunnerLongRunningPromptTransport implements TuiPromptTransport {
 		]);
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("prompt_transport_late_jsonl_drain_unsupported");
 	}

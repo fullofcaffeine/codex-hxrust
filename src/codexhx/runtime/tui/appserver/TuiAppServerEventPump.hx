@@ -13,19 +13,19 @@ import codexhx.runtime.tui.terminal.TerminalSize;
 import codexhx.protocol.RequestId;
 
 /**
-	Pumps typed fake app-server events into the live shell redraw path.
+	Pumps typed app-server session events into the live shell redraw path.
 
-	The fake facade owns session/thread state mutation. This pump owns the next
+	The session owns thread and turn state mutation. This pump owns the next
 	layer: effects that request redraw become scheduler events, rendered frames,
 	and backend operations through the same path used by terminal resize/input.
 **/
 class TuiAppServerEventPump {
-	final facade:FakeTuiAppServerFacade;
+	final session:TuiAppServerSession;
 	final scheduler:TerminalRedrawScheduler;
 	final backend:TerminalBackend;
 
-	public function new(facade:FakeTuiAppServerFacade, scheduler:TerminalRedrawScheduler, backend:TerminalBackend) {
-		this.facade = facade;
+	public function new(session:TuiAppServerSession, scheduler:TerminalRedrawScheduler, backend:TerminalBackend) {
+		this.session = session;
 		this.scheduler = scheduler;
 		this.backend = backend;
 	}
@@ -39,17 +39,17 @@ class TuiAppServerEventPump {
 		}
 
 		var processed = 0;
-		while (facade.queuedCount() > 0 && safePolicy.allowsAnother(processed)) {
-			final event = facade.shiftQueued();
+		while (session.hasPendingEvent() && safePolicy.allowsAnother(processed)) {
+			final event = session.nextEvent();
 			if (event != null) {
-				final effects = facade.receive(event);
+				final effects = session.receiveEvent(event);
 				outcome.recordEvent(effects);
 				requestDraws(effects);
 				processed = processed + 1;
 			}
 		}
 
-		if (facade.queuedCount() > 0)
+		if (session.hasPendingEvent())
 			outcome.markBackpressure();
 		flushFrame(outcome);
 		return outcome;
@@ -60,7 +60,7 @@ class TuiAppServerEventPump {
 		final navigationOutcome = handleAgentNavigationInput(input);
 		if (navigationOutcome != null)
 			return new TuiPromptSubmitInteraction([], null, navigationOutcome, null, null);
-		final shellEffects = facade.shell().applyInput(input);
+		final shellEffects = session.shell().applyInput(input);
 		final submitResult = submitPromptFromShellEffects(shellEffects, requestId, input);
 		final lateJsonlInterruptResult = interruptSubmittedTurnBeforeLateJsonlDrain(submitResult, safePolicy);
 		final lateJsonlDrainResult = drainSubmittedTurnLateJsonlAfterSubmit(submitResult, safePolicy);
@@ -73,13 +73,13 @@ class TuiAppServerEventPump {
 
 	public function handleReadinessEvent(event:TuiAppServerReadinessEvent, policy:TuiAppServerPumpPolicy):TuiAppServerReadinessInteraction {
 		final safePolicy = policy == null ? TuiAppServerPumpPolicy.lossless() : policy;
-		if (!facade.canDrainSubmittedTurnLateJsonl()) {
+		if (!session.canDrainSubmittedTurnLateJsonl()) {
 			final outcome = drain(safePolicy);
 			return TuiAppServerReadinessInteraction.noPendingSubmittedTurn(outcome);
 		}
 		final drainResult = switch event {
 			case SubmittedTurnLateJsonlReady(maxLinesPerBatch, maxBatches):
-				facade.drainSubmittedTurnLateJsonl(maxLinesPerBatch, maxBatches);
+				session.drainSubmittedTurnLateJsonl(maxLinesPerBatch, maxBatches);
 		}
 		final outcome = drain(safePolicy);
 		return TuiAppServerReadinessInteraction.drained(drainResult, outcome);
@@ -97,7 +97,7 @@ class TuiAppServerEventPump {
 		if (direction == null)
 			return null;
 		final outcome = new TuiAppServerPumpOutcome();
-		final effects = facade.activateAdjacentAgent(direction);
+		final effects = session.activateAdjacentAgent(direction);
 		outcome.recordEvent(effects);
 		requestDraws(effects);
 		flushFrame(outcome);
@@ -109,7 +109,7 @@ class TuiAppServerEventPump {
 		for (effect in shellEffects) {
 			switch effect {
 				case ChatWidgetShellEffect.PromptSubmitted(text):
-					return facade.submitPrompt(requestId, text);
+					return session.startTurn(requestId, text);
 				case _:
 			}
 		}
@@ -127,7 +127,7 @@ class TuiAppServerEventPump {
 		final requestId = policy.interruptBeforeLateJsonlDrainRequestId();
 		if (requestId == null)
 			return null;
-		return facade.interruptActiveTurn(requestId);
+		return session.interruptTurn(requestId);
 	}
 
 	function drainSubmittedTurnLateJsonlAfterSubmit(submitResult:Null<TuiPromptSubmitResult>,
@@ -136,7 +136,7 @@ class TuiAppServerEventPump {
 			return null;
 		if (policy == null || !policy.shouldDrainSubmittedTurnLateJsonl())
 			return null;
-		return facade.drainSubmittedTurnLateJsonl(policy.lateJsonlMaxLinesPerBatch, policy.lateJsonlMaxBatches);
+		return session.drainSubmittedTurnLateJsonl(policy.lateJsonlMaxLinesPerBatch, policy.lateJsonlMaxBatches);
 	}
 
 	function requestShellDraws(effects:Array<ChatWidgetShellEffect>):Array<TerminalSchedulerEffect> {
@@ -168,7 +168,7 @@ class TuiAppServerEventPump {
 	}
 
 	function flushFrame(outcome:TuiAppServerPumpOutcome):Void {
-		final frame = ChatWidgetShellRenderer.render(facade.shell(), scheduler.currentSize());
+		final frame = ChatWidgetShellRenderer.render(session.shell(), scheduler.currentSize());
 		final schedulerEffects = scheduler.flush(frame);
 		outcome.recordSchedulerEffects(schedulerEffects);
 		outcome.recordTerminalOperations(TerminalSchedulerRunner.applyEffects(backend, schedulerEffects));

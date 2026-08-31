@@ -130,7 +130,7 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		return TuiPromptTurnInterruptOutcome.accepted(lineOutcome.response(), lineOutcome.events());
 	}
 
-	public function pumpSubmittedTurnLateJsonlBatch(facade:FakeTuiAppServerFacade, maxLines:Int):TuiPromptSubmittedTurnLateJsonlPumpResult {
+	public function pumpSubmittedTurnLateJsonlBatch(session:TuiAppServerSession, maxLines:Int):TuiPromptSubmittedTurnLateJsonlPumpResult {
 		lastLateJsonlBatchValue = null;
 		lastLateJsonlPumpResultValue = null;
 		if (closedValue) {
@@ -138,8 +138,8 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 				[]));
 			return lastLateJsonlPumpResultValue;
 		}
-		if (facade == null) {
-			lastLateJsonlPumpResultValue = TuiPromptSubmittedTurnLateJsonlPumpResult.lineRejected(TuiAppServerJsonRpcLateJsonlBatch.rejected("missing_facade"));
+		if (session == null) {
+			lastLateJsonlPumpResultValue = TuiPromptSubmittedTurnLateJsonlPumpResult.lineRejected(TuiAppServerJsonRpcLateJsonlBatch.rejected("missing_session"));
 			return lastLateJsonlPumpResultValue;
 		}
 		final connected = ensureConnected();
@@ -158,11 +158,11 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 			lastLateJsonlPumpResultValue = TuiPromptSubmittedTurnLateJsonlPumpResult.lineRejected(lines);
 			return lastLateJsonlPumpResultValue;
 		}
-		lastLateJsonlPumpResultValue = TuiPromptSubmittedTurnLateJsonlPumpResult.fromBatch(lines, facade.deliverSubmittedTurnJsonlBatchLines(lines.lines()));
+		lastLateJsonlPumpResultValue = TuiPromptSubmittedTurnLateJsonlPumpResult.fromBatch(lines, session.deliverSubmittedTurnJsonlBatchLines(lines.lines()));
 		return lastLateJsonlPumpResultValue;
 	}
 
-	public function drainSubmittedTurnLateJsonlBatches(facade:FakeTuiAppServerFacade, maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonlBatches(session:TuiAppServerSession, maxLinesPerBatch:Int,
 			maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		lastLateJsonlDrainResultValue = null;
 		if (maxLinesPerBatch <= 0) {
@@ -189,7 +189,7 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 
 		for (_ in 0...maxBatches) {
 			attemptedBatchCount = attemptedBatchCount + 1;
-			stopPump = pumpSubmittedTurnLateJsonlBatch(facade, maxLinesPerBatch);
+			stopPump = pumpSubmittedTurnLateJsonlBatch(session, maxLinesPerBatch);
 			if (stopPump == null) {
 				lastLateJsonlDrainResultValue = lateJsonlDrainResult(TuiPromptSubmittedTurnLateJsonlDrainStatus.BatchRejected,
 					"missing_late_jsonl_pump_result", attemptedBatchCount, acceptedBatchCount, lineCount, notificationCount, appliedNotificationCount,
@@ -233,9 +233,8 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		return lastLateJsonlDrainResultValue;
 	}
 
-	public function drainSubmittedTurnLateJsonl(facade:FakeTuiAppServerFacade, maxLinesPerBatch:Int,
-			maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
-		return drainSubmittedTurnLateJsonlBatches(facade, maxLinesPerBatch, maxBatches);
+	public function drainSubmittedTurnLateJsonl(session:TuiAppServerSession, maxLinesPerBatch:Int, maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return drainSubmittedTurnLateJsonlBatches(session, maxLinesPerBatch, maxBatches);
 	}
 
 	public function close(code:String):TuiAppServerJsonRpcLineCloseReport {

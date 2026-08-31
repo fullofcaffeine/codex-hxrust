@@ -3,8 +3,8 @@
 **Beads:** `TUI-LIVE-9` / `codex-hxrust-3v64`, `TUI-LIVE-10` / `codex-hxrust-dglj`
 
 This slice connects the production `AgentNavigationState` to the minimal live
-TUI shell. `FakeTuiAppServerFacade` now composes the state beside active session
-and active thread ownership, so typed fake app-server events can update agent
+TUI shell. `TransportTuiAppServerSession` composes the state beside active session
+and active thread ownership, so typed app-server events can update agent
 metadata, path/running activity, closed state, removal, and active-thread
 selection.
 

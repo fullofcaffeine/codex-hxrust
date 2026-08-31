@@ -3,8 +3,7 @@ package codexhx.runtime.tui.appserver;
 import codexhx.protocol.RequestId;
 
 /**
-	Typed prompt pending-request lifecycle observed by the fake app-server
-	facade.
+	Typed prompt pending-request lifecycle observed by the app-server session.
 **/
 class TuiPromptPendingRequestLifecycle {
 	public final status:TuiPromptPendingRequestStatus;

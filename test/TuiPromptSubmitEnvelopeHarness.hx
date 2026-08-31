@@ -58,6 +58,7 @@ import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
+import codexhx.runtime.tui.appserver.TuiAppServerSession;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
 import codexhx.runtime.tui.appserver.PersistentStdioTuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.ProcessBackedTuiAppServerJsonRpcLineTransportAttacher;
@@ -3898,7 +3899,7 @@ class RejectingPromptTransport implements TuiPromptTransport {
 		return TuiPromptTurnInterruptOutcome.rejected(code);
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("prompt_transport_late_jsonl_drain_unsupported");
 	}
@@ -3928,7 +3929,7 @@ class LongRunningPromptTransport implements TuiPromptTransport {
 		]);
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("prompt_transport_late_jsonl_drain_unsupported");
 	}
@@ -3958,7 +3959,7 @@ class LineRejectedDrainPromptTransport implements TuiPromptTransport {
 		return TuiPromptTurnInterruptOutcome.rejected("line_rejected_drain_interrupt_unsupported");
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return new TuiPromptSubmittedTurnLateJsonlDrainResult(TuiPromptSubmittedTurnLateJsonlDrainStatus.LineReadRejected, code, 1, 0, 0, 0, 0, 0, 0, 0,
 			TuiPromptSubmittedTurnLateJsonlPumpStatus.LineReadRejected.text(), code, TuiAppServerJsonRpcTransportStatus.Disconnected.text(), code, "", "", "",
@@ -4087,7 +4088,7 @@ class DisconnectedAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransp
 		return TuiPromptTurnInterruptOutcome.rejected(code);
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("app_server_late_jsonl_drain_unsupported");
 	}
@@ -4109,7 +4110,7 @@ class MissingResponseAppServerJsonRpcTransport implements TuiAppServerJsonRpcTra
 		return TuiPromptTurnInterruptOutcome.rejected("missing_response_transport_interrupt_unsupported");
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("app_server_late_jsonl_drain_unsupported");
 	}

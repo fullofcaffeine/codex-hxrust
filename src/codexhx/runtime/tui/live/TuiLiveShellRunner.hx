@@ -17,7 +17,7 @@ import codexhx.runtime.tui.terminal.TerminalSchedulerRunner;
 	Runs the first credential-free live TUI shell loop.
 
 	This is intentionally small: it owns terminal setup/restore and event
-	dispatch, while the fake app-server facade and ChatWidget shell own state
+	dispatch, while the app-server session and ChatWidget shell own state
 	mutation. The loop is bounded so the same code path is usable in headless CI
 	and generated Rust smoke gates.
 **/
@@ -33,7 +33,7 @@ class TuiLiveShellRunner {
 			return outcome;
 		}
 
-		final pump = new TuiAppServerEventPump(request.facade, request.scheduler, request.backend);
+		final pump = new TuiAppServerEventPump(request.session, request.scheduler, request.backend);
 		try {
 			attachSession(request);
 			enqueueInitialEvents(request);
@@ -54,25 +54,24 @@ class TuiLiveShellRunner {
 	}
 
 	static function shutdownPromptTransport(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome, code:String):Void {
-		outcome.recordPromptTransportShutdown(request.facade.shutdownPromptTransport(code));
+		outcome.recordPromptTransportShutdown(request.session.shutdown(code));
 	}
 
 	static function recordTurnState(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome):Void {
-		outcome.recordTurnState(request.facade.activeTurnIdText(), request.facade.lastStartedTurnIdText(), request.facade.lastCompletedTurnIdText(),
-			request.facade.lastInterruptedTurnIdText(), request.facade.completedTurnCount(), request.facade.interruptedTurnCount(),
-			request.facade.lastInterruptCode());
+		outcome.recordTurnState(request.session.activeTurnIdText(), request.session.lastStartedTurnIdText(), request.session.lastCompletedTurnIdText(),
+			request.session.lastInterruptedTurnIdText(), request.session.completedTurnCount(), request.session.interruptedTurnCount(),
+			request.session.lastInterruptCode());
 	}
 
 	static function attachSession(request:TuiLiveShellRunRequest):Void {
 		final attachRequest = RequestId.fromInteger(1);
-		request.facade.startSessionAttach(attachRequest, request.sessionId, request.primaryThreadId, request.modelLabel);
-		request.facade.completeSessionAttach(attachRequest);
+		request.session.bootstrap(attachRequest, request.sessionId, request.primaryThreadId, request.modelLabel);
 		request.scheduler.handle(TerminalSchedulerEvent.DrawRequested);
 	}
 
 	static function enqueueInitialEvents(request:TuiLiveShellRunRequest):Void {
 		for (event in request.initialEvents)
-			request.facade.enqueue(event);
+			request.session.enqueueEvent(event);
 	}
 
 	static function runLoop(request:TuiLiveShellRunRequest, pump:TuiAppServerEventPump, outcome:TuiLiveShellRunOutcome):Void {
@@ -83,7 +82,7 @@ class TuiLiveShellRunner {
 			&& outcome.iterations() < request.policy.maxIterations
 			&& idleEvents < request.policy.idleEventLimit) {
 			outcome.recordIteration();
-			if (request.facade.hasPendingSubmittedTurn() || submittedTurnReadinessOpened) {
+			if (request.session.hasPendingSubmittedTurn() || submittedTurnReadinessOpened) {
 				final queuedReadinessEvent = request.shiftReadinessEvent();
 				if (queuedReadinessEvent != null) {
 					outcome.recordReadinessEvent();
@@ -94,7 +93,7 @@ class TuiLiveShellRunner {
 				}
 			}
 
-			final queuedPumpEvent = request.facade.queuedCount() > 0 ? request.shiftPumpEvent() : null;
+			final queuedPumpEvent = request.session.hasPendingEvent() ? request.shiftPumpEvent() : null;
 			final pumpEvent = queuedPumpEvent == null ? TuiAppServerPumpEvent.DrainQueuedEvents : queuedPumpEvent;
 			if (queuedPumpEvent != null)
 				outcome.recordPumpEvent();
@@ -128,7 +127,7 @@ class TuiLiveShellRunner {
 					idleEvents = 0;
 					outcome.recordKeyEvent();
 					if (shouldInterruptOnKey(request, key)) {
-						request.facade.interruptActiveTurn(RequestId.fromInteger(nextRequestId));
+						request.session.interruptTurn(RequestId.fromInteger(nextRequestId));
 						nextRequestId = nextRequestId + 1;
 						recordPump(request, outcome, pump.handlePumpEvent(TuiAppServerPumpEvent.DrainQueuedEvents, request.policy.appServerPolicy), false);
 						recordCurrentFrame(request, outcome);
@@ -160,7 +159,7 @@ class TuiLiveShellRunner {
 	static function recordReadiness(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome,
 			interaction:codexhx.runtime.tui.appserver.TuiAppServerReadinessInteraction):Void {
 		outcome.recordReadinessInteraction(interaction);
-		outcome.recordReadinessActiveTurn(request.facade.activeTurnIdText());
+		outcome.recordReadinessActiveTurn(request.session.activeTurnIdText());
 		if (interaction != null && interaction.pumpOutcome().schedulerDrawFrameCount() > 0)
 			recordCurrentFrame(request, outcome);
 	}
@@ -196,7 +195,7 @@ class TuiLiveShellRunner {
 	static function shouldInterruptOnKey(request:TuiLiveShellRunRequest, key:TerminalKey):Bool {
 		return switch key {
 			case TerminalKey.CtrlC:
-				request.facade.activeTurn() != null;
+				request.session.activeTurn() != null;
 			case _:
 				false;
 		}

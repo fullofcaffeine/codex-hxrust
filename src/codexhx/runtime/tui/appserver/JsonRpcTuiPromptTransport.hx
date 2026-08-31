@@ -99,9 +99,8 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		return lastInterruptOutcomeValue;
 	}
 
-	public function drainSubmittedTurnLateJsonl(facade:FakeTuiAppServerFacade, maxLinesPerBatch:Int,
-			maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
-		return appServerTransport.drainSubmittedTurnLateJsonl(facade, maxLinesPerBatch, maxBatches);
+	public function drainSubmittedTurnLateJsonl(session:TuiAppServerSession, maxLinesPerBatch:Int, maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
+		return appServerTransport.drainSubmittedTurnLateJsonl(session, maxLinesPerBatch, maxBatches);
 	}
 
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {

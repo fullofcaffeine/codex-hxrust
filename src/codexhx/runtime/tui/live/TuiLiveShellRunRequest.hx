@@ -4,7 +4,6 @@ import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
-import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.PersistentTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
@@ -12,6 +11,8 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
+import codexhx.runtime.tui.appserver.TuiAppServerSession;
+import codexhx.runtime.tui.appserver.TransportTuiAppServerSession;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.terminal.TerminalBackend;
 import codexhx.runtime.tui.terminal.TerminalRedrawScheduler;
@@ -21,7 +22,7 @@ import codexhx.runtime.tui.terminal.TerminalSetup;
 	Typed startup request for the minimal runnable TUI shell.
 
 	The required fields are the live boundary facts: terminal backend/setup and
-	the fake session/thread identity. Optional builder methods let tests inject
+	the session/thread identity. Optional builder methods let tests inject
 	existing state without widening the runner with opaque configuration or
 	anonymous records whose backend field type can drift in generated Rust.
 **/
@@ -32,7 +33,7 @@ class TuiLiveShellRunRequest {
 	public final primaryThreadId:ThreadId;
 	public final modelLabel:String;
 	public var shell:ChatWidgetShellState;
-	public var facade:FakeTuiAppServerFacade;
+	public var session:TuiAppServerSession;
 	public var scheduler:TerminalRedrawScheduler;
 	public var policy:TuiLiveShellRunPolicy;
 	public var initialEvents:Array<TuiAppServerEvent>;
@@ -47,7 +48,7 @@ class TuiLiveShellRunRequest {
 		this.primaryThreadId = primaryThreadId;
 		this.modelLabel = normalize(modelLabel, "gpt-live");
 		this.shell = ChatWidgetShellState.initial("pending");
-		this.facade = new FakeTuiAppServerFacade(this.shell);
+		this.session = new TransportTuiAppServerSession(this.shell);
 		this.scheduler = new TerminalRedrawScheduler(setup.size);
 		this.policy = TuiLiveShellRunPolicy.bounded(64, 4);
 		this.initialEvents = [];
@@ -58,17 +59,18 @@ class TuiLiveShellRunRequest {
 
 	public function withShell(shell:ChatWidgetShellState):TuiLiveShellRunRequest {
 		this.shell = shell == null ? ChatWidgetShellState.initial("pending") : shell;
-		this.facade = new FakeTuiAppServerFacade(this.shell);
+		this.session = new TransportTuiAppServerSession(this.shell);
 		return this;
 	}
 
-	public function withFacade(facade:FakeTuiAppServerFacade):TuiLiveShellRunRequest {
-		this.facade = facade == null ? new FakeTuiAppServerFacade(this.shell) : facade;
+	public function withSession(session:TuiAppServerSession):TuiLiveShellRunRequest {
+		this.session = session == null ? new TransportTuiAppServerSession(this.shell) : session;
+		this.shell = this.session.shell();
 		return this;
 	}
 
 	public function withJsonRpcPromptTransport(promptTransport:JsonRpcTuiPromptTransport):TuiLiveShellRunRequest {
-		this.facade = new FakeTuiAppServerFacade(this.shell, promptTransport);
+		this.session = new TransportTuiAppServerSession(this.shell, promptTransport);
 		return this;
 	}
 

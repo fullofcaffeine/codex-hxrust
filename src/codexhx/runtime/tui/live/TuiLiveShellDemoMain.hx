@@ -14,8 +14,8 @@ import codexhx.runtime.tui.terminal.TerminalSize;
 /**
 	User-runnable, credential-free generated live TUI demo entrypoint.
 
-	The demo intentionally uses the fake app-server facade from the minimal live
-	shell by default. It can also select the dry-run connector-backed JSONL line
+	The demo uses the credential-free transport-backed app-server session by
+	default. It can also select the dry-run connector-backed JSONL line
 	transport or an explicit one-shot process-backed stdio JSONL transport so the
 	same generated binary exercises the app-server-shaped prompt path while keeping
 	model traffic, sockets, tools, and persistent state out of scope.

@@ -3,17 +3,17 @@
 **Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`, `TUI-LIVE-65` / `codex-hxrust-o8lu`, `TUI-LIVE-81` / `codex-hxrust-xfyp`, `TUI-LIVE-82` / `codex-hxrust-u6ta`, `TUI-LIVE-83` / `codex-hxrust-73vh`, `TUI-LIVE-84` / `codex-hxrust-7mrb`, `TUI-LIVE-85` / `codex-hxrust-rce5`, `TUI-LIVE-86` / `codex-hxrust-f44b`, `TUI-LIVE-87` / `codex-hxrust-uuhi`, `TUI-LIVE-88` / `codex-hxrust-swjy`, `TUI-LIVE-89` / `codex-hxrust-wb6o`, `TUI-LIVE-90` / `codex-hxrust-ofn3`, `TUI-LIVE-91` / `codex-hxrust-28tx`, `TUI-LIVE-92` / `codex-hxrust-t7qt`, `TUI-LIVE-93` / `codex-hxrust-mohy`, `TUI-LIVE-94` / `codex-hxrust-7u0m`, `TUI-LIVE-95` / `codex-hxrust-0o47`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
-production terminal backend, redraw scheduler, ChatWidget shell state, fake
-app-server facade, app-server event pump, and typed terminal input mapper into
+production terminal backend, redraw scheduler, ChatWidget shell state,
+app-server session, event pump, and typed terminal input mapper into
 one bounded runner.
 
 The runner is still credential-free. It does not open a JSON-RPC socket, call a
 model, use SQLite/log state, or render the full upstream ratatui widget tree.
-It proves the generated Haxe/Rust path can set up a terminal backend, attach a
-fake session, draw the first frame, poll typed terminal events, submit prompt
-text through the fake app-server path, route semantic agent previous/next input,
-handle resize/draw/tick events, request exit for Esc/Ctrl-C/empty-composer `q`,
-and restore the terminal.
+It proves that generated Haxe/Rust can set up a terminal backend and attach a
+typed session. The runner draws the first frame, polls typed terminal events,
+and submits prompts through the credential-free app-server path. It routes
+previous/next agent input and handles resize, draw, and tick events. It also
+requests exit for Esc, Ctrl-C, or empty-composer `q`, and restores the terminal.
 
 Validation:
 
@@ -50,7 +50,7 @@ so the generated demo can report completed turn evidence before the later
 `turn/interrupt` request path exists.
 
 `TUI-LIVE-63` adds the first typed interrupt route. During key handling,
-`TuiLiveShellRunner` sends Ctrl-C to `FakeTuiAppServerFacade.interruptActiveTurn`
+`TuiLiveShellRunner` sends Ctrl-C to `TuiAppServerSession.interruptTurn`
 when an active turn exists; idle Ctrl-C still follows the previous shell-exit
 path. `TuiLiveShellRunOutcome` now records last-interrupted turn ID,
 interrupted-turn count, and the last interrupt code alongside active/completed

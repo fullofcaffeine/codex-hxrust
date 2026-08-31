@@ -29,7 +29,7 @@ class EchoTuiPromptTransport implements TuiPromptTransport {
 		]);
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("prompt_transport_late_jsonl_drain_unsupported");
 	}

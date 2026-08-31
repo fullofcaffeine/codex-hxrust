@@ -1,14 +1,15 @@
-# TUI Fake App-Server Session
+# TUI Fake App-Server Session Fixture
 
 **Bead:** `TUI-LIVE-5` / `codex-hxrust-ppp3`
 
 ## Purpose
 
-This slice attaches the minimal live ChatWidget shell to a deterministic, in-process app-server facade. It proves session lifecycle and active-thread notifications can mutate rendered TUI state without opening sockets, reading credentials, calling models, or touching SQLite/log state.
+This validation fixture attaches the ChatWidget shell to a deterministic app-server session. It proves session lifecycle and active-thread notifications can mutate rendered TUI state without external services.
 
 ## Shape
 
-- `codexhx.runtime.tui.appserver.FakeTuiAppServerFacade` owns typed pending attach requests, active session/thread IDs, and a deterministic event queue.
+- `FakeTuiAppServerFacade` is a test implementation of `TuiAppServerSession`.
+- `TransportTuiAppServerSession` owns pending requests, active IDs, and the event queue.
 - `TuiAppServerEvent` models session started, thread status, assistant delta, and disconnect notifications as typed variants.
 - `TuiAppServerShellEffect` reports request registration, stale response rejection, session attach, event application/ignore, disconnect, and redraw intent.
 - Request correlation uses `codexhx.protocol.RequestId`; session/thread ownership uses `SessionId` and `ThreadId`.

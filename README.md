@@ -33,7 +33,7 @@ Latest slice: `TUI-LIVE-140` / `codex-hxrust-6ble` routes prefix-then-decode-rej
 
 The strategy is upstream-first:
 
-1. Model the mainstream Codex protocol/runtime shape from `../codex`.
+1. Model the mainstream Codex protocol/runtime shape from the clean, pinned `../codex-upstream-reference` checkout.
 2. Prove Haxe-authored, Rust-emitted parity in small gated slices.
 3. Add Cafex/Cafetera compatibility later as an adapter/conformance layer.
 4. Treat haxe.rust limitations found during the port as upstreamable compiler/runtime work.

@@ -11,20 +11,24 @@ import codexhx.runtime.tui.chatwidget.ChatWidgetTranscriptRole;
 import codexhx.runtime.tui.agent.AgentNavigationDirection;
 import codexhx.runtime.tui.agent.AgentNavigationState;
 import haxe.ds.StringMap;
+import haxe.json.Value;
 
 /**
-	Credential-free app-server facade for the first production-shaped live shell.
+	Transport-backed app-server session seam for the first live-shell tracer.
 
-	The facade models request IDs, stale attach responses, session ownership, and
-	thread-scoped notifications without sockets, JSON parsing, model calls, or DB
-	handles. Later transports can preserve this typed surface while replacing the
-	in-process event queue.
+	The session owns request correlation, thread and turn state, inbound event
+	delivery, and transport shutdown. Its typed transport can be deterministic,
+	line-connected, or process-backed without changing TUI ownership. The
+	zero-configuration path is deterministic and credential-free; callers must
+	inject a line-connected or process-backed transport for live turn I/O.
+	Bootstrap currently adopts caller-supplied session and thread identifiers;
+	the first vertical tracer must add wire-level initialize and thread attach.
 **/
-class FakeTuiAppServerFacade {
+class TransportTuiAppServerSession implements TuiAppServerSession {
 	final shellValue:ChatWidgetShellState;
 	final agentNavigationValue:AgentNavigationState;
 	final promptTransport:TuiPromptTransport;
-	// StringMap forces string keys; only this facade converts RequestId at the map boundary.
+	// StringMap forces string keys; only this session converts RequestId at the map boundary.
 	final pending:StringMap<TuiAppServerPendingRequest>;
 	final queue:Array<TuiAppServerEvent>;
 	var activeSessionValue:Null<SessionId>;
@@ -64,6 +68,11 @@ class FakeTuiAppServerFacade {
 
 	public function shell():ChatWidgetShellState {
 		return shellValue;
+	}
+
+	public function bootstrap(requestId:RequestId, sessionId:SessionId, primaryThreadId:ThreadId, modelLabel:String):Array<TuiAppServerShellEffect> {
+		startSessionAttach(requestId, sessionId, primaryThreadId, modelLabel);
+		return completeSessionAttach(requestId);
 	}
 
 	public function activeSession():Null<SessionId> {
@@ -182,6 +191,10 @@ class FakeTuiAppServerFacade {
 		return TuiPromptSubmitResult.accepted(envelope, effects);
 	}
 
+	public function startTurn(requestId:RequestId, promptText:String):TuiPromptSubmitResult {
+		return submitPrompt(requestId, promptText);
+	}
+
 	public function drainSubmittedTurnLateJsonl(maxLinesPerBatch:Int, maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return promptTransport.drainSubmittedTurnLateJsonl(this, maxLinesPerBatch, maxBatches);
 	}
@@ -214,6 +227,10 @@ class FakeTuiAppServerFacade {
 		for (event in outcome.events())
 			enqueue(event);
 		return TuiPromptTurnInterruptResult.accepted(envelope, effects);
+	}
+
+	public function interruptTurn(requestId:RequestId):TuiPromptTurnInterruptResult {
+		return interruptActiveTurn(requestId);
 	}
 
 	public function deliverSubmittedTurnCompletion(threadId:ThreadId, turnId:TurnId):TuiPromptSubmittedTurnCompletionResult {
@@ -329,6 +346,18 @@ class FakeTuiAppServerFacade {
 		return promptTransport.shutdown(code);
 	}
 
+	public function resolveServerRequest(_requestId:RequestId, _result:Value):TuiAppServerRequestResponseOutcome {
+		return TuiAppServerRequestResponseOutcome.unsupported();
+	}
+
+	public function rejectServerRequest(_requestId:RequestId, _error:Value):TuiAppServerRequestResponseOutcome {
+		return TuiAppServerRequestResponseOutcome.unsupported();
+	}
+
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return shutdownPromptTransport(code);
+	}
+
 	public function receive(event:TuiAppServerEvent):Array<TuiAppServerShellEffect> {
 		final effects:Array<TuiAppServerShellEffect> = [];
 		switch event {
@@ -418,14 +447,30 @@ class FakeTuiAppServerFacade {
 		queue.push(event);
 	}
 
+	public function enqueueEvent(event:TuiAppServerEvent):Void {
+		enqueue(event);
+	}
+
 	public function queuedCount():Int {
 		return queue.length;
+	}
+
+	public function hasPendingEvent():Bool {
+		return queuedCount() > 0;
 	}
 
 	public function shiftQueued():Null<TuiAppServerEvent> {
 		if (queue.length == 0)
 			return null;
 		return queue.shift();
+	}
+
+	public function nextEvent():Null<TuiAppServerEvent> {
+		return shiftQueued();
+	}
+
+	public function receiveEvent(event:TuiAppServerEvent):Array<TuiAppServerShellEffect> {
+		return receive(event);
 	}
 
 	public function drainQueued():Array<TuiAppServerShellEffect> {

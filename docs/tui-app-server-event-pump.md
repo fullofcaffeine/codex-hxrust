@@ -4,14 +4,14 @@
 
 ## Purpose
 
-This slice connects typed fake app-server events to the minimal live shell redraw path. App-server notifications now update `ChatWidgetShellState`, request redraws through `TerminalRedrawScheduler`, render the updated shell, and apply backend operations through `TerminalSchedulerRunner`.
+This slice connects typed app-server session events to the minimal live shell redraw path. App-server notifications now update `ChatWidgetShellState`, request redraws through `TerminalRedrawScheduler`, render the updated shell, and apply backend operations through `TerminalSchedulerRunner`.
 
 ## Shape
 
-- `TuiAppServerEventPump` drains queued `TuiAppServerEvent` values from `FakeTuiAppServerFacade`, routes shell effects into scheduler draw requests, renders `ChatWidgetShellRenderer`, and applies terminal operations.
+- `TuiAppServerEventPump` drains queued `TuiAppServerEvent` values from `TuiAppServerSession`, routes shell effects into scheduler draw requests, renders `ChatWidgetShellRenderer`, and applies terminal operations.
 - `TuiAppServerPumpPolicy` exposes the current synchronous drain contract plus future async hooks: lossless drain, bounded drain, and cancellation.
 - `TuiAppServerPumpOutcome` records structured state/effect evidence: drained events, draw requests, scheduler effects, terminal operations, backpressure, and cancellation.
-- `FakeTuiAppServerFacade.shiftQueued()` keeps queue ownership typed while allowing the pump to stop on policy boundaries.
+- `TuiAppServerSession.nextEvent()` keeps queue ownership typed while allowing the pump to stop on policy boundaries.
 
 The current pump is synchronous and credential-free. Bounded drains preserve remaining queued events and report backpressure; they do not drop events. Cancellation preserves queued events and skips redraw.
 

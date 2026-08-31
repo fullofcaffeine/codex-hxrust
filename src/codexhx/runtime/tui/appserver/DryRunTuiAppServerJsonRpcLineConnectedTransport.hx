@@ -89,7 +89,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		return TuiPromptTurnInterruptOutcome.rejected("line_connected_interrupt_unsupported");
 	}
 
-	public function drainSubmittedTurnLateJsonl(_facade:FakeTuiAppServerFacade, _maxLinesPerBatch:Int,
+	public function drainSubmittedTurnLateJsonl(_session:TuiAppServerSession, _maxLinesPerBatch:Int,
 			_maxBatches:Int):TuiPromptSubmittedTurnLateJsonlDrainResult {
 		return TuiPromptSubmittedTurnLateJsonlDrainResult.unsupported("line_connected_late_jsonl_drain_unsupported");
 	}
