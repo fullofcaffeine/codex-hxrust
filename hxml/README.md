@@ -66,7 +66,7 @@ Profile policy for the scaffold:
 | `tui-prompt-submit-envelope.hxml` | Compile the TUI-LIVE-7 prompt submit envelope harness through metal haxe.rust. |
 | `tui-agent-navigation.hxml` | Compile the TUI-LIVE-8 production agent navigation state harness through portable haxe.rust. |
 | `tui-live-agent-navigation.hxml` | Compile the TUI-LIVE-9 live shell agent navigation integration harness through metal haxe.rust. |
-| `tui-app-server-session-contract.checkout.hxml` | Compile the typed TUI app-server session ownership contract through metal haxe.rust. |
+| `tui-app-server-session-contract.checkout.hxml` | Compile the typed TUI session and persistent client-response transport contract through metal haxe.rust. |
 | `tui-app-server-vertical-tracer.checkout.hxml` | Compile the initialize/thread-open/turn/render/shutdown/restore tracer through metal haxe.rust. |
 | `resume-picker-kernel.hxml` | Compile the HXCX-TUI-103 resume picker pure state/effect kernel harness through portable haxe.rust. |
 | `resume-picker-host-facade.hxml` | Compile the HXCX-TUI-104 resume picker runtime-neutral host facade harness through portable haxe.rust. |

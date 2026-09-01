@@ -105,6 +105,12 @@ class ProcessBackedTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonR
 		return TuiPromptTurnInterruptLineOutcome.accepted(decoded.response(), decoded.events(), report.transcript().inboundLines(), report.transcript());
 	}
 
+	public function sendClientResponseLine(_response:TuiAppServerClientResponse, _outboundLine:String):TuiAppServerRequestResponseOutcome {
+		if (!isOpen())
+			return TuiAppServerRequestResponseOutcome.disconnected("line_transport_closed");
+		return TuiAppServerRequestResponseOutcome.rejected("client_response_requires_persistent_transport");
+	}
+
 	public function readLateJsonlBatchLines(_maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
 		if (!isOpen())
 			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);

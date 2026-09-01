@@ -163,6 +163,37 @@ class TuiAppServerJsonRpcStdioSession implements TuiAppServerJsonRpcLineTranspor
 			TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
 	}
 
+	public function sendClientResponseLine(response:TuiAppServerClientResponse, outboundLine:String):TuiAppServerRequestResponseOutcome {
+		if (!isOpen())
+			return TuiAppServerRequestResponseOutcome.disconnected("line_transport_closed");
+		if (response == null)
+			return TuiAppServerRequestResponseOutcome.rejected("missing_client_response");
+		final validationCode = response.validationCode();
+		if (validationCode != "valid")
+			return TuiAppServerRequestResponseOutcome.rejected(validationCode);
+		if (outboundLine == null || outboundLine.length == 0)
+			return TuiAppServerRequestResponseOutcome.rejected("missing_outbound_line");
+		if (outboundLine != response.messageJson() + "\n")
+			return TuiAppServerRequestResponseOutcome.rejected("mismatched_outbound_line");
+		final refusal = refusalCode();
+		if (refusal.length > 0)
+			return TuiAppServerRequestResponseOutcome.rejected(refusal);
+		final started = ensureStarted();
+		if (started.length > 0)
+			return TuiAppServerRequestResponseOutcome.disconnected(started);
+		final active = process;
+		if (active == null)
+			return TuiAppServerRequestResponseOutcome.disconnected("missing_stdio_process");
+		try {
+			active.stdin.writeString(outboundLine);
+			active.stdin.flush();
+			outboundLines = outboundLines + 1;
+			return TuiAppServerRequestResponseOutcome.sent();
+		} catch (e:haxe.Exception) {
+			return TuiAppServerRequestResponseOutcome.disconnected("stdio_write_failed");
+		}
+	}
+
 	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
 		if (!isOpen())
 			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);

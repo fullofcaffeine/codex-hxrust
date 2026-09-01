@@ -1,7 +1,10 @@
 package codexhx.runtime.tui.appserver;
 
+import codexhx.protocol.RequestId;
+import haxe.json.Value;
+
 /**
-	Connector-backed JSON-RPC prompt transport that keeps one line transport open.
+	Connector-backed app-server transport that keeps one line transport open.
 
 	Why
 	- A live TUI app-server session must survive more than one prompt. The
@@ -10,18 +13,17 @@ package codexhx.runtime.tui.appserver;
 
 	What
 	- Connects and materializes the line transport lazily on first send.
-	- Reuses the same line transport across subsequent prompt submissions.
+	- Reuses the same line transport across prompts and client responses.
 	- Converts line outcomes back into the existing typed JSON-RPC transport
 	  outcome shape.
-	- Exposes explicit close diagnostics without widening the current
-	  `TuiAppServerJsonRpcTransport` interface yet.
+	- Keeps prompt calls and app-server request responses in separate contracts.
 
 	How
 	- Keeps endpoint/open/attachment reporting in the existing connector seam.
 	- Leaves async reader/writer tasks, sockets, credentials, persistence, and
 	  model/tool execution for later runtime slices.
 **/
-class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJsonRpcTransport {
+class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJsonRpcTransport implements TuiAppServerClientTransport {
 	final endpoint:TuiAppServerJsonRpcLineEndpoint;
 	final connector:DryRunTuiAppServerJsonRpcLineConnector;
 
@@ -128,6 +130,14 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		if (!lineOutcome.isAccepted())
 			return TuiPromptTurnInterruptOutcome.rejected(lineOutcome.code());
 		return TuiPromptTurnInterruptOutcome.accepted(lineOutcome.response(), lineOutcome.events());
+	}
+
+	public function resolveServerRequest(requestId:RequestId, result:Value):TuiAppServerRequestResponseOutcome {
+		return sendClientResponse(TuiAppServerClientResponse.resolved(requestId, result));
+	}
+
+	public function rejectServerRequest(requestId:RequestId, error:TuiAppServerJsonRpcError):TuiAppServerRequestResponseOutcome {
+		return sendClientResponse(TuiAppServerClientResponse.rejected(requestId, error));
 	}
 
 	public function pumpSubmittedTurnLateJsonlBatch(session:TuiAppServerSession, maxLines:Int):TuiPromptSubmittedTurnLateJsonlPumpResult {
@@ -310,6 +320,27 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		lineTransportValue = transport;
 		lastCloseReportValue = null;
 		return "";
+	}
+
+	function sendClientResponse(response:TuiAppServerClientResponse):TuiAppServerRequestResponseOutcome {
+		if (closedValue)
+			return TuiAppServerRequestResponseOutcome.disconnected("line_connected_transport_closed");
+		if (response == null)
+			return TuiAppServerRequestResponseOutcome.rejected("missing_client_response");
+		final validationCode = response.validationCode();
+		if (validationCode != "valid")
+			return TuiAppServerRequestResponseOutcome.rejected(validationCode);
+		final connected = ensureConnected();
+		if (connected.length > 0)
+			return TuiAppServerRequestResponseOutcome.disconnected(connected);
+		final transport = lineTransportValue;
+		if (transport == null)
+			return TuiAppServerRequestResponseOutcome.disconnected("missing_line_transport");
+		final outboundLine = response.messageJson() + "\n";
+		final outcome = transport.sendClientResponseLine(response, outboundLine);
+		if (outcome == null)
+			return TuiAppServerRequestResponseOutcome.rejected("missing_client_response_line_outcome");
+		return outcome;
 	}
 
 	function recordAttempt(lineOutcome:TuiAppServerJsonRpcLineOutcome, transportMaterialized:Bool):Void {

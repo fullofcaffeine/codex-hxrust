@@ -44,4 +44,4 @@ Generated Rust review confirmed both original failure sites. The startup transpo
 
 ## Limits
 
-The deterministic startup transport emits and records the protocol requests but does not launch a real Codex app-server process. Live process/socket ownership, asynchronous event reading, server-request reply transport, provider/model execution, and production persistence remain separate tasks. The tracer proves the replaceable ownership path; it does not claim complete TUI or app-server parity.
+The deterministic startup transport emits and records the protocol requests but does not launch a real Codex app-server process. Live process and socket ownership, asynchronous event reading, provider execution, and production persistence remain separate tasks. The client-response transport can now write typed app-server request results and errors. Live inbound request routing remains separate. The tracer proves the replaceable ownership path. It does not claim complete TUI or app-server parity.

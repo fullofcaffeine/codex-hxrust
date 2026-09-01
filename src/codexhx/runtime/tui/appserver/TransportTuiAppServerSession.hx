@@ -21,14 +21,15 @@ import haxe.json.Value;
 	line-connected, or process-backed without changing TUI ownership. The
 	zero-configuration path is deterministic and credential-free; callers must
 	inject a line-connected or process-backed transport for live turn I/O.
-	Bootstrap currently adopts caller-supplied session and thread identifiers;
-	the first vertical tracer must add wire-level initialize and thread attach.
+	Startup and client-response transports remain separate typed capabilities.
+	A persistent implementation can provide both capabilities on one connection.
 **/
 class TransportTuiAppServerSession implements TuiAppServerSession {
 	final shellValue:ChatWidgetShellState;
 	final agentNavigationValue:AgentNavigationState;
 	final promptTransport:TuiPromptTransport;
 	final startupTransport:Null<TuiAppServerStartupTransport>;
+	final clientTransport:Null<TuiAppServerClientTransport>;
 	// StringMap forces string keys; only this session converts RequestId at the map boundary.
 	final pending:StringMap<TuiAppServerPendingRequest>;
 	final queue:Array<TuiAppServerEvent>;
@@ -46,11 +47,13 @@ class TransportTuiAppServerSession implements TuiAppServerSession {
 	var latestPromptGeneration:Int;
 	var lastPromptLifecycleValue:TuiPromptPendingRequestLifecycle;
 
-	public function new(shell:ChatWidgetShellState, ?promptTransport:TuiPromptTransport, ?startupTransport:TuiAppServerStartupTransport) {
+	public function new(shell:ChatWidgetShellState, ?promptTransport:TuiPromptTransport, ?startupTransport:TuiAppServerStartupTransport,
+			?clientTransport:TuiAppServerClientTransport) {
 		this.shellValue = shell == null ? ChatWidgetShellState.initial("model pending") : shell;
 		this.agentNavigationValue = new AgentNavigationState();
 		this.promptTransport = promptTransport == null ? new JsonRpcTuiPromptTransport() : promptTransport;
 		this.startupTransport = startupTransport;
+		this.clientTransport = clientTransport;
 		this.pending = new StringMap<TuiAppServerPendingRequest>();
 		this.queue = [];
 		this.activeSessionValue = null;
@@ -362,12 +365,18 @@ class TransportTuiAppServerSession implements TuiAppServerSession {
 		return promptTransport.shutdown(code);
 	}
 
-	public function resolveServerRequest(_requestId:RequestId, _result:Value):TuiAppServerRequestResponseOutcome {
-		return TuiAppServerRequestResponseOutcome.unsupported();
+	public function resolveServerRequest(requestId:RequestId, result:Value):TuiAppServerRequestResponseOutcome {
+		if (clientTransport == null)
+			return TuiAppServerRequestResponseOutcome.disconnected("client_transport_unavailable");
+		final outcome = clientTransport.resolveServerRequest(requestId, result);
+		return outcome == null ? TuiAppServerRequestResponseOutcome.rejected("missing_client_transport_outcome") : outcome;
 	}
 
-	public function rejectServerRequest(_requestId:RequestId, _error:Value):TuiAppServerRequestResponseOutcome {
-		return TuiAppServerRequestResponseOutcome.unsupported();
+	public function rejectServerRequest(requestId:RequestId, error:TuiAppServerJsonRpcError):TuiAppServerRequestResponseOutcome {
+		if (clientTransport == null)
+			return TuiAppServerRequestResponseOutcome.disconnected("client_transport_unavailable");
+		final outcome = clientTransport.rejectServerRequest(requestId, error);
+		return outcome == null ? TuiAppServerRequestResponseOutcome.rejected("missing_client_transport_outcome") : outcome;
 	}
 
 	public function shutdown(code:String):TuiPromptTransportShutdownReport {

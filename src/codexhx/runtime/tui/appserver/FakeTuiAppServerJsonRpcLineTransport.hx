@@ -8,12 +8,14 @@ class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTra
 	var state:TuiAppServerJsonRpcLineTransportState;
 	var outboundLines:Int;
 	var inboundLines:Int;
+	var clientResponseLines:Array<String>;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
 		this.state = TuiAppServerJsonRpcLineTransportState.Open;
 		this.outboundLines = 0;
 		this.inboundLines = 0;
+		this.clientResponseLines = [];
 	}
 
 	public function sendPromptLine(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope, outboundLine:String):TuiAppServerJsonRpcLineOutcome {
@@ -61,6 +63,23 @@ class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTra
 		return TuiPromptTurnInterruptLineOutcome.accepted(response, [], lines, TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, lines));
 	}
 
+	public function sendClientResponseLine(response:TuiAppServerClientResponse, outboundLine:String):TuiAppServerRequestResponseOutcome {
+		if (!isOpen())
+			return TuiAppServerRequestResponseOutcome.disconnected("line_transport_closed");
+		if (response == null)
+			return TuiAppServerRequestResponseOutcome.rejected("missing_client_response");
+		final validationCode = response.validationCode();
+		if (validationCode != "valid")
+			return TuiAppServerRequestResponseOutcome.rejected(validationCode);
+		if (outboundLine == null || outboundLine.length == 0)
+			return TuiAppServerRequestResponseOutcome.rejected("missing_outbound_line");
+		if (outboundLine != response.messageJson() + "\n")
+			return TuiAppServerRequestResponseOutcome.rejected("mismatched_outbound_line");
+		clientResponseLines.push(outboundLine);
+		outboundLines = outboundLines + 1;
+		return TuiAppServerRequestResponseOutcome.sent();
+	}
+
 	public function readLateJsonlBatchLines(_maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
 		if (!isOpen())
 			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
@@ -86,6 +105,14 @@ class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTra
 
 	public function inboundLineCount():Int {
 		return inboundLines;
+	}
+
+	public function clientResponseLineCount():Int {
+		return clientResponseLines.length;
+	}
+
+	public function clientResponseLineAt(index:Int):String {
+		return index < 0 || index >= clientResponseLines.length ? "" : clientResponseLines[index];
 	}
 
 	static function inboundFramesFromOutcome(outcome:TuiPromptJsonRpcExchangeOutcome):Array<TuiPromptJsonRpcFrame> {

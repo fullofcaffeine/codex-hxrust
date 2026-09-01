@@ -7,28 +7,36 @@ package codexhx.runtime.tui.appserver;
 	narrow status instead of inspecting an open JSON value.
 **/
 class TuiAppServerRequestResponseOutcome {
-	final acceptedValue:Bool;
+	final statusValue:TuiAppServerRequestResponseStatus;
 	final codeValue:String;
 
-	function new(accepted:Bool, code:String) {
-		this.acceptedValue = accepted;
-		this.codeValue = normalize(code, accepted ? "sent" : "rejected");
+	function new(status:TuiAppServerRequestResponseStatus, code:String) {
+		this.statusValue = status;
+		this.codeValue = normalize(code, status.text());
 	}
 
 	public static function sent():TuiAppServerRequestResponseOutcome {
-		return new TuiAppServerRequestResponseOutcome(true, "sent");
+		return new TuiAppServerRequestResponseOutcome(TuiAppServerRequestResponseStatus.Sent, "sent");
 	}
 
 	public static function rejected(code:String):TuiAppServerRequestResponseOutcome {
-		return new TuiAppServerRequestResponseOutcome(false, code);
+		return new TuiAppServerRequestResponseOutcome(TuiAppServerRequestResponseStatus.Rejected, code);
 	}
 
-	public static function unsupported():TuiAppServerRequestResponseOutcome {
-		return rejected("server_request_response_unsupported");
+	public static function disconnected(code:String):TuiAppServerRequestResponseOutcome {
+		return new TuiAppServerRequestResponseOutcome(TuiAppServerRequestResponseStatus.Disconnected, code);
 	}
 
 	public function isAccepted():Bool {
-		return acceptedValue;
+		return statusValue == TuiAppServerRequestResponseStatus.Sent;
+	}
+
+	public function status():TuiAppServerRequestResponseStatus {
+		return statusValue;
+	}
+
+	public function statusText():String {
+		return statusValue.text();
 	}
 
 	public function code():String {

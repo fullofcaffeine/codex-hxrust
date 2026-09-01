@@ -8,6 +8,7 @@ import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.PersistentTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
+import codexhx.runtime.tui.appserver.TuiAppServerClientTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerReadinessEvent;
@@ -53,7 +54,7 @@ class TuiLiveShellRunRequest {
 		this.primaryThreadId = primaryThreadId;
 		this.modelLabel = normalize(modelLabel, "gpt-live");
 		this.shell = ChatWidgetShellState.initial("pending");
-		this.session = adoptedSession(this.shell, null);
+		this.session = adoptedSession(this.shell, null, null);
 		this.startupRequest = startup(TuiAppServerThreadOpenMode.Start, null);
 		this.scheduler = new TerminalRedrawScheduler(setup.size);
 		this.policy = TuiLiveShellRunPolicy.bounded(64, 4);
@@ -65,7 +66,7 @@ class TuiLiveShellRunRequest {
 
 	public function withShell(shell:ChatWidgetShellState):TuiLiveShellRunRequest {
 		this.shell = shell == null ? ChatWidgetShellState.initial("pending") : shell;
-		this.session = adoptedSession(this.shell, null);
+		this.session = adoptedSession(this.shell, null, null);
 		return this;
 	}
 
@@ -83,7 +84,7 @@ class TuiLiveShellRunRequest {
 	}
 
 	public function withJsonRpcPromptTransport(promptTransport:JsonRpcTuiPromptTransport):TuiLiveShellRunRequest {
-		this.session = adoptedSession(this.shell, promptTransport);
+		this.session = adoptedSession(this.shell, promptTransport, null);
 		return this;
 	}
 
@@ -104,9 +105,9 @@ class TuiLiveShellRunRequest {
 
 	public function withPersistentStdioLineConnectedPromptTransport(endpoint:TuiAppServerJsonRpcLineEndpoint,
 			maxInboundLinesPerPrompt:Int = 10):TuiLiveShellRunRequest {
-		return
-			withJsonRpcPromptTransport(new JsonRpcTuiPromptTransport(PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(endpoint,
-				maxInboundLinesPerPrompt)));
+		final transport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(endpoint, maxInboundLinesPerPrompt);
+		this.session = adoptedSession(this.shell, new JsonRpcTuiPromptTransport(transport), transport);
+		return this;
 	}
 
 	public function withScheduler(scheduler:TerminalRedrawScheduler):TuiLiveShellRunRequest {
@@ -159,8 +160,9 @@ class TuiLiveShellRunRequest {
 		return value;
 	}
 
-	function adoptedSession(shell:ChatWidgetShellState, promptTransport:Null<JsonRpcTuiPromptTransport>):TuiAppServerSession {
-		return new TransportTuiAppServerSession(shell, promptTransport, new AdoptedTuiAppServerStartupTransport(sessionId, primaryThreadId));
+	function adoptedSession(shell:ChatWidgetShellState, promptTransport:Null<JsonRpcTuiPromptTransport>,
+			clientTransport:Null<TuiAppServerClientTransport>):TuiAppServerSession {
+		return new TransportTuiAppServerSession(shell, promptTransport, new AdoptedTuiAppServerStartupTransport(sessionId, primaryThreadId), clientTransport);
 	}
 
 	function startup(mode:TuiAppServerThreadOpenMode, resumeThreadId:Null<ThreadId>):TuiAppServerStartupRequest {

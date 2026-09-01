@@ -10,6 +10,8 @@ import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineTransportAttac
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.PersistentTuiAppServerJsonRpcLineConnectedTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerClientResponse;
+import codexhx.runtime.tui.appserver.TuiAppServerRequestResponseOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineCloseReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectReport;
@@ -4351,6 +4353,10 @@ class RunnerRejectedLateJsonlLineTransport implements TuiAppServerJsonRpcLineTra
 		return TuiPromptTurnInterruptLineOutcome.rejected("runner_rejected_read_transport_interrupt_unsupported");
 	}
 
+	public function sendClientResponseLine(_response:TuiAppServerClientResponse, _outboundLine:String):TuiAppServerRequestResponseOutcome {
+		return TuiAppServerRequestResponseOutcome.rejected("runner_client_response_unsupported");
+	}
+
 	public function readLateJsonlBatchLines(_maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
 		if (!isOpen())
 			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
@@ -4419,6 +4425,10 @@ class RunnerNoDataThenRejectedLateJsonlLineTransport implements TuiAppServerJson
 	public function sendInterruptLine(_request:TuiPromptTurnInterruptRequest, _envelope:TuiPromptTurnInterruptEnvelope,
 			_outboundLine:String):TuiPromptTurnInterruptLineOutcome {
 		return TuiPromptTurnInterruptLineOutcome.rejected("runner_rejected_read_transport_interrupt_unsupported");
+	}
+
+	public function sendClientResponseLine(_response:TuiAppServerClientResponse, _outboundLine:String):TuiAppServerRequestResponseOutcome {
+		return TuiAppServerRequestResponseOutcome.rejected("runner_client_response_unsupported");
 	}
 
 	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
@@ -4514,6 +4524,10 @@ class RunnerNoDataLateJsonlLineTransport implements TuiAppServerJsonRpcLineTrans
 		return TuiPromptTurnInterruptLineOutcome.accepted(response, [
 			TuiAppServerEvent.ThreadStatus(_envelope.threadId, TuiAppServerThreadStatus.Ready("interrupted"))
 		], inbound, TuiAppServerJsonRpcLineTranscript.accepted(_outboundLine, inbound));
+	}
+
+	public function sendClientResponseLine(_response:TuiAppServerClientResponse, _outboundLine:String):TuiAppServerRequestResponseOutcome {
+		return TuiAppServerRequestResponseOutcome.rejected("runner_client_response_unsupported");
 	}
 
 	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {

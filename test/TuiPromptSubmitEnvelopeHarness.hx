@@ -15,6 +15,8 @@ import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.PersistentTuiAppServerJsonRpcLineConnectedTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerClientResponse;
+import codexhx.runtime.tui.appserver.TuiAppServerRequestResponseOutcome;
 import codexhx.runtime.tui.appserver.ProcessBackedTuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
@@ -4032,6 +4034,10 @@ class NoDataLateJsonlLineTransport implements TuiAppServerJsonRpcLineTransport {
 		return TuiPromptTurnInterruptLineOutcome.rejected("no_data_transport_interrupt_unsupported");
 	}
 
+	public function sendClientResponseLine(_response:TuiAppServerClientResponse, _outboundLine:String):TuiAppServerRequestResponseOutcome {
+		return TuiAppServerRequestResponseOutcome.rejected("client_response_unsupported");
+	}
+
 	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {
 		if (!isOpen())
 			return TuiAppServerJsonRpcLateJsonlBatch.disconnected("line_transport_closed", []);
@@ -4168,6 +4174,10 @@ class MismatchedInboundLineTransport implements TuiAppServerJsonRpcLineTransport
 	public function sendInterruptLine(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope,
 			outboundLine:String):TuiPromptTurnInterruptLineOutcome {
 		return delegate.sendInterruptLine(request, envelope, outboundLine);
+	}
+
+	public function sendClientResponseLine(response:TuiAppServerClientResponse, outboundLine:String):TuiAppServerRequestResponseOutcome {
+		return delegate.sendClientResponseLine(response, outboundLine);
 	}
 
 	public function readLateJsonlBatchLines(maxLines:Int):TuiAppServerJsonRpcLateJsonlBatch {

@@ -50,7 +50,7 @@ interface TuiAppServerSession {
 	function resolveServerRequest(requestId:RequestId, result:Value):TuiAppServerRequestResponseOutcome;
 
 	/** Passes a typed JSON-RPC error through the app-server response boundary. */
-	function rejectServerRequest(requestId:RequestId, error:Value):TuiAppServerRequestResponseOutcome;
+	function rejectServerRequest(requestId:RequestId, error:TuiAppServerJsonRpcError):TuiAppServerRequestResponseOutcome;
 
 	function shutdown(code:String):TuiPromptTransportShutdownReport;
 }
