@@ -78,7 +78,7 @@ Unsupported commands fail closed with `unsupported_command`. The adapter remains
 
 The fixture `fixtures/hxrust/runtime-app-client.v1.json` and `harness/check-runtime-app-client.sh` prove the facade through both Haxe interpreter and haxe.rust-generated Rust. The slice intentionally stays portable; later live transport work can place metal/native async wrappers around this semantic core.
 
-HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<Class>.shift()` return lowering mismatched Rust `Option` and non-null class reference signatures. The local runtime queue now uses a typed read outcome plus indexed removal; the compiler issue is tracked upstream as product-neutral work, not a Codex-specific workaround.
+HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<Class>.shift()` return lowering mismatched Rust `Option` and non-null class reference signatures. The issue is resolved upstream. The local runtime queue keeps its typed read outcome and indexed removal as application-owned design.
 
 ## Runtime Bootstrap
 
@@ -220,7 +220,7 @@ The fixture `fixtures/hxrust/thread-read-token-usage-replay.v1.json` and `harnes
 
 The fixture `fixtures/hxrust/thread-read-token-usage-replay-delivery.v1.json` and `harness/check-thread-read-token-usage-replay-delivery.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not open sockets, write JSON-RPC envelopes, rebuild turns, compute owner attribution, or construct usage fields. The boundary is documented in `docs/thread-read-token-usage-replay-delivery.md`.
 
-HXCX-4.23 also exposed generic haxe.rust issue `haxe.rust-3f0g`: same-class `static final` String reads can lower to a missing crate-root static getter path. The local harness uses a helper function as a semantic workaround while the compiler issue is tracked upstream.
+HXCX-4.23 also exposed generic haxe.rust issue `haxe.rust-3f0g`: same-class `static final` String reads could lower to a missing crate-root static getter path. The issue is resolved upstream. The local helper remains valid application code.
 
 ## Thread/Read Resume Goal Snapshot
 
@@ -593,4 +593,4 @@ The fixture `fixtures/upstream/vt100-render-selected.v1.json` and `harness/check
 
 The fixture `fixtures/upstream/turn-runtime-selected.v1.json` and `harness/check-turn-runtime-reducer.sh` prove the reducer through both Haxe interpreter and haxe.rust-generated Rust. This is still not live terminal or app-server ownership; it is the deterministic state core that later transport and TUI surfaces can consume.
 
-HXCX-4.10 also exposed generic haxe.rust issue `haxe.rust-fzl`: reusing a non-copy local `String` as multiple conditional expression results can generate Rust move-after-move errors. The reducer uses explicit Haxe string slices as semantic copies while the compiler issue is tracked upstream as product-neutral clone-insertion work.
+HXCX-4.10 also exposed generic haxe.rust issue `haxe.rust-fzl`: reusing a non-copy local `String` as multiple conditional expression results needed a clone-insertion regression fixture. Current upstream lowering is correct and the fixture preserves it. The reducer keeps explicit Haxe string slices as application-owned semantic copies.

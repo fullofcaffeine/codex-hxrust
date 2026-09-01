@@ -1,30 +1,30 @@
 {
   "schema": "codex-hxrust.haxe-rust-pressure-gaps.v1",
   "bead": "HXCX-7.1",
-  "generatedAt": "2026-06-11T00:00:00Z",
+  "generatedAt": "2026-08-31T00:00:00Z",
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 24,
-    "resolvedUpstream": 16,
-    "openUpstream": 8,
+    "totalGaps": 25,
+    "resolvedUpstream": 24,
+    "openUpstream": 1,
     "localWorkaround": 0,
-    "upstreamRepros": 0,
+    "upstreamRepros": 1,
     "severity": {
       "high": 7,
-      "medium": 17,
+      "medium": 18,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 13,
+      "runtime_model_session": 14,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 2105,
+    "sourceFilesScanned": 2165,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -219,139 +219,162 @@
       ]
     },
     {
-      "id": "nullable-array-shift-class-return",
+      "id": "guarded-nullable-primitive-unwrap",
       "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-tmvb",
+      "haxeRustRefs": [
+        "haxe_rust-4tc8"
+      ],
+      "reproduction": "TUI-LIVE-54 exposed a dead Null Access throw in generated Rust after a switch narrowed a Null<Int> process exit code to Int.",
+      "workaround": "The Haxe source remains typed and correct. The generated Rust builds and runs, but its proven non-null branch still contains an unreachable dynamic throw.",
+      "followUp": "haxe_rust-4tc8",
+      "upstreamRepro": {
+        "ledger": "reference/haxe-rust-upstream-repros.v1.json",
+        "fixture": "../haxe.rust/test/snapshot/nullable_scalar_switch_narrowing",
+        "currentResult": "fix_in_review"
+      },
+      "validation": [
+        "current b4975cb3 reduced Null<Int> switch output reproduces the dead branch",
+        "harness/check-tui-prompt-submit-envelope.sh",
+        "generic haxe.rust nullable scalar switch fixture in haxe_rust-4tc8"
+      ]
+    },
+    {
+      "id": "nullable-array-shift-class-return",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-1hb",
       "haxeRustRefs": [
         "haxe.rust-362"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "Runtime event queue work exposed a method returning Null<ClassType> from Array<ClassType>.shift(); generated Rust returned HxRef<ClassType> while the expression lowered to Option<HxRef<ClassType>>, causing E0308.",
-      "workaround": "The local queue API now uses a typed read outcome and indexed removal to keep generated Rust green; the compiler gap remains tracked upstream as a generic nullable Array.shift/class-return regression.",
-      "followUp": "haxe.rust-362",
+      "workaround": "Resolved upstream with consistent nullable generic return coercion; the local typed queue outcome remains an application API choice rather than a compiler workaround.",
       "validation": [
         "harness/check-runtime-app-client.sh",
-        "haxe.rust-362 acceptance requires a product-neutral regression fixture"
+        "array_shift_nullable_class_return snapshot in ../haxe.rust"
       ]
     },
     {
       "id": "non-copy-class-field-assign-op",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-e0d",
       "haxeRustRefs": [
         "haxe.rust-ojj"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "TUI story replay summary work exposed unsupported lowering for class String field updates written as this.field += value; equivalent Haxe source using this.field = this.field + value compiles.",
-      "workaround": "The local summary uses explicit assignment for string accumulation; the compiler gap remains tracked upstream as generic non-copy class field assign-op lowering work.",
-      "followUp": "haxe.rust-ojj",
+      "workaround": "Resolved upstream with evaluation-order-safe String field compound assignment lowering; explicit assignment remains valid Haxe but is no longer required by the compiler.",
       "validation": [
         "harness/check-tui-story-replay.sh",
-        "haxe.rust-ojj acceptance requires a product-neutral regression fixture"
+        "class_string_field_assignop snapshot in ../haxe.rust"
       ]
     },
     {
       "id": "reused-non-copy-local-conditional-results",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-ckg",
       "haxeRustRefs": [
         "haxe.rust-fzl"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "Turn runtime reducer work exposed Rust E0382 move-after-move errors when one String parameter was reused as the then-branch result for multiple conditional expressions feeding final markdown, last markdown, and notification fields.",
-      "workaround": "The local reducer uses explicit semantic Haxe string slices via substr(0, length) while haxe.rust fixes clone insertion/reuse analysis for non-Copy local values generically.",
-      "followUp": "haxe.rust-fzl",
+      "workaround": "Current compiler behavior already inserts the required clones; the product-neutral fixture preserves that ownership regression.",
       "validation": [
         "harness/check-turn-runtime-reducer.sh",
-        "haxe.rust-fzl acceptance requires a product-neutral regression fixture"
+        "string_conditional_reuse snapshot in ../haxe.rust"
       ]
     },
     {
       "id": "static-final-class-field-access-path",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-ffo",
       "haxeRustRefs": [
         "haxe.rust-3f0g"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "Token usage replay delivery work exposed Rust E0433 when a same-class static final String was read from a static harness method; generated Rust referenced a crate-root class module that was not emitted.",
-      "workaround": "The local delivery harness uses a helper function that returns the stable String literal while haxe.rust fixes static final/static var getter path lowering generically.",
-      "followUp": "haxe.rust-3f0g",
+      "workaround": "Resolved upstream with same-class static final access-path lowering; the helper function can remain as ordinary fixture structure but is no longer compiler-required.",
       "validation": [
         "harness/check-thread-read-token-usage-replay-delivery.sh",
-        "haxe.rust-3f0g acceptance requires a product-neutral regression fixture"
+        "static_final_same_class_read snapshot in ../haxe.rust"
       ]
     },
     {
       "id": "reflect-compare-lowering",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-fo5",
       "haxeRustRefs": [
         "haxe.rust-fz20"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "Model catalog selection exposed Rust E0433 when Reflect.compare(left.modelId, right.modelId) was used inside a typed Array.sort comparator; generated Rust referenced Reflect::compare without emitting or importing a Reflect runtime type.",
-      "workaround": "The local model catalog sort uses direct typed string comparisons while haxe.rust lowers Reflect.compare generically.",
-      "followUp": "haxe.rust-fz20",
+      "workaround": "Resolved upstream for typed Int, Float, and String values without an hxrt helper; direct typed comparison remains a valid application choice.",
       "validation": [
         "harness/check-model-catalog.sh",
-        "haxe.rust-fz20 acceptance requires a product-neutral Reflect.compare regression fixture"
+        "reflect_compare_sort snapshot in ../haxe.rust"
       ]
     },
     {
       "id": "optional-primitive-constructor-default-lowering",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-ckn",
       "haxeRustRefs": [
         "haxe.rust-3oju"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "Turn model/tool planning work exposed Rust E0308 when a constructor parameter shaped as ?flag:Bool = false was assigned into a non-optional Bool field; generated Rust assigned Option<bool> into bool.",
-      "workaround": "The local model catalog DTO now requires an explicit useResponsesLite Bool argument while haxe.rust fixes optional primitive default unwrapping generically.",
-      "followUp": "haxe.rust-3oju",
+      "workaround": "Resolved upstream for portable and metal constructor defaults; explicit arguments remain an application API choice rather than a lowering requirement.",
       "validation": [
         "harness/check-turn-model-plan.sh",
-        "haxe.rust-3oju acceptance requires a product-neutral optional primitive constructor default regression fixture"
+        "optional_primitive_ctor_defaults portable and metal snapshots in ../haxe.rust"
       ]
     },
     {
       "id": "generic-helper-bound-propagation",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-1ss",
       "haxeRustRefs": [
         "haxe.rust-akfm"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "The HXCX-4.49 async contract initially used generic static/helper functions returning and matching generic payloads such as AsyncPoll<A> and AsyncStreamItem<T>. Generated Rust omitted Clone + Send + Sync bounds required by the generated payload structs/enums, causing E0277/E0599 failures.",
-      "workaround": "Local async contract uses a typed enum outcome, direct constructors, and concrete fixture summaries while generic helper bound propagation is fixed in haxe.rust.",
-      "followUp": "haxe.rust-akfm",
+      "workaround": "Resolved upstream by inferring the bounds required by generated generic payload signatures; the local typed enum and direct constructors remain valid domain design.",
       "validation": [
         "harness/check-async-runtime-contract.sh",
-        "haxe.rust-akfm acceptance requires a product-neutral generic helper bound propagation regression fixture"
+        "generic_helper_payload_bounds snapshot in ../haxe.rust"
       ]
     },
     {
       "id": "optional-anon-field-read",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "runtime_model_session",
       "codexBead": "codex-hxrust-c8bn",
       "haxeRustRefs": [
         "haxe.rust-i8li"
       ],
+      "resolvedBy": "2cb4d22bac949cfb2c6f1d42225950659d2a60f9",
       "reproduction": "Active-turn error classification work exposed a generated Rust panic at hxrt/src/anon.rs when a typed anonymous structure omitted optional String/Bool fields and later read them; Haxe interp accepted the source.",
-      "workaround": "The local classifier now materializes all draft fields through a typed default factory while haxe.rust fixes optional anonymous-field lowering/runtime semantics generically.",
-      "followUp": "haxe.rust-i8li",
+      "workaround": "Resolved upstream by preserving optional anonymous-field null/default semantics; the typed default factory remains a valid application invariant rather than a compiler workaround.",
       "validation": [
         "harness/check-model-stream-item-reducer.sh",
-        "haxe.rust-i8li acceptance requires a product-neutral optional anonymous-field regression fixture"
+        "anon_optional_fields snapshot in ../haxe.rust"
       ]
     },
     {

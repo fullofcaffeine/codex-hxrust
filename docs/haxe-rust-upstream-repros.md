@@ -1,14 +1,15 @@
 # haxe.rust Upstream Repros
 
 **Date:** 2026-06-11
+**Reconciled:** 2026-08-31
 **Bead:** `HXCX-7.2` / `codex-hxrust-rat.2`
 
 ## Purpose
 
-This record closes the loop from the HXCX-7.1 pressure-gap ledger to generic
-haxe.rust fixtures. The remaining compiler gap has a minimal, standalone Haxe
-inputs in `../haxe.rust` that can run without Codex, Cafetera, Cafex,
-credentials, or local paths.
+This record links each active pressure gap to one generic haxe.rust fixture.
+One output-quality defect remains active. Issue `haxe_rust-4tc8` owns its
+framework-neutral snapshot fix. The fixture has no Codex, Cafetera, Cafex,
+credential, or local-path dependency.
 
 Machine-readable fixture:
 
@@ -24,7 +25,7 @@ harness/check-haxe-rust-upstream-repros.sh
 
 | Gap | haxe.rust bead | Fixture | Current result |
 | --- | --- | --- | --- |
-| None | n/a | n/a | n/a |
+| Guarded nullable scalar switch narrowing | `haxe_rust-4tc8` | `test/snapshot/nullable_scalar_switch_narrowing` | [PR #18](https://github.com/fullofcaffeine/reflaxe.rust/pull/18) at `83333c9664d13f4d69a56bb6e44331e69cc74bd8` |
 
 Resolved upstream:
 
@@ -43,13 +44,15 @@ cd ../haxe.rust
 bash scripts/ci/check-upstream-open-gap-repros.sh
 ```
 
-It currently expects no Rust build failures. When a new compiler gap lands in
-this backlog, add the corresponding expected-failure repro and then move it into
-a passing snapshot or semantic-diff case when the linked haxe.rust bead closes.
+It currently expects no Cargo build failures. The active defect produces valid
+Rust with a dead throw, so its fix uses a snapshot instead. The consumer gate
+derives required mappings from active pressure gaps. It rejects an empty repro
+list while an active gap exists. When a new compiler gap appears, add one
+framework-neutral reproducer before consumer work continues.
 
 ## Scope Rules
 
 - Keep compiler fixes generic to haxe.rust; no codexhx-specific compiler code.
 - Keep Codex/Cafetera/Cafex context in codex-hxrust ledgers, not in haxe.rust fixture source.
 - Keep local codexhx workarounds only until each haxe.rust bead closes or the gap is explicitly accepted.
-- Treat the current zero-repro runner as a clean backlog contract, not as broad production readiness proof.
+- Treat the current Cargo runner as one part of the contract. Snapshot fixes in review must include an exact PR and commit.

@@ -50,4 +50,4 @@ The Haxe facade lives in `codexhx.runtime.app.threadread`:
 
 ## haxe.rust Pressure
 
-This slice exposed generic haxe.rust issue `haxe.rust-3f0g`: a same-class `static final` String read in the harness lowered to a missing crate-root static getter path. The local harness uses a helper function as a semantic Haxe workaround while the compiler fix belongs upstream. The final harness passes under the Haxe interpreter and portable haxe.rust-generated Rust with no raw Rust escapes.
+This slice exposed generic haxe.rust issue `haxe.rust-3f0g`: a same-class `static final` String read in the harness lowered to a missing crate-root static getter path. The issue is resolved upstream. The helper function remains valid application code, and the final harness passes under the Haxe interpreter and portable haxe.rust-generated Rust with no raw Rust escapes.

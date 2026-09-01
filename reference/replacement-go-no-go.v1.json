@@ -4,7 +4,8 @@
   "gate": "G6",
   "milestone": "M6",
   "date": "2026-06-11",
-  "owner": "Marcelo Serpa",
+  "reconciledAt": "2026-08-31",
+  "owner": "repository owner",
   "decision": {
     "selectedMode": "selected_adapter_slice",
     "allowedModes": [
@@ -32,11 +33,11 @@
   },
   "measuredInputs": {
     "pressureGaps": {
-      "total": 10,
-      "resolvedUpstream": 10,
-      "openUpstream": 0,
+      "total": 25,
+      "resolvedUpstream": 24,
+      "openUpstream": 1,
       "localWorkaround": 0,
-      "upstreamRepros": 0,
+      "upstreamRepros": 1,
       "rawRustEscapeMatches": 0
     },
     "cafexSeamLedger": {

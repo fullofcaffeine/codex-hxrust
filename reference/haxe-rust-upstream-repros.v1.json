@@ -1,11 +1,11 @@
 {
   "schema": "codex-hxrust.haxe-rust-upstream-repros.v1",
   "bead": "HXCX-7.2",
-  "generatedAt": "2026-06-11T00:00:00Z",
+  "generatedAt": "2026-08-31T00:00:00Z",
   "sourceLedger": "reference/haxe-rust-pressure-gaps.v1.json",
   "haxeRustRepo": "../haxe.rust",
   "haxeRustRunner": "scripts/ci/check-upstream-open-gap-repros.sh",
-  "runnerMode": "no_open_expected_failure_repros",
+  "runnerMode": "active_fix_in_review",
   "policy": {
     "compilerScope": "generic_haxe_to_rust",
     "codexSpecificCompilerCodeAllowed": false,
@@ -21,10 +21,29 @@
     ]
   },
   "summary": {
-    "totalRepros": 0,
+    "totalRepros": 1,
     "expectedCargoFailures": 0,
-    "openHaxeRustBeads": 0,
+    "openHaxeRustBeads": 1,
     "codexSpecificContextRemoved": true
   },
-  "repros": []
+  "repros": [
+    {
+      "id": "nullable_scalar_switch_narrowing",
+      "pressureGapId": "guarded-nullable-primitive-unwrap",
+      "status": "fix_in_review",
+      "haxeRustBead": "haxe_rust-4tc8",
+      "haxeRustFixturePath": "test/snapshot/nullable_scalar_switch_narrowing",
+      "entrypoint": "Main.hx",
+      "compileFile": "compile.hxml",
+      "profileCompileFiles": [
+        "compile.hxml",
+        "compile.metal.hxml"
+      ],
+      "expectedFailureSignature": "Null Access",
+      "upstreamableContract": "A switch over a nullable scalar must reuse the null proof and emit one Option match without a dead Null Access throw in the present-value arm.",
+      "codexhxUse": "The typed process runner remains correct, but the pinned compiler keeps a dead throw until this generic fix merges and passes exact merged-commit replay.",
+      "pullRequest": "https://github.com/fullofcaffeine/reflaxe.rust/pull/18",
+      "fixtureCommit": "83333c9664d13f4d69a56bb6e44331e69cc74bd8"
+    }
+  ]
 }

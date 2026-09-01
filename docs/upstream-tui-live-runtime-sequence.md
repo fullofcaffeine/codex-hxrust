@@ -115,7 +115,7 @@ Add the first generated executable boundary for the TUI track:
 - deterministic cancel/quit key handling;
 - generated binary stdout snapshot suitable for CI.
 
-Status: HXCX-TUI-0 now owns `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. The binary uses metal haxe.rust because this is the path that will eventually host Rust-native terminal ownership. This remains a headless smoke proof, not full ratatui/crossterm ownership, live keyboard input, live app-server fanout, model traffic, or Cafex behavior. It reuses the existing generic haxe.rust issue `haxe.rust-3f0g` workaround by avoiding same-class `static final` string reads in the entrypoint.
+Status: HXCX-TUI-0 now owns `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. The binary uses metal haxe.rust because this is the path that will eventually host Rust-native terminal ownership. This remains a headless smoke proof, not full ratatui/crossterm ownership, live keyboard input, live app-server fanout, model traffic, or Cafex behavior. The slice exposed generic issue `haxe.rust-3f0g`, which is resolved upstream; the helper-based source shape remains valid application code.
 
 ### HXCX-TUI-1: Headless Raw Codex TUI Event-Loop Smoke Shell
 
@@ -127,7 +127,7 @@ Extend the generated smoke binary from a single frame into a minimal app-loop sh
 - deterministic render counts and event traces;
 - cancel/quit handling without live terminal, network, model, or tool effects.
 
-Status: HXCX-TUI-1 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/main.rs:38`, `../codex/codex-rs/tui/src/app.rs:754`, `../codex/codex-rs/tui/src/app.rs:1180`, `../codex/codex-rs/tui/src/tui.rs:499`, `../codex/codex-rs/tui/src/app_event.rs:239`, `../codex/codex-rs/tui/src/app_event.rs:642`, and `../codex/codex-rs/tui/src/app_event.rs:1057`. The loop request uses a nullable class-typed frame field to avoid the existing generic haxe.rust class-field default-constructor lowering issue already tracked in this repo; no Codex-specific compiler workaround was added.
+Status: HXCX-TUI-1 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/main.rs:38`, `../codex/codex-rs/tui/src/app.rs:754`, `../codex/codex-rs/tui/src/app.rs:1180`, `../codex/codex-rs/tui/src/tui.rs:499`, `../codex/codex-rs/tui/src/app_event.rs:239`, `../codex/codex-rs/tui/src/app_event.rs:642`, and `../codex/codex-rs/tui/src/app_event.rs:1057`. The loop request keeps its nullable class-typed frame field as a valid application model. The reconciled pressure ledger does not treat that source shape as an active compiler gap.
 
 ### HXCX-TUI-2: Typed Raw Codex TUI App-Event Queue Facade
 
@@ -511,7 +511,7 @@ Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:
 
 This should stay portable-first unless haxe.rust exposes a concrete performance/codegen reason to split out a metal reducer.
 
-Status: HXCX-4.10 now owns `fixtures/upstream/turn-runtime-selected.v1.json` and validates the reducer through `harness/check-turn-runtime-reducer.sh`. This is pure reducer parity, not live terminal/app-server ownership. The slice exposed generic haxe.rust issue `haxe.rust-fzl` for reused non-copy local strings across conditional expression results; codexhx keeps only a semantic Haxe copy workaround while the compiler fix belongs upstream.
+Status: HXCX-4.10 now owns `fixtures/upstream/turn-runtime-selected.v1.json` and validates the reducer through `harness/check-turn-runtime-reducer.sh`. This is pure reducer parity, not live terminal/app-server ownership. The slice exposed generic haxe.rust issue `haxe.rust-fzl` for reused non-copy local strings across conditional expression results. The upstream regression fixture now preserves correct clone insertion; the explicit Haxe copies remain valid application code.
 
 ### HXCX-4.11: App-Server Bootstrap And Initialize Handshake
 
@@ -663,7 +663,7 @@ Model the selected restored usage delivery policy:
 - missing payloads skip notification delivery rather than emitting malformed usage;
 - delivery is connection-scoped and never broadcast to other subscribers.
 
-Status: HXCX-4.23 now owns `fixtures/hxrust/thread-read-token-usage-replay-delivery.v1.json` and validates the slice through `harness/check-thread-read-token-usage-replay-delivery.sh`. It exposed generic haxe.rust issue `haxe.rust-3f0g` for same-class `static final` String access path lowering; codexhx uses a helper-function workaround while the compiler fix belongs upstream. This is delivery-policy evidence only, not socket ownership, JSON-RPC transport, usage aggregation, rollout parsing, or production state ownership.
+Status: HXCX-4.23 now owns `fixtures/hxrust/thread-read-token-usage-replay-delivery.v1.json` and validates the slice through `harness/check-thread-read-token-usage-replay-delivery.sh`. It exposed generic haxe.rust issue `haxe.rust-3f0g` for same-class `static final` String access path lowering, now resolved upstream. The helper function remains valid application code. This is delivery-policy evidence only, not socket ownership, JSON-RPC transport, usage aggregation, rollout parsing, or production state ownership.
 
 ### HXCX-4.24: Resume Goal Snapshot Ordering
 
@@ -931,7 +931,7 @@ Model the selected upstream model catalog and provider capability boundary after
 - represent Bedrock as a static catalog with hosted web/image disabled and default service-tier behavior;
 - refuse live `/models` refresh attempts in credential-free fixture gates.
 
-Status: HXCX-4.44 now owns `fixtures/hxrust/model-catalog.v1.json` and validates the slice through `harness/check-model-catalog.sh`. It exposed generic haxe.rust issue `haxe.rust-fz20` for `Reflect.compare` lowering; codexhx uses direct typed comparison locally while the compiler fix belongs upstream. This is selected static catalog/capability evidence only, not live provider traffic, model cache/ETag ownership, websocket/realtime behavior, or Cafex behavior.
+Status: HXCX-4.44 now owns `fixtures/hxrust/model-catalog.v1.json` and validates the slice through `harness/check-model-catalog.sh`. It exposed generic haxe.rust issue `haxe.rust-fz20` for `Reflect.compare` lowering, now resolved upstream. Direct typed comparison remains a valid application choice. This is selected static catalog/capability evidence only, not live provider traffic, model cache/ETag ownership, websocket/realtime behavior, or Cafex behavior.
 
 ### HXCX-4.45: Turn Model Selection And Tool-Capability Planning
 
@@ -943,7 +943,7 @@ Model the selected upstream turn-context model selection and tool capability pla
 - suppress hosted tools when Responses Lite or standalone namespace tools own the selected surface;
 - refuse unsupported requested capabilities before live model/tool execution.
 
-Status: HXCX-4.45 now owns `fixtures/hxrust/turn-model-plan.v1.json` and validates the slice through `harness/check-turn-model-plan.sh`. It exposed generic haxe.rust issue `haxe.rust-3oju` for optional primitive constructor default lowering; codexhx uses an explicit constructor argument while the compiler fix belongs upstream. This is selected deterministic planning evidence only, not live provider traffic, real tool execution, websocket/realtime behavior, or Cafex behavior.
+Status: HXCX-4.45 now owns `fixtures/hxrust/turn-model-plan.v1.json` and validates the slice through `harness/check-turn-model-plan.sh`. It exposed generic haxe.rust issue `haxe.rust-3oju` for optional primitive constructor default lowering, now resolved upstream. The explicit constructor argument remains a valid application API choice. This is selected deterministic planning evidence only, not live provider traffic, real tool execution, websocket/realtime behavior, or Cafex behavior.
 
 ### HXCX-4.46: Model Request Envelope And Response Routing
 
@@ -1632,7 +1632,7 @@ Model selected raw Codex active-turn TUI error classification behavior:
 - surface archived session guidance without leaking the rollout path;
 - preserve event ordering while avoiding live steering, live interrupt, live app-server fanout, real network traffic, filesystem mutation, and real tool execution.
 
-Status: HXCX-4.99 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. This slice exposed optional anonymous-field read lowering/runtime semantics as generic haxe.rust follow-up `haxe.rust-i8li`; codexhx now materializes that draft record through a typed default factory while the compiler/runtime fix is tracked upstream. This is deterministic active-turn error classification evidence only, not live app-server calls, live turn steering, live interrupt retry, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+Status: HXCX-4.99 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. This slice exposed optional anonymous-field read lowering/runtime semantics as generic haxe.rust issue `haxe.rust-i8li`, now resolved upstream. The typed default factory remains a valid application invariant. This is deterministic active-turn error classification evidence only, not live app-server calls, live turn steering, live interrupt retry, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
 ### HXCX-4.100: Fresh Session Service-Tier Propagation Boundary
 
@@ -4468,13 +4468,13 @@ Status: TUI-LIVE-53 preserves the typed app-server line open payload that future
 
 Status: TUI-LIVE-54 adds the first real process-backed JSONL boundary beneath the app-server prompt path. `TuiAppServerJsonRpcStdioLineRunner` spawns a typed stdio launch plan through `sys.io.Process`, writes one outbound JSON-RPC line, closes stdin, reads stdout JSONL and stderr text, waits for the exit code, and returns a typed `TuiAppServerJsonRpcStdioLineRunReport` with success, nonzero-exit, spawn-failure, and refusal outcomes. The prompt-submit harness proves deterministic spawn/write/read using a shell echo child, nonzero exit with stderr and inbound-line evidence, missing command refusal, cwd/env unsupported refusal, missing outbound refusal, interpreter execution, and generated Rust execution. This slice also landed generic haxe.rust `d91a2708`, moving `sys.io.Process` away from raw `untyped __rust__` stdlib fallbacks into typed `NativeProcess`/`hxrt::process` APIs with the haxe.rust harness green.
 
-Focused generated Rust inspection for the new runner/report/process bridge shows no raw Rust escapes, `ERaw`, panic/todo stubs, or enum `Default::default()` fallbacks. One guarded `Null<Int>` exit-code narrowing still emits a dead `Null Access` branch in generated Rust; the Haxe source remains typed, and the output-shape issue is recorded in the haxe.rust pressure ledger as a generic compiler/backend gap. This still does not own a long-lived app-server process, socket transport, async stream pump, typed JSON parser at the process boundary, model calls, persistence, or tools; it proves the first credential-free native stdio process I/O edge needed by the real connector.
+Focused generated Rust inspection for the new runner/report/process bridge shows no raw Rust escapes, `ERaw`, panic/todo stubs, or enum `Default::default()` fallbacks. One guarded `Null<Int>` exit-code narrowing still emits a dead `Null Access` branch in generated Rust. The Haxe source remains typed. Generic haxe.rust issue `haxe_rust-4tc8` owns the output fix. This still does not own a long-lived app-server process, socket transport, async stream pump, typed JSON parsing at the process boundary, model calls, persistence, or tools. It proves the first credential-free native stdio process edge that the real connector needs.
 
 ### TUI-LIVE-55 Process-backed App-server Line Transport
 
 Status: TUI-LIVE-55 promotes the stdio process runner into the existing `TuiAppServerJsonRpcLineTransport` contract. `ProcessBackedTuiAppServerJsonRpcLineTransport` writes the prompt JSONL line through `TuiAppServerJsonRpcStdioLineRunner`, reads process stdout/stderr, tracks open/closed state and line counts, and returns accepted, rejected, or disconnected line outcomes with raw transcript evidence. `TuiPromptJsonRpcInboundLineDecoder` narrows the currently modeled prompt JSON-RPC subset from raw inbound lines into typed `turn/start` responses and stream notifications before the wire session rebuilds frame records. The prompt-submit harness proves a real child-process echo can feed `FakeTuiAppServerJsonRpcWireSession`, proves nonzero child exits become disconnected outcomes with inbound evidence, proves unknown-method decoder rejection, cwd refusal, and send-after-close behavior, and validates interpreter plus generated Rust gates.
 
-Focused generated inspection for the new decoder/transport shows no raw Rust escapes, `ERaw`, enum `Default::default()` fallbacks, panic/todo stubs, or generated dynamic formatting in the new decoder/transport. The already-recorded guarded `Null<Int>` exit-code branch remains in the stdio runner, and haxe.rust still emits normal `unreachable!()` arms for exhaustive `haxe.json.Value` enum matches. This still does not own a long-lived app-server process, socket transport, async stream pump, credentials, model calls, persistence, or tools; it proves the existing wire/session prompt path can now consume process-backed JSONL line traffic through the same typed transport seam.
+Focused generated inspection for the new decoder/transport shows no raw Rust escapes, `ERaw`, enum `Default::default()` fallbacks, panic/todo stubs, or generated dynamic formatting in the new decoder/transport. The guarded `Null<Int>` exit-code branch remains in the stdio runner under `haxe_rust-4tc8`. haxe.rust also emits normal `unreachable!()` arms for exhaustive `haxe.json.Value` enum matches. This still does not own a long-lived app-server process, socket transport, async stream pump, credentials, model calls, persistence, or tools. It proves that the wire/session prompt path can consume process-backed JSONL traffic through the same typed transport.
 
 ### TUI-LIVE-56 Process-backed App-server Line Connector Attacher
 
@@ -7137,8 +7137,8 @@ These are generic compiler/runtime pressure points. They must not become Codex-s
 | SQLite/persistence | Replacement claims require production persistence parity, not JSONL-only fixture state. | Use a typed metal boundary around native Rust DB crates; do not make portable state pretend to be production persistence. |
 | Network/websocket/audio | Remote app-server and realtime require host/network/audio APIs. | Later metal/native-wrapper work, credential-free tests first. |
 | Generated Rust quality | TUI/runtime debugging needs readable generated Rust and useful diagnostics. | Track concrete ugly or inefficient lowering as haxe.rust Beads with product-neutral fixtures. Existing `haxe.rust-oo3.73` is the benchmark-corpus anchor. |
-| Non-copy local reuse | Reducers often route the same text payload into transcript, notification, and state fields. | HXCX-4.10 filed `haxe.rust-fzl`; until fixed, use explicit Haxe semantic copies rather than raw Rust or Codex-specific compiler hooks. |
-| Static final access paths | Fixture and runtime harnesses often keep stable IDs as static constants. | HXCX-4.23 filed `haxe.rust-3f0g`; until fixed, use helper functions for constant values that generated Rust mispaths. |
+| Non-copy local reuse | Reducers often route the same text payload into transcript, notification, and state fields. | HXCX-4.10 exposed `haxe.rust-fzl`, now covered by an upstream regression fixture. Explicit Haxe semantic copies remain valid when the application wants them. |
+| Static final access paths | Fixture and runtime harnesses often keep stable IDs as static constants. | HXCX-4.23 exposed `haxe.rust-3f0g`, now resolved upstream. Helper functions remain valid application code. |
 | Nullable JSON enum helper matches | Fixture adapters commonly read optional JSON fields before converting into typed DTOs. | HXCX-TUI-103 exposed a portable generated-Rust mismatch around matching `Null<haxe.json.Value>` helper returns. Fixed upstream in haxe.rust `8b7b97b24f19577dda522e7d0cae33853a4ff44c` / `haxe.rust-qsoq` with the product-neutral `json_nullable_value_switch` snapshot; keep future compiler pressure generic and Codex-free. |
 | Reused non-Copy string fallback lowering | Render-state reducers and policies often compute fallback values from an existing string local and then continue using that local for preservation checks. | HXCX-TUI-158 exposed a portable generated-Rust move/borrow mismatch for `HxString` reuse across a ternary fallback. Track as generic haxe.rust work with product-neutral fixtures; keep codexhx source clear and avoid Codex-specific compiler hooks. |
 
