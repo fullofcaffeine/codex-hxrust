@@ -23,6 +23,15 @@ The pin records the admitted compiler commit.
 Set `HAXE_RUST_ROOT` to select the checkout for a generated build.
 `scripts/run-haxe-rust.sh` supplies all source, standard-library, and Reflaxe paths from that checkout.
 It also reports the actual commit and dirty-file count.
+Haxe gives later class paths precedence. The runner therefore appends the selected checkout paths after
+the consumer HXML and its `-lib reflaxe.rust` expansion. This makes the reported checkout the compiler
+that Haxe actually parses, including its standard-library overrides.
+
+Verify the selection contract with:
+
+```bash
+npm run test:haxe-rust-selection
+```
 
 The scoped library file remains available for legacy local commands. Reproducibility gates and pin admission do not use its fixed sibling paths.
 

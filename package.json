@@ -28,6 +28,7 @@
     "public:precommit": "npm run format:haxe:check && npm run lint:source-names && npm run lint:import-boundaries && npm run security:gitleaks",
     "test:generated-cargo": "bash scripts/check-generated-cargo.sh",
     "test:haxe-rust-identity": "bash harness/check-haxe-rust-identity.sh",
+    "test:haxe-rust-selection": "bash harness/check-haxe-rust-selection.sh",
     "test:upstream-codex-identity": "bash scripts/check-upstream-codex-identity.sh",
     "test:tui-smoke": "bash harness/check-tui-smoke.sh",
     "test:tui-terminal-contract": "bash harness/check-tui-terminal-contract.sh",

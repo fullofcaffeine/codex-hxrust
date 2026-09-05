@@ -42,11 +42,9 @@ package_version="$(jq -er '.packageVersion' "$PIN_FILE")"
 
 printf 'haxe_rust_identity=%s\n' "$(printf '%s\n' "$identity" | jq -c .)"
 
+# Haxe gives later class paths precedence. Keep the selected checkout after any
+# `-lib reflaxe.rust` expansion inside the consumer HXML.
 exec "$HAXE_BIN" \
-  -cp "${checkout_root}/src" \
-  -cp "${checkout_root}/std" \
-  -cp "${checkout_root}/std/rust/_std" \
-  -cp "${checkout_root}/vendor/reflaxe/src" \
   -D "reflaxe=${package_version}" \
   -D "reflaxe.rust=${package_version}" \
   -D rust_nested_modules \
@@ -57,4 +55,8 @@ exec "$HAXE_BIN" \
   --macro 'reflaxe.rust.CompilerBootstrap.Start()' \
   --macro 'reflaxe.rust.CompilerInit.Start()' \
   "$HXML" \
-  "$@"
+  "$@" \
+  -cp "${checkout_root}/src" \
+  -cp "${checkout_root}/std" \
+  -cp "${checkout_root}/std/rust/_std" \
+  -cp "${checkout_root}/vendor/reflaxe/src"

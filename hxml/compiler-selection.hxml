@@ -1,0 +1,5 @@
+-cp test/compilerselection
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_crate=codex_hxrust_compiler_selection
+-main CompilerSelectionHarness
