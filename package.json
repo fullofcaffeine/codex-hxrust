@@ -9,7 +9,7 @@
     "url": "https://github.com/fullofcaffeine/codex-hxrust.git"
   },
   "devDependencies": {
-    "lix": "^15.12.4"
+    "lix": "^17.0.3"
   },
   "scripts": {
     "postinstall": "lix download",
